@@ -2,180 +2,58 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Mental Math - SPA</title>
+    <title>Mental Math - Training</title>
     <style>
-        /* --- STILI DI BASE --- */
-        body {
-            font-family: monospace;
-            background-color: #0a0a0a;
-            color: #d4d4d4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
+        /* Mantieni i tuoi stili CSS originali qui */
+        body { font-family: monospace; background-color: #0a0a0a; color: #d4d4d4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
         .hidden { display: none !important; }
-
-        /* Contenitore generico per le view centralizzate */
-        .view-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background: #111;
-            padding: 30px;
-            border: 1px solid #333;
-            width: 400px;
-            max-width: 90vw;
-        }
-
-        /* --- BOTTONI E NAVIGAZIONE --- */
-        .btn {
-            padding: 12px;
-            background: #222;
-            color: #fff;
-            border: 1px solid #555;
-            font-weight: bold;
-            cursor: pointer;
-            font-family: monospace;
-            text-align: center;
-            transition: 0.2s;
-        }
+        .view-container { display: flex; flex-direction: column; gap: 15px; background: #111; padding: 30px; border: 1px solid #333; width: 400px; max-width: 90vw; }
+        .btn { padding: 12px; background: #222; color: #fff; border: 1px solid #555; font-weight: bold; cursor: pointer; font-family: monospace; text-align: center; transition: 0.2s; }
         .btn:hover { background: #ddd; color: #000; }
-        .btn-back {
-            background: transparent;
-            border: none;
-            text-align: left;
-            padding: 0;
-            margin-bottom: 20px;
-            color: #888;
-        }
+        .btn-back { background: transparent; border: none; text-align: left; padding: 0; margin-bottom: 20px; color: #888; }
         .btn-back:hover { background: transparent; color: #fff; text-decoration: underline; }
-
-        /* --- STILI PER LA TEORIA --- */
-        .theory-content {
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-        .theory-content h2 { margin-top: 0; color: #fff; }
-        .example-box {
-            background: #000;
-            padding: 10px;
-            border-left: 3px solid #555;
-            margin: 15px 0;
-        }
-
-        /* --- STILI FORM SETUP (PRATICA) --- */
-        .config-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1rem;
-        }
-        .config-row input, .config-row select {
-            width: 100px;
-            background: #222;
-            color: #fff;
-            border: 1px solid #555;
-            padding: 5px;
-            font-family: monospace;
-            text-align: center;
-        }
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
-
-        /* --- STILI MOTORE DI GIOCO --- */
-        .math-grid {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            row-gap: 10px;
-            font-size: 3rem;
-        }
+        .config-row { display: flex; justify-content: space-between; align-items: center; font-size: 1rem; }
+        .config-row input { width: 100px; background: #222; color: #fff; border: 1px solid #555; padding: 5px; font-family: monospace; text-align: center; }
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        .math-grid { display: grid; grid-template-columns: 1fr auto; row-gap: 10px; font-size: 3rem; }
         #multiplicand { text-align: right; }
-        #multiplier {
-            text-align: left;
-            white-space: pre;
-            color: #777;
-        }
-        #answer-input {
-            grid-column: 1 / 2;
-            font-family: monospace;
-            font-size: 3rem;
-            width: 300px;
-            text-align: right;
-            background: transparent;
-            color: #fff;
-            border: none;
-            border-top: 2px solid #555;
-            padding-top: 10px;
-            outline: none;
-        }
-        .error-flash {
-            color: #ff4444 !important;
-            border-top: 2px solid #ff4444 !important;
-        }
-        /* Contenitore wrapper per il gioco che permette di aggiungere il tasto "esci" */
-        #game-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
+        #multiplier { text-align: left; white-space: pre; color: #777; }
+        #answer-input { grid-column: 1 / 2; font-family: monospace; font-size: 3rem; width: 300px; text-align: right; background: transparent; color: #fff; border: none; border-top: 2px solid #555; padding-top: 10px; outline: none; }
+        .error-flash { color: #ff4444 !important; border-top: 2px solid #ff4444 !important; }
     </style>
 </head>
 <body>
 
     <div id="view-main" class="view-container">
         <h2 style="text-align: center; margin-top:0;">MENTAL MATH</h2>
-        <button class="btn" id="nav-to-theory">Teoria e Metodi</button>
-        <button class="btn" id="nav-to-practice">Pratica Libera</button>
-    </div>
-
-    <div id="view-theory-dash" class="view-container hidden">
-        <button class="btn btn-back" onclick="switchView('view-main')">&lt; Torna al Menu</button>
-        <h2 style="margin-top:0;">Moduli Didattici</h2>
-        <div id="theory-modules-container"></div>
-    </div>
-
-    <div id="view-lesson" class="view-container hidden">
-        <button class="btn btn-back" onclick="switchView('view-theory-dash')">&lt; Torna ai Moduli</button>
-        
-        <div id="lesson-content" class="theory-content"></div>
-        
-        <button class="btn" id="btn-start-lesson-practice" style="background: #fff; color: #000;">Esercitati su questo metodo</button>
+        <button class="btn" id="nav-to-practice">Avvia Allenamento</button>
     </div>
 
     <div id="view-practice-setup" class="view-container hidden">
-        <button class="btn btn-back" onclick="switchView('view-main')">&lt; Torna al Menu</button>
-        <h2 style="margin-top:0;">Pratica Libera</h2>
+        <button class="btn btn-back" id="btn-back-main">&lt; Torna al Menu</button>
+        <h2 style="margin-top:0;">Setup Sessione</h2>
         
         <div class="config-row">
-            <label>Range Minimo:</label>
-            <input type="number" id="config-min" value="10">
+            <label>Numero Cifre:</label>
+            <input type="number" id="config-digits" value="2">
         </div>
         <div class="config-row">
-            <label>Range Massimo:</label>
-            <input type="number" id="config-max" value="99">
-        </div>
-        <div class="config-row">
-            <label>Moltiplicatore:</label>
+            <label>Moltiplicatore Fisso:</label>
             <input type="number" id="config-mult" value="11">
         </div>
-        <div class="config-row" style="margin-top: 10px;">
-            <label>Metodo Input:</label>
-            <select id="config-mode">
-                <option value="LTR">Standard (Da SX)</option>
-                <option value="RTL" selected>RTL (Da DX)</option>
-            </select>
+        <div class="config-row">
+            <label>Tempo (secondi):</label>
+            <input type="number" id="config-time" value="60">
         </div>
-        <button class="btn" id="btn-start-free-practice" style="margin-top: 20px;">Avvia Simulazione</button>
+        <button class="btn" id="btn-start-session" style="margin-top: 20px;">Inizia</button>
     </div>
 
-    <div id="view-game" class="hidden" id="game-wrapper">
+    <div id="view-game" class="hidden" style="display: flex; flex-direction: column; align-items: flex-start;">
         <button class="btn btn-back" id="btn-exit-game" style="position: absolute; top: 20px; left: 20px;">&lt; Abbandona Sessione</button>
-        
+        <div id="game-hud" style="width: 300px; display: flex; justify-content: space-between; font-size: 1.2rem; margin-bottom: 20px; color: #888; border-bottom: 1px solid #333; padding-bottom: 10px;">
+            <div>Tempo: <span id="hud-time">60</span>s</div>
+            <div>Punti: <span id="hud-score">0</span></div>
+        </div>
         <div class="math-grid">
             <div id="multiplicand">--</div>
             <div id="multiplier"> * --</div>
