@@ -43,29 +43,29 @@
             <label>Multiplier:</label>
             <div style="display: flex; gap: 5px;">
                 <select id="config-mult-type">
-                    <option value="literal">Esatto</option>
-                    <option value="digits">Cifre</option>
+                    <option value="literal">Exact</option>
+                    <option value="digits">Digits</option>
                 </select>
                 <input type="text" id="config-mult" value="11" style="width: 130px;" placeholder="es. 8, 11-13, 15">
             </div>
         </div>
         
         <div class="config-row" style="margin-top: 10px;">
-            <label>Tempo:</label>
+            <label>Time:</label>
             <div style="display: flex; gap: 5px;">
                 <select id="config-time-type">
-                    <option value="s">Secondi</option>
-                    <option value="m">Minuti</option>
+                    <option value="s">Seconds</option>
+                    <option value="m">Minutes</option>
                 </select>
                 <input type="number" id="config-time" value="60" style="width: 80px;">
             </div>
         </div>
         
-        <button class="btn" id="btn-start-session" style="margin-top: 15px;">Inizia</button>
+        <button class="btn" id="btn-start-session" style="margin-top: 15px;">Start Session</button>
 
         <div class="debug-panel">
-            <button class="btn-debug" id="btn-reset-weights">Reset Pesi</button>
-            <button class="btn-debug" id="btn-multiplier-stats">Statistiche Moltiplicatori</button>
+            <button class="btn-debug" id="btn-reset-weights">Reset Weights</button>
+            <button class="btn-debug" id="btn-multiplier-stats">Multiplier Statistics</button>
         </div>
         <div id="stats-output" class="hidden"></div>
     </div>
@@ -73,8 +73,8 @@
     <div id="view-game" class="hidden" style="display: flex; flex-direction: column; align-items: flex-start;">
         <button class="btn btn-back" id="btn-exit-game" style="position: absolute; top: 20px; left: 20px;">&lt; Abbandona Sessione</button>
         <div id="game-hud" style="width: 300px; display: flex; justify-content: space-between; font-size: 1.2rem; margin-bottom: 20px; color: #888; border-bottom: 1px solid #333; padding-bottom: 10px;">
-            <div>Tempo: <span id="hud-time">60</span>s</div>
-            <div>Punti: <span id="hud-score">0</span></div>
+            <div>Time: <span id="hud-time">60</span>s</div>
+            <div>Score: <span id="hud-score">0</span></div>
         </div>
         <div class="math-grid">
             <div id="multiplicand">--</div>
