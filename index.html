@@ -4,48 +4,70 @@
     <meta charset="UTF-8">
     <title>Mental Math - Training</title>
     <style>
-        /* Mantieni i tuoi stili CSS originali qui */
         body { font-family: monospace; background-color: #0a0a0a; color: #d4d4d4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
         .hidden { display: none !important; }
-        .view-container { display: flex; flex-direction: column; gap: 15px; background: #111; padding: 30px; border: 1px solid #333; width: 400px; max-width: 90vw; }
+        .view-container { display: flex; flex-direction: column; gap: 15px; background: #111; padding: 30px; border: 1px solid #333; width: 450px; max-width: 90vw; }
         .btn { padding: 12px; background: #222; color: #fff; border: 1px solid #555; font-weight: bold; cursor: pointer; font-family: monospace; text-align: center; transition: 0.2s; }
         .btn:hover { background: #ddd; color: #000; }
         .btn-back { background: transparent; border: none; text-align: left; padding: 0; margin-bottom: 20px; color: #888; }
         .btn-back:hover { background: transparent; color: #fff; text-decoration: underline; }
-        .config-row { display: flex; justify-content: space-between; align-items: center; font-size: 1rem; }
-        .config-row input { width: 100px; background: #222; color: #fff; border: 1px solid #555; padding: 5px; font-family: monospace; text-align: center; }
-        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        .config-row { display: flex; justify-content: space-between; align-items: center; font-size: 1rem; margin-bottom: 5px; }
+        .config-row input, .config-row select { background: #222; color: #fff; border: 1px solid #555; padding: 5px; font-family: monospace; }
+        .config-row input { width: 120px; text-align: center; }
         .math-grid { display: grid; grid-template-columns: 1fr auto; row-gap: 10px; font-size: 3rem; }
         #multiplicand { text-align: right; }
         #multiplier { text-align: left; white-space: pre; color: #777; }
         #answer-input { grid-column: 1 / 2; font-family: monospace; font-size: 3rem; width: 300px; text-align: right; background: transparent; color: #fff; border: none; border-top: 2px solid #555; padding-top: 10px; outline: none; }
         .error-flash { color: #ff4444 !important; border-top: 2px solid #ff4444 !important; }
+        
+        .debug-panel { display: flex; gap: 10px; margin-top: 5px; }
+        .btn-debug { flex: 1; padding: 8px; font-size: 0.8rem; border: 1px solid #444; color: #bbb; cursor: pointer; font-family: monospace; }
+        #btn-reset-weights { background: #3a1a1a; }
+        #btn-reset-weights:hover { background: #5a2a2a; color: #fff; }
+        #btn-top-weights { background: #1a2a3a; }
+        #btn-top-weights:hover { background: #2a4a6a; color: #fff; }
+        #stats-output { background: #0a0a0a; border: 1px dashed #444; padding: 10px; font-size: 0.85rem; margin-top: 10px; white-space: pre-line; color: #aaa; max-height: 150px; overflow-y: auto; }
     </style>
 </head>
 <body>
 
-    <div id="view-main" class="view-container">
-        <h2 style="text-align: center; margin-top:0;">MENTAL MATH</h2>
-        <button class="btn" id="nav-to-practice">Avvia Allenamento</button>
-    </div>
-
-    <div id="view-practice-setup" class="view-container hidden">
-        <button class="btn btn-back" id="btn-back-main">&lt; Torna al Menu</button>
-        <h2 style="margin-top:0;">Setup Sessione</h2>
+    <div id="view-practice-setup" class="view-container">
+        <h2 style="margin-top:0; text-align: center;">Setup Sessione</h2>
         
         <div class="config-row">
-            <label>Numero Cifre:</label>
-            <input type="number" id="config-digits" value="2">
+            <label>Moltiplicando:</label>
+            <input type="text" id="config-digits" value="2" placeholder="es. 2, 2-4">
         </div>
+        
         <div class="config-row">
-            <label>Moltiplicatore Fisso:</label>
-            <input type="number" id="config-mult" value="11">
+            <label>Moltiplicatore:</label>
+            <div style="display: flex; gap: 5px;">
+                <select id="config-mult-type">
+                    <option value="literal">Esatto</option>
+                    <option value="digits">Cifre</option>
+                </select>
+                <input type="text" id="config-mult" value="11" style="width: 130px;" placeholder="es. 8, 11-13, 15">
+            </div>
         </div>
-        <div class="config-row">
-            <label>Tempo (secondi):</label>
-            <input type="number" id="config-time" value="60">
+        
+        <div class="config-row" style="margin-top: 10px;">
+            <label>Tempo:</label>
+            <div style="display: flex; gap: 5px;">
+                <select id="config-time-type">
+                    <option value="s">Secondi</option>
+                    <option value="m">Minuti</option>
+                </select>
+                <input type="number" id="config-time" value="60" style="width: 80px;">
+            </div>
         </div>
-        <button class="btn" id="btn-start-session" style="margin-top: 20px;">Inizia</button>
+        
+        <button class="btn" id="btn-start-session" style="margin-top: 15px;">Inizia</button>
+
+        <div class="debug-panel">
+            <button class="btn-debug" id="btn-reset-weights">Reset Pesi</button>
+            <button class="btn-debug" id="btn-top-weights">Top 10 Lenti</button>
+        </div>
+        <div id="stats-output" class="hidden"></div>
     </div>
 
     <div id="view-game" class="hidden" style="display: flex; flex-direction: column; align-items: flex-start;">
