@@ -24,23 +24,23 @@
         .btn-debug { flex: 1; padding: 8px; font-size: 0.8rem; border: 1px solid #444; color: #bbb; cursor: pointer; font-family: monospace; }
         #btn-reset-weights { background: #3a1a1a; }
         #btn-reset-weights:hover { background: #5a2a2a; color: #fff; }
-        #btn-top-weights { background: #1a2a3a; }
-        #btn-top-weights:hover { background: #2a4a6a; color: #fff; }
-        #stats-output { background: #0a0a0a; border: 1px dashed #444; padding: 10px; font-size: 0.85rem; margin-top: 10px; white-space: pre-line; color: #aaa; max-height: 150px; overflow-y: auto; }
+        #btn-multiplier-stats { background: #1a2a3a; }
+        #btn-multiplier-stats:hover { background: #2a4a6a; color: #fff; }
+        #stats-output { background: #0a0a0a; border: 1px dashed #444; padding: 10px; font-size: 0.85rem; margin-top: 10px; white-space: pre-line; color: #aaa; max-height: 200px; overflow-y: auto; }
     </style>
 </head>
 <body>
 
     <div id="view-practice-setup" class="view-container">
-        <h2 style="margin-top:0; text-align: center;">Setup Sessione</h2>
+        <h2 style="margin-top:0; text-align: center;">Setup Session</h2>
         
         <div class="config-row">
-            <label>Moltiplicando:</label>
+            <label>Multiplicand:</label>
             <input type="text" id="config-digits" value="2" placeholder="es. 2, 2-4">
         </div>
         
         <div class="config-row">
-            <label>Moltiplicatore:</label>
+            <label>Multiplier:</label>
             <div style="display: flex; gap: 5px;">
                 <select id="config-mult-type">
                     <option value="literal">Esatto</option>
@@ -65,7 +65,7 @@
 
         <div class="debug-panel">
             <button class="btn-debug" id="btn-reset-weights">Reset Pesi</button>
-            <button class="btn-debug" id="btn-top-weights">Top 10 Lenti</button>
+            <button class="btn-debug" id="btn-multiplier-stats">Statistiche Moltiplicatori</button>
         </div>
         <div id="stats-output" class="hidden"></div>
     </div>

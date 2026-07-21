@@ -36,21 +36,21 @@ document.getElementById('btn-reset-weights').addEventListener('click', () => {
     engine.resetWeights();
     statsOutput.classList.remove('hidden');
     statsOutput.style.color = '#4a4';
-    statsOutput.textContent = "Pesi resettati con successo. Tutti i calcoli sono tornati allo stato iniziale (1000ms).";
+    statsOutput.textContent = "Pesi resettati con successo. Tutti i moltiplicatori sono tornati al valore base (1.00s).";
 });
 
-document.getElementById('btn-top-weights').addEventListener('click', () => {
-    const top = engine.getTopWeights();
+document.getElementById('btn-multiplier-stats').addEventListener('click', () => {
+    const stats = engine.getMultiplierStats();
     statsOutput.classList.remove('hidden');
     statsOutput.style.color = '#aaa';
     
-    if (top.length === 0) {
-        statsOutput.textContent = "Nessun dato alterato trovato.\nTutti i pesi sono allo stato iniziale (1000ms).";
+    if (stats.length === 0) {
+        statsOutput.textContent = "Nessun dato di latenza registrato.\nTutti i moltiplicatori sono a 1.00s.";
     } else {
-        let text = "TOP 10 OPERAZIONI PIÙ LENTE:\n\n";
-        top.forEach((item, index) => {
-            const [a, b] = item[0].split('_');
-            text += `${index + 1}. ${a} * ${b} = ${Math.round(item[1])} ms\n`;
+        let text = "LATENZA MEDIA (NORMALIZZATA A 2 CIFRE):\n\n";
+        stats.forEach((item, index) => {
+            const seconds = (item[1] / 1000).toFixed(2);
+            text += `${index + 1}. Gruppo [${item[0]}] -> ${seconds} s\n`;
         });
         statsOutput.textContent = text;
     }
@@ -156,6 +156,7 @@ answerInput.addEventListener('keydown', (e) => {
         const timeTaken = performance.now() - opStartTime;
         sessionStats.push({ 
             key: currentOperation.key, 
+            multiplicand: currentOperation.rawMultiplicand,
             time: timeTaken, 
             errors: currentErrors 
         });
