@@ -1,0 +1,58 @@
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{margin=25mm}
+\usepackage{xcolor}
+
+\definecolor{primarycolor}{RGB}{41, 128, 185}
+\definecolor{boxbg}{RGB}{245, 247, 250}
+
+\title{\textbf{Metodo di Trachtenberg -- Appunti di Calcolo Mentale}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Moltiplicazione per 11}
+
+\textbf{Regola:} Si scrive l'ultima cifra del numero (quella delle unità) inalterata. Poi, per ogni cifra successiva, si somma la cifra stessa alla cifra alla sua destra. Infine, si riporta l'ultima cifra a sinistra (la prima del numero originario).
+
+\textbf{Esempio:} Calcoliamo $432 \times 11$.
+\begin{enumerate}
+    \item Scriviamo l'unità finale: \textbf{2}.
+    \item Sommiamo la cifra centrale con la destra ($3 + 2$): \textbf{5}.
+    \item Sommiamo la prima cifra con la destra ($4 + 3$): \textbf{7}.
+    \item Scriviamo la prima cifra iniziale: \textbf{4}.
+\end{enumerate}
+Risultato: $432 \times 11 = \mathbf{4752}$.
+
+\section{Moltiplicazione per 12}
+
+\textbf{Regola:} Si raddoppia ogni cifra e sommandola al suo vicino di destra (la cifra immediatamente successiva verso destra). 
+
+\textbf{Esempio:} Calcoliamo $314 \times 12$.
+\begin{enumerate}
+    \item Per l'ultima cifra (4): $4 \times 2 + 0 = \mathbf{8}$.
+    \item Per la cifra centrale (1): $1 \times 2 + 4 = \mathbf{6}$.
+    \item Per la prima cifra (3): $3 \times 2 + 1 = \mathbf{7}$.
+    \item Per il bordo a sinistra (aggiungendo uno zero iniziale implicito): $0 \times 2 + 3 = \mathbf{3}$.
+\end{enumerate}
+Risultato: $314 \times 12 = \mathbf{3768}$.
+
+\section{Moltiplicazione per 6}
+
+\textbf{Regola:} Si prende ogni cifra, si somma la metà della cifra alla sua destra (arrotondata per difetto se dispari) e si aggiunge 5 se la cifra stessa è un numero dispari.
+
+\textbf{Esempio:} Calcoliamo $43 \times 6$.
+\begin{enumerate}
+    \item Cifra 3 (dispari): aggiungiamo 5 ($5$). A destra non c'è nulla (metà = 0). Totale: $5$.
+    \item Cifra 4 (pari): aggiungiamo 0 ($0$). A destra c'è il 3, la cui metà intera è $1$. Sommiamo la cifra stessa ($4 + 1 = 5$).
+    \item Per la cifra a sinistra dello zero iniziale: metà del 4 è $2$.
+\end{enumerate}
+Risultato: $43 \times 6 = \mathbf{258}$.
+
+\end{document}
