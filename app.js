@@ -14,8 +14,6 @@ let sessionStats = [];
 const multiplicandDisplay = document.getElementById('multiplicand');
 const multiplierDisplay = document.getElementById('multiplier');
 const answerInput = document.getElementById('answer-input');
-const hudTime = document.getElementById('hud-time');
-const hudScore = document.getElementById('hud-score');
 
 const viewSetup = document.getElementById('view-practice-setup');
 const viewGame = document.getElementById('view-game');
@@ -78,7 +76,6 @@ document.getElementById('btn-start-session').addEventListener('click', () => {
     statsOutput.classList.add('hidden');
     engine.updateConfig({ digits, mult, multType });
     
-    updateHUD();
     answerInput.disabled = false;
     
     clearInterval(timerInterval);
@@ -90,15 +87,9 @@ document.getElementById('btn-start-session').addEventListener('click', () => {
 
 function timerTick() {
     timeLeft--;
-    updateHUD();
     if (timeLeft <= 0) {
         endSession();
     }
-}
-
-function updateHUD() {
-    hudTime.textContent = timeLeft;
-    hudScore.textContent = currentScore;
 }
 
 function endSession() {
@@ -162,7 +153,6 @@ answerInput.addEventListener('keydown', (e) => {
         });
         
         currentScore++; 
-        updateHUD();    
         renderNewOperation();
     } else if (validation.status === 'ERROR') {
         handleInvalidInput();

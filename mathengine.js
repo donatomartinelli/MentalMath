@@ -90,7 +90,6 @@ export class MathEngine {
         const multiplicand = Math.floor(Math.random() * sizeA) + rangeA.min;
         const target = multiplicand * selectedMultiplier;
 
-        // Rimossa la commutatività visiva per fissare il moltiplicatore a destra
         return {
             multiplicand: multiplicand,
             multiplier: selectedMultiplier,
