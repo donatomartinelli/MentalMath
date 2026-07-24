@@ -10,6 +10,7 @@ let timeLeft = 0;
 let opStartTime = 0;
 let currentErrors = 0;
 let sessionStats = [];
+let chartInstance = null; // Variabile globale per gestire il ciclo di vita del grafico
 
 const multiplicandDisplay = document.getElementById('multiplicand');
 const multiplierDisplay = document.getElementById('multiplier');
@@ -18,6 +19,9 @@ const answerInput = document.getElementById('answer-input');
 const viewSetup = document.getElementById('view-practice-setup');
 const viewGame = document.getElementById('view-game');
 const statsOutput = document.getElementById('stats-output');
+const statsText = document.getElementById('stats-text');
+const chartContainer = document.getElementById('chart-container');
+const chartCanvas = document.getElementById('stats-chart');
 
 function switchView(toGame) {
     if (toGame) {
@@ -33,24 +37,61 @@ function switchView(toGame) {
 document.getElementById('btn-reset-weights').addEventListener('click', () => {
     engine.resetWeights();
     statsOutput.classList.remove('hidden');
-    statsOutput.style.color = '#4a4';
-    statsOutput.textContent = "Pesi resettati con successo. Tutti i moltiplicatori sono tornati al valore base (1.00s).";
+    chartContainer.style.display = 'none';
+    statsText.style.color = '#4a4';
+    statsText.textContent = "Dati storici e pesi resettati con successo.\nTutti i moltiplicatori sono tornati al valore base (1.00s).";
 });
 
 document.getElementById('btn-multiplier-stats').addEventListener('click', () => {
     const stats = engine.getMultiplierStats();
     statsOutput.classList.remove('hidden');
-    statsOutput.style.color = '#aaa';
+    statsText.style.color = '#aaa';
     
     if (stats.length === 0) {
-        statsOutput.textContent = "Nessun dato di latenza registrato.\nTutti i moltiplicatori sono a 1.00s.";
+        statsText.textContent = "Nessun dato di latenza registrato.\nTutti i moltiplicatori sono a 1.00s.";
+        chartContainer.style.display = 'none';
     } else {
-        let text = "LATENZA MEDIA (NORMALIZZATA A 2 CIFRE):\n\n";
+        // Testo Media Globale Attuale (EMA)
+        let text = "EMA LATENZA ATTUALE (NORMALIZZATA A 2 CIFRE):\n\n";
         stats.forEach((item, index) => {
             const seconds = (item[1] / 1000).toFixed(2);
             text += `${index + 1}. Gruppo [${item[0]}] -> ${seconds} s\n`;
         });
-        statsOutput.textContent = text;
+        statsText.textContent = text;
+
+        // Renderizzazione Grafico Serie Storica Giornaliera
+        const chartData = engine.getChartData();
+        if (chartData) {
+            chartContainer.style.display = 'block';
+            
+            if (chartInstance) {
+                chartInstance.destroy(); // Distruzione istanza precedente per evitare overlay
+            }
+            
+            chartInstance = new Chart(chartCanvas, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Secondi', color: '#888' },
+                            ticks: { color: '#888' },
+                            grid: { color: '#333' }
+                        },
+                        x: {
+                            ticks: { color: '#888' },
+                            grid: { color: '#333' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#d4d4d4', font: { family: 'monospace' } } }
+                    }
+                }
+            });
+        }
     }
 });
 

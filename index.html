@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Mental Math - Training</title>
+    <!-- Importazione libreria Chart.js per il rendering grafico vettoriale -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: monospace; background-color: #0a0a0a; color: #d4d4d4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
         .hidden { display: none !important; }
@@ -26,52 +28,59 @@
         #btn-reset-weights:hover { background: #5a2a2a; color: #fff; }
         #btn-multiplier-stats { background: #1a2a3a; }
         #btn-multiplier-stats:hover { background: #2a4a6a; color: #fff; }
-        #stats-output { background: #0a0a0a; border: 1px dashed #444; padding: 10px; font-size: 0.85rem; margin-top: 10px; white-space: pre-line; color: #aaa; max-height: 200px; overflow-y: auto; }
+        #stats-output { background: #0a0a0a; border: 1px dashed #444; padding: 10px; font-size: 0.85rem; margin-top: 10px; color: #aaa; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        #stats-text { white-space: pre-line; }
+        #chart-container { width: 100%; height: 200px; display: none; }
     </style>
 </head>
 <body>
 
     <div id="view-practice-setup" class="view-container">
-        <h2 style="margin-top:0; text-align: center;">Setup Session</h2>
+        <h2 style="margin-top:0; text-align: center;">Setup Sessione</h2>
         
         <div class="config-row">
-            <label>Multiplicand:</label>
+            <label>Moltiplicando:</label>
             <input type="text" id="config-digits" value="2" placeholder="es. 2, 2-4">
         </div>
         
         <div class="config-row">
-            <label>Multiplier:</label>
+            <label>Moltiplicatore:</label>
             <div style="display: flex; gap: 5px;">
                 <select id="config-mult-type">
-                    <option value="literal">Exact</option>
-                    <option value="digits">Digits</option>
+                    <option value="literal">Esatto</option>
+                    <option value="digits">Cifre</option>
                 </select>
                 <input type="text" id="config-mult" value="11" style="width: 130px;" placeholder="es. 8, 11-13, 15">
             </div>
         </div>
         
         <div class="config-row" style="margin-top: 10px;">
-            <label>Time:</label>
+            <label>Tempo:</label>
             <div style="display: flex; gap: 5px;">
                 <select id="config-time-type">
-                    <option value="s">Seconds</option>
-                    <option value="m">Minutes</option>
+                    <option value="s">Secondi</option>
+                    <option value="m">Minuti</option>
                 </select>
                 <input type="number" id="config-time" value="60" style="width: 80px;">
             </div>
         </div>
         
-        <button class="btn" id="btn-start-session" style="margin-top: 15px;">Start Session</button>
+        <button class="btn" id="btn-start-session" style="margin-top: 15px;">Inizia</button>
 
         <div class="debug-panel">
-            <button class="btn-debug" id="btn-reset-weights">Reset Weights</button>
-            <button class="btn-debug" id="btn-multiplier-stats">Multiplier Statistics</button>
+            <button class="btn-debug" id="btn-reset-weights">Reset Pesi</button>
+            <button class="btn-debug" id="btn-multiplier-stats">Statistiche Moltiplicatori</button>
         </div>
-        <div id="stats-output" class="hidden"></div>
+        <div id="stats-output" class="hidden">
+            <div id="stats-text"></div>
+            <div id="chart-container">
+                <canvas id="stats-chart"></canvas>
+            </div>
+        </div>
     </div>
 
     <div id="view-game" class="hidden" style="display: flex; flex-direction: column; align-items: flex-start; justify-content: center; height: 100%;">
-        <button class="btn btn-back" id="btn-exit-game" style="position: absolute; top: 20px; left: 20px;">&lt; Quit Session</button>
+        <button class="btn btn-back" id="btn-exit-game" style="position: absolute; top: 20px; left: 20px;">&lt; Abbandona Sessione</button>
         <div class="math-grid">
             <div id="multiplicand">--</div>
             <div id="multiplier"> * --</div>
