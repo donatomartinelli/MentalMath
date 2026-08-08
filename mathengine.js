@@ -2,7 +2,8 @@ export class MathEngine {
     constructor(config = { digits: '2', mult: '11', multType: 'literal' }) {
         this.config = config;
         this.weightsKey = 'mentalMathGroupWeights'; 
-        this.historyKey = 'mentalMathHistory'; // Chiave per il tracking giornaliero
+        this.historyKey = 'mentalMathHistory'; 
+        this.presetsKey = 'mentalMathPresets';
         
         this.weights = JSON.parse(localStorage.getItem(this.weightsKey)) || {};
         this.history = JSON.parse(localStorage.getItem(this.historyKey)) || {};
@@ -12,6 +13,21 @@ export class MathEngine {
         this.config = { ...this.config, ...newConfig };
     }
 
+    // --- GESTIONE PRESETS ---
+    getPresets() {
+        const defaultPresets = {
+            "Riscaldamento": { digits: '2', mult: '11,12', multType: 'literal', time: '60', timeType: 's' }
+        };
+        return JSON.parse(localStorage.getItem(this.presetsKey)) || defaultPresets;
+    }
+
+    savePreset(name, presetConfig) {
+        const presets = this.getPresets();
+        presets[name] = presetConfig;
+        localStorage.setItem(this.presetsKey, JSON.stringify(presets));
+    }
+
+    // --- PARSING SETUP ---
     parseDigits(inputStr) {
         let min, max;
         if (inputStr.includes('-')) {
@@ -22,9 +38,7 @@ export class MathEngine {
             min = parseInt(inputStr.trim(), 10) || 1;
             max = min;
         }
-
         if (min > max) [min, max] = [max, min];
-
         return {
             min: Math.pow(10, min - 1),
             max: Math.pow(10, max) - 1
@@ -34,7 +48,6 @@ export class MathEngine {
     parseLiteralValues(inputStr) {
         const values = new Set();
         const parts = inputStr.split(',');
-        
         for (const part of parts) {
             if (part.includes('-')) {
                 const [minStr, maxStr] = part.split('-');
@@ -49,11 +62,11 @@ export class MathEngine {
                 if (!isNaN(val)) values.add(val);
             }
         }
-        
         const arr = Array.from(values);
         return arr.length > 0 ? arr : [11]; 
     }
 
+    // --- MOTORE DI GIOCO ---
     generateOperation() {
         const rangeA = this.parseDigits(this.config.digits);
         const isRightDigits = this.config.multType === 'digits';
@@ -61,9 +74,7 @@ export class MathEngine {
         let validMultipliers = [];
         if (isRightDigits) {
             const rightRange = this.parseDigits(this.config.mult);
-            for (let i = rightRange.min; i <= rightRange.max; i++) {
-                validMultipliers.push(i);
-            }
+            for (let i = rightRange.min; i <= rightRange.max; i++) validMultipliers.push(i);
         } else {
             validMultipliers = this.parseLiteralValues(this.config.mult);
         }
@@ -103,18 +114,17 @@ export class MathEngine {
     }
 
     validateInput(inputBuffer, targetStr) {
-        if (inputBuffer === targetStr) {
-            return { status: 'CORRECT' };
-        } else if (inputBuffer.length >= targetStr.length) {
-            return { status: 'ERROR' };
-        }
+        if (inputBuffer === targetStr) return { status: 'CORRECT' };
+        else if (inputBuffer.length >= targetStr.length) return { status: 'ERROR' };
         return { status: 'PENDING' };
     }
 
     updateWeights(sessionStats) {
         const alpha = 0.3; 
         const penaltyPerError = 800; 
-        const today = new Date().toISOString().split('T')[0]; // Isolamento data YYYY-MM-DD
+        
+        const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+        const today = (new Date(Date.now() - tzoffset)).toISOString().split('T')[0];
 
         if (!this.history[today]) {
             this.history[today] = {};
@@ -122,16 +132,13 @@ export class MathEngine {
 
         sessionStats.forEach(stat => {
             const oldWeight = this.weights[stat.key] || 1000;
-            
             const rawEffectiveTime = stat.time + (stat.errors * penaltyPerError);
             const digits = stat.multiplicand.toString().length;
             const normalizationFactor = Math.max(1, digits / 2); 
             const normalizedTime = rawEffectiveTime / normalizationFactor;
 
-            // Aggiornamento EMA (per estrazione)
             this.weights[stat.key] = (alpha * normalizedTime) + ((1 - alpha) * oldWeight);
 
-            // Accumulatore media giornaliera (per il grafico)
             if (!this.history[today][stat.key]) {
                 this.history[today][stat.key] = { sum: 0, count: 0 };
             }
@@ -143,52 +150,63 @@ export class MathEngine {
         localStorage.setItem(this.historyKey, JSON.stringify(this.history));
     }
 
-    resetWeights() {
-        this.weights = {};
-        this.history = {};
-        localStorage.removeItem(this.weightsKey);
-        localStorage.removeItem(this.historyKey);
-    }
-
     getMultiplierStats() {
-        return Object.entries(this.weights)
-            .sort((a, b) => b[1] - a[1]);
+        return Object.entries(this.weights).sort((a, b) => b[1] - a[1]);
     }
 
-    // Metodo per estrarre e strutturare i dati temporali per Chart.js
-    getChartData() {
+    // --- ESTRAZIONE DATI DASHBOARD ---
+    getDashboardData() {
         const dates = Object.keys(this.history).sort();
         if (dates.length === 0) return null;
 
+        const volumeDataArray = [];
+        const latencyDatasets = [];
+        const heatmapData = {};
+        
         const multipliers = new Set();
-        dates.forEach(date => {
-            Object.keys(this.history[date]).forEach(m => multipliers.add(m));
-        });
-
-        const datasets = [];
+        dates.forEach(date => Object.keys(this.history[date]).forEach(m => multipliers.add(m)));
         const colors = ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#4bc0c0', '#9966ff', '#ff9f40'];
         let colorIdx = 0;
 
         multipliers.forEach(mult => {
-            const data = dates.map(date => {
+            const dataLine = dates.map(date => {
                 const dayData = this.history[date][mult];
                 if (dayData && dayData.count > 0) {
-                    return (dayData.sum / dayData.count) / 1000; // Converte in secondi
+                    return (dayData.sum / dayData.count) / 1000; 
                 }
-                return null; // I buchi vengono gestiti dalla libreria tramite spanGaps
+                return null;
             });
 
-            datasets.push({
-                label: `Moltiplicatore [${mult}]`,
-                data: data,
+            latencyDatasets.push({
+                label: `[${mult}]`,
+                data: dataLine,
                 borderColor: colors[colorIdx % colors.length],
                 backgroundColor: colors[colorIdx % colors.length],
-                tension: 0.2, // Curvatura leggera per leggibilità
-                spanGaps: true // Ignora i giorni in cui non ti sei allenato su quel numero
+                tension: 0.2,
+                spanGaps: true 
             });
             colorIdx++;
         });
 
-        return { labels: dates, datasets };
+        dates.forEach(date => {
+            let dailyTotal = 0;
+            Object.values(this.history[date]).forEach(multData => { dailyTotal += multData.count; });
+            volumeDataArray.push(dailyTotal);
+            heatmapData[date] = dailyTotal;
+        });
+
+        const volumeDataset = {
+            label: 'Calcoli Completati',
+            data: volumeDataArray,
+            backgroundColor: '#26a641',
+            borderRadius: 4
+        };
+
+        return { 
+            labels: dates, 
+            latencyDatasets, 
+            volumeDataset,
+            heatmapData 
+        };
     }
 }
