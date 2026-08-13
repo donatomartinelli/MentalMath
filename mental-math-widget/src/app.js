@@ -295,3 +295,14 @@ document.addEventListener('click', (e) => {
         answerInput.focus();
     }
 });
+
+// --- CHIUSURA NATIVA WIDGET ---
+document.getElementById('btn-close-app').addEventListener('click', () => {
+    if (window.__TAURI__) {
+        window.__TAURI__.core.invoke('plugin:window|close').catch(() => {
+            window.__TAURI__.window.getCurrentWindow().close();
+        });
+    } else {
+        window.close();
+    }
+});
