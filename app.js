@@ -256,6 +256,9 @@ DOM.answerInput.addEventListener('keydown', (e) => {
     else if (/^\d$/.test(e.key)) DOM.answerInput.value = e.key + DOM.answerInput.value;
     else return; 
     
+    // Ripristino della selezione del cursore a sinistra
+    DOM.answerInput.setSelectionRange(0, 0);
+    
     if (!state.currentOperation) return;
     
     const validation = engine.validateInput(DOM.answerInput.value, state.currentOperation.targetStr);
@@ -267,7 +270,10 @@ DOM.answerInput.addEventListener('keydown', (e) => {
     } else if (validation.status === 'ERROR') {
         state.currentErrors++; 
         DOM.answerInput.classList.add('error-flash');
-        setTimeout(() => DOM.answerInput.classList.remove('error-flash'), 150);
+        setTimeout(() => {
+            DOM.answerInput.value = ''; // Ripristino lo svuotamento del campo
+            DOM.answerInput.classList.remove('error-flash');
+        }, 150);
     }
 });
 
