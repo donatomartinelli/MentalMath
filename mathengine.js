@@ -122,14 +122,15 @@ export class MathEngine {
         const multipliers = new Set(datesKeys.flatMap(d => Object.keys(this.history[d])));
         const colors = ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#4bc0c0', '#9966ff', '#ff9f40'];
 
-        const latencyDatasets = Array.from(multipliers).map((mult, i) => ({
+        const latencyDatasets = Array.from(multipliers).map((mult) => ({
             label: `[${mult}]`,
             data: continuousDates.map(date => {
                 const dayData = this.history[date]?.[mult];
                 return dayData && dayData.count > 0 ? (dayData.sum / dayData.count) / 1000 : null;
             }),
-            borderColor: colors[i % colors.length],
-            backgroundColor: colors[i % colors.length],
+            borderColor: '#ffffff',
+            backgroundColor: '#ffffff',
+            borderWidth: 2,
             tension: 0.2,
             spanGaps: true 
         }));
@@ -140,14 +141,6 @@ export class MathEngine {
             heatmapData[date] = dailyTotal;
         });
 
-        // Calcolo Media Mobile a 7 giorni per il Volume
-        const windowSize = 7;
-        const volumeMA = volumeDataArray.map((_, idx, arr) => {
-            if (idx < windowSize - 1) return null;
-            const slice = arr.slice(idx - windowSize + 1, idx + 1);
-            return slice.reduce((a, b) => a + b, 0) / windowSize;
-        });
-
         // Calcolo Streak (Giorni Consecutivi)
         let currentStreak = 0, bestStreak = 0, tempStreak = 0;
         for (let i = 0; i < volumeDataArray.length; i++) {
@@ -155,7 +148,6 @@ export class MathEngine {
                 tempStreak++;
                 bestStreak = Math.max(bestStreak, tempStreak);
             } else {
-                // Se oggi è 0 non rompere la streak finché non passa il giorno
                 if (i !== volumeDataArray.length - 1) tempStreak = 0; 
             }
         }
@@ -164,8 +156,7 @@ export class MathEngine {
         return { 
             labels: continuousDates, 
             latencyDatasets, 
-            volumeDataset: { label: 'Calcoli Completati', data: volumeDataArray, backgroundColor: '#26a641', borderRadius: 4, order: 2 },
-            volumeMADataset: { label: 'Media Mobile (7gg)', data: volumeMA, type: 'line', borderColor: '#58a6ff', borderWidth: 2, pointRadius: 0, order: 1, spanGaps: true },
+            volumeDataset: { label: 'Calcoli', data: volumeDataArray, backgroundColor: '#ffffff', borderRadius: 4 },
             heatmapData,
             streaks: { current: currentStreak, best: bestStreak }
         };

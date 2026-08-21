@@ -10,7 +10,7 @@ const state = {
     opStartTime: 0,
     currentErrors: 0,
     sessionStats: [],
-    charts: { latency: null, volume: null },
+    charts: { latency: null, volume: null, ema: null },
     isShowingSolution: false
 };
 
@@ -67,8 +67,8 @@ const loadPresetsUI = () => {
 
     DOM.dashboard.presets.insertAdjacentHTML('beforeend', `
         <div style="display: flex; gap: 5px; align-items: center;">
-            <input type="text" id="new-preset-name" class="preset-input" placeholder="Nome...">
-            <div id="btn-save-preset" class="preset-chip" style="background: #222; border-color: #555;">Salva</div>
+            <input type="text" id="new-preset-name" class="preset-input" placeholder="Name...">
+            <div id="btn-save-preset" class="preset-chip" style="background: #222; border-color: #555;">Save</div>
         </div>
     `);
 
@@ -133,11 +133,9 @@ document.getElementById('btn-dashboard').onclick = () => {
     const stats = engine.getMultiplierStats();
     
     if (!stats.length) {
-        DOM.dashboard.stats.textContent = "Nessun dato. Inizia un allenamento.";
         renderHeatmap({});
         return;
     } 
-    DOM.dashboard.stats.textContent = stats.map((item, i) => `${i + 1}. [${item[0]}] -> ${(item[1] / 1000).toFixed(2)}s`).join('\n');
 
     const data = engine.getDashboardData();
     if (!data) return;
@@ -147,32 +145,71 @@ document.getElementById('btn-dashboard').onclick = () => {
     DOM.dashboard.streakCurrent.textContent = `${data.streaks.current} 🔥`;
     DOM.dashboard.streakBest.textContent = `${data.streaks.best} 🏆`;
 
+    // Setup configurazione per Pan e Zoom (Click e trascina ripristinato)
     const zoomOptions = {
-        pan: { enabled: true, mode: 'x', modifierKey: null }, 
-        zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' }
+        pan: { enabled: true, mode: 'x', modifierKey: null }, // Trascina per spostarti
+        zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x', drag: { enabled: false } }
     };
 
     if (typeof Chart !== 'undefined') {
-        state.charts.volume?.destroy();
-        state.charts.volume = new Chart(document.getElementById('chart-volume'), {
+        
+        // 1. Grafico a Colonne Orizzontale per EMA Latenza Attuale
+        state.charts.ema?.destroy();
+        state.charts.ema = new Chart(document.getElementById('chart-ema'), {
             type: 'bar',
-            data: { labels: data.labels, datasets: [data.volumeMADataset, data.volumeDataset] },
-            options: { 
-                responsive: true, maintainAspectRatio: false, 
-                interaction: { mode: 'index', intersect: false },
-                scales: { y: { beginAtZero: true, grid: { color: '#30363d' } }, x: { grid: { display: false } } }, 
-                plugins: { legend: { labels: { color: '#d4d4d4', font: {family:'monospace'} } }, zoom: zoomOptions } 
+            data: {
+                labels: stats.map(s => `[${s[0]}]`),
+                datasets: [{ data: stats.map(s => s[1] / 1000), backgroundColor: '#ffffff', borderRadius: 4 }]
+            },
+            options: {
+                indexAxis: 'y', 
+                responsive: true, maintainAspectRatio: false,
+                scales: { x: { beginAtZero: true, grid: { color: '#333333' }, ticks: { color: '#d4d4d4' } }, y: { grid: { display: false }, ticks: { color: '#d4d4d4' } } },
+                plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toFixed(2)}s` } } }
             }
         });
 
+        // 2. Grafico Volume (Media Mobile Rimosso)
+        state.charts.volume?.destroy();
+        state.charts.volume = new Chart(document.getElementById('chart-volume'), {
+            type: 'bar',
+            data: { labels: data.labels, datasets: [data.volumeDataset] },
+            options: { 
+                responsive: true, maintainAspectRatio: false, 
+                scales: { y: { beginAtZero: true, grid: { color: '#333333' }, ticks: { color: '#d4d4d4' } }, x: { grid: { display: false }, ticks: { color: '#d4d4d4' } } }, 
+                plugins: { legend: { display: false }, zoom: zoomOptions } 
+            }
+        });
+
+        // 3. Grafico Latenza Giornaliera (Effetto Hover e Tooltip su Click)
         state.charts.latency?.destroy();
         state.charts.latency = new Chart(document.getElementById('chart-latency'), {
             type: 'line',
             data: { labels: data.labels, datasets: data.latencyDatasets },
             options: { 
                 responsive: true, maintainAspectRatio: false, 
-                scales: { y: { beginAtZero: true, grid: { color: '#30363d' } }, x: { grid: { color: '#30363d' } } }, 
-                plugins: { legend: { labels: { color: '#d4d4d4', font: { family: 'monospace' } } }, zoom: zoomOptions } 
+                interaction: { mode: 'nearest', intersect: true }, 
+                onHover: (e, activeElements, chart) => {
+                    if (activeElements.length) {
+                        const activeIndex = activeElements[0].datasetIndex;
+                        chart.data.datasets.forEach((dataset, i) => {
+                            dataset.borderColor = i === activeIndex ? '#ffffff' : '#444444';
+                            dataset.borderWidth = i === activeIndex ? 3 : 1;
+                        });
+                    } else {
+                        chart.data.datasets.forEach(dataset => {
+                            dataset.borderColor = '#ffffff';
+                            dataset.borderWidth = 2;
+                        });
+                    }
+                    chart.update();
+                },
+                scales: { y: { beginAtZero: true, grid: { color: '#333333' }, ticks: { color: '#d4d4d4' } }, x: { grid: { color: '#333333' }, ticks: { color: '#d4d4d4' } } }, 
+                plugins: { 
+                    legend: { labels: { color: '#d4d4d4', font: { family: 'monospace' } } }, 
+                    zoom: zoomOptions,
+                    tooltip: { events: ['click'] } 
+                } 
             }
         });
     }
