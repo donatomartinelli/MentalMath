@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Math Hub</title>
+    <!-- KaTeX per renderizzare LaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <style>
+        /* Palette Brutalista Monocromatica */
+        :root { 
+            --bg: #050505; 
+            --surface: #111111; 
+            --border: #333333; 
+            --border-highlight: #666666;
+            --text-main: #e0e0e0; 
+            --text-muted: #777777;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Courier New', Courier, monospace; 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            margin: 0; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+        }
+
+        .hidden { display: none !important; }
+
+        /* Barra del titolo ridotta all'osso */
+        /* Barra del titolo - Ora usa il DRAG NATIVO (-webkit-app-region) */
+        .titlebar { 
+            height: 30px; 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 0 15px; 
+            user-select: none; 
+            background: var(--bg);
+            -webkit-app-region: drag; /* Permette a Windows/Mac di trascinare la finestra nativamente */
+        }
+        .titlebar-drag { 
+            flex: 1; 
+            height: 100%; 
+            display: flex; 
+            align-items: center; 
+            font-size: 0.8rem; 
+            color: var(--text-muted); 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .titlebar-close { 
+            background: transparent; 
+            color: var(--text-muted); 
+            border: none; 
+            cursor: pointer; 
+            font-size: 1rem; 
+            font-family: inherit;
+            -webkit-app-region: no-drag; /* IMPORTANTE: Disabilita il drag sul bottone per poterci cliccare */
+        }
+        .titlebar-close:hover { color: #ffffff; }
+
+        /* Layout Principale */
+        .app-layout {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 30px);
+        }
+
+        /* Sidebar di Controllo (Sinistra) */
+        .sidebar {
+            width: 320px;
+            border-right: 1px solid var(--border);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            margin-top: 0;
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        select {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 12px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            border-radius: 0; /* Niente curve */
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+        }
+        select:focus { border-color: var(--text-main); }
+        select option { background: var(--bg); }
+
+        .btn {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 15px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.1s;
+            border-radius: 0;
+        }
+        .btn:hover {
+            background: var(--text-main);
+            color: var(--bg);
+        }
+        .btn-ghost { border-color: transparent; color: var(--text-muted); text-align: left; padding: 10px 0; }
+        .btn-ghost:hover { background: transparent; color: var(--text-main); border-color: transparent; }
+
+        /* Tela Principale (Destra) */
+        .canvas {
+            flex: 1;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .problem-breadcrumb {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+        }
+
+        /* Il Problema Matematico */
+        .math-hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2rem;
+            min-height: 250px;
+            padding: 40px 0;
+        }
+
+        .theory-box {
+            border: 1px dashed var(--border-highlight);
+            padding: 25px;
+            margin-bottom: 30px;
+            color: #999;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            background: var(--surface);
+        }
+
+        .solution-box {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            width: 100%;
+        }
+
+        .solution-result {
+            font-size: 1.8rem;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-left: 2px solid var(--border);
+            padding-left: 20px;
+            color: #aaaaaa;
+        }
+
+        /* Griglia di Autovalutazione */
+        .eval-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 50px;
+            padding-top: 20px;
+        }
+        
+        .btn-eval { padding: 20px 10px; font-weight: bold; font-size: 0.85rem; border: 1px solid; }
+        
+        /* Colori desaturati, in linea col brutalismo */
+        .eval-wrong { border-color: #5a2020; color: #ff6b6b; }
+        .eval-wrong:hover { background: #5a2020; color: #fff; }
+        
+        .eval-hard { border-color: #5a4020; color: #ffb86b; }
+        .eval-hard:hover { background: #5a4020; color: #fff; }
+        
+        .eval-good { border-color: #205a2d; color: #6bff84; }
+        .eval-good:hover { background: #205a2d; color: #fff; }
+        
+        .eval-easy { border-color: #20405a; color: #6b84ff; }
+        .eval-easy:hover { background: #20405a; color: #fff; }
+
+        /* Stato di Idle (Nessun problema generato) */
+        .idle-state {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--border);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="titlebar">
+        <div class="titlebar-drag" data-tauri-drag-region>SYS.MATH_HUB // LOCAL</div>
+        <button class="titlebar-close" id="btn-close-app">[X]</button>
+    </div>
+
+    <div class="app-layout">
+        
+        <aside class="sidebar">
+            <h2 class="section-title">Parametri di Generazione</h2>
+            
+            <div class="control-group">
+                <select id="select-course"></select>
+            </div>
+            
+            <div class="control-group">
+                <select id="select-module"></select>
+            </div>
+            
+            <button class="btn" id="btn-start" style="margin-top: auto; border-color: var(--text-main);">Esegui Generazione</button>
+        </aside>
+
+        <main class="canvas">
+            
+            <div id="idle-screen" class="idle-state">AWAITING_INPUT</div>
+
+            <div id="problem-screen" class="hidden" style="flex: 1; display: flex; flex-direction: column;">
+                <div class="problem-breadcrumb" id="topic-label">-- / --</div>
+
+                <button class="btn btn-ghost" id="btn-theory">>> Mostra Riferimenti Teorici</button>
+                <div id="theory-container" class="theory-box hidden"></div>
+
+                <div class="math-hero">
+                    <div id="math-problem"></div>
+                </div>
+
+                <div id="action-area" style="margin-top: auto;">
+                    <button class="btn" id="btn-show-solution" style="width: 100%;">Valida Risultato</button>
+                </div>
+
+                <div id="solution-container" class="solution-box hidden">
+                    <div id="math-solution" class="solution-result"></div>
+                    <div id="math-steps" class="steps-list"></div>
+                    
+                    <div class="eval-grid">
+                        <button class="btn btn-eval eval-wrong" data-rating="wrong">ERRATO (RIPETI)</button>
+                        <button class="btn btn-eval eval-hard" data-rating="hard">LENTO (DIFFICILE)</button>
+                        <button class="btn btn-eval eval-good" data-rating="good">CORRETTO (BENE)</button>
+                        <button class="btn btn-eval eval-easy" data-rating="easy">TRIVIALE (FACILE)</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
