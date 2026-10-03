@@ -1,4 +1,4 @@
-import { problemBank } from './problemBank.js';
+import { problemBank } from './data/problemBank.js';
 
 export class MathEngine {
     constructor() {
