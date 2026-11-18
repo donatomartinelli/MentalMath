@@ -1,0 +1,8 @@
+{
+  "name": "Math-Hub Personal Competency Platform",
+  "short_name": "Math-Hub",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a"
+}

@@ -1,0 +1,118 @@
+\documentclass[11pt,a4paper]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+
+% Ambiente Esercizio: \begin{esercizio}{ID-IMMUTABILE}{DIFFICOLTA_1_10}
+\newenvironment{esercizio}[2]{%
+  \par\medskip\noindent\textbf{[#1]} \textit{(Difficoltà base: #2/10)}\par\noindent\ignorespaces
+}{\par\medskip}
+
+% Ambiente Soluzione: compilato nel tuo PDF ma ignorato dallo script Python per non fare spoiler nell'app
+\newenvironment{soluzione}{%
+  \par\noindent\textit{Soluzione (trascritta da quaderno A5):}\par\noindent\ignorespaces
+}{\par\bigskip}
+
+\begin{document}
+
+% ==============================================================================
+\part{Analisi}
+% ==============================================================================
+
+\chapter{Pre-Analisi}
+
+\section{Disequazioni Irrazionali}
+
+\begin{esercizio}{PRE-AN-DISEQ-001}{1.5}
+Risolvere in $\mathbb{R}$ la disequazione elementare:
+$$\sqrt{x + 3} > 2$$
+\end{esercizio}
+\begin{soluzione}
+% Da compilare dopo aver svolto l'esercizio su carta
+\end{soluzione}
+
+\begin{esercizio}{PRE-AN-DISEQ-002}{2.0}
+Risolvere in $\mathbb{R}$ la disequazione:
+$$\sqrt{2x - 1} \le x - 2$$
+\end{esercizio}
+\begin{soluzione}
+\end{soluzione}
+
+\begin{esercizio}{PRE-AN-DISEQ-003}{3.0}
+Risolvere in $\mathbb{R}$ la disequazione irrazionale:
+$$\sqrt{2x^2 - 5x + 2} > x - 1$$
+\end{esercizio}
+\begin{soluzione}
+\end{soluzione}
+
+\section{Goniometria}
+
+\begin{esercizio}{PRE-AN-GONIOM-001}{2.0}
+Risolvere in $[0, 2\pi)$ l'equazione:
+$$2\sin^2(x) - \sin(x) - 1 = 0$$
+\end{esercizio}
+\begin{soluzione}
+\end{soluzione}
+
+\chapter{Analisi 1}
+
+\section{Limiti e Asintotici}
+
+\begin{esercizio}{AN1-LIM-001}{3.0}
+Calcolare il seguente limite notevole:
+$$\lim_{x \to 0} \frac{\sin(3x) - 3x\cos(x)}{x^3}$$
+\end{esercizio}
+\begin{soluzione}
+\end{soluzione}
+
+% ==============================================================================
+\part{Geometria}
+% ==============================================================================
+
+\chapter{Pre-Geometria}
+
+\section{Coniche nel Piano}
+
+\begin{esercizio}{PRE-GEO-ANALIT-001}{2.5}
+Determinare centro, raggio ed eventuali tangenti condotte dall'origine alla circonferenza:
+$$x^2 + y^2 - 6x - 4y + 9 = 0$$
+\end{esercizio}
+\begin{soluzione}
+\end{soluzione}
+
+\chapter{Geometria 1}
+
+\section{Autovalori e Diagonalizzazione}
+
+\begin{esercizio}{GEO1-AUTOVAL-001}{3.5}
+Determinare il polinomio caratteristico e gli autovalori della matrice:
+$$A = \begin{pmatrix} 2 & 1 & 0 \\ 1 & 2 & 0 \\ 0 & 0 & 3 \end{pmatrix}$$
+\end{esercizio}
+\begin{soluzione}
+\end{soluzione}
+
+% ==============================================================================
+\part{Algebra}
+% ==============================================================================
+
+\chapter{Algebra}
+
+\section{Gruppo Simmetrico e Permutazioni}
+
+\begin{esercizio}{ALG1-SYM-001}{3.0}
+In $S_9$, decomporre in cicli disgiunti, calcolare il periodo e la parità della permutazione:
+$$\sigma = (1\,4\,7\,2)(2\,5\,8)(3\,6\,4\,9)$$
+\end{esercizio}
+\begin{soluzione}
+\end{soluzione}
+
+\section{Anelli e Congruenze}
+
+\begin{esercizio}{ALG1-ANELLI-001}{4.5}
+Sia $A$ un anello commutativo unitario e $I \subseteq A$ un ideale. Dimostrare formalmente che la relazione $a \equiv b \pmod{I} \iff a - b \in I$ è una congruenza compatibile con somma e prodotto.
+\end{esercizio}
+\begin{soluzione}
+\end{soluzione}
+
+\end{document}
