@@ -227,9 +227,9 @@ function renderCurrentProblem(forceNew = false) {
         window.renderMathInElement(statementEl, {
             delimiters: [
                 { left: '$$', right: '$$', display: true },
-                { left: '\[', right: '\]', display: true },
+                { left: '\\[', right: '\\]', display: true },
                 { left: '$', right: '$', display: false },
-                { left: '\(', right: '\)', display: false }
+                { left: '\\(', right: '\\)', display: false }
             ],
             throwOnError: false
         });
@@ -528,9 +528,8 @@ function renderMentalLatencyText() {
         return;
     }
     statsText.textContent = stats
-        .map((item, idx) => `${idx + 1}. Moltiplicatore [${item[0]}] -> ${(item[1] / 1000).toFixed(2)} s`)
-        .join('
-');
+    .map((item, idx) => `${idx + 1}. Moltiplicatore [${item[0]}] -> ${(item[1] / 1000).toFixed(2)} s`)
+    .join('\n');
 }
 
 function renderSpectrumRadarAndTable() {
