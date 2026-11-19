@@ -29,8 +29,11 @@
         <!-- VISTA 1: PROBLEM SOLVING -->
         <section id="sec-problems">
             <div class="problem-meta">
-                <span id="prob-breadcrumb">CARICAMENTO IN CORSO...</span>
-                <span id="prob-timer">00:00</span>
+                <div style="display:flex; flex-direction:column; gap:5px;">
+                    <span id="prob-breadcrumb">CARICAMENTO IN CORSO...</span>
+                    <!-- NUOVA BARRA PROGRESSIONE -->
+                    <span id="prob-progress" style="font-size: 0.75rem; color: var(--fg-muted); font-family: var(--font-mono);"></span>
+                </div>
             </div>
 
             <div id="prob-statement" class="problem-statement"></div>

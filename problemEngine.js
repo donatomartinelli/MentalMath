@@ -179,4 +179,37 @@ export class ProblemEngine {
         }
         return { current: currentStreak, todayCount };
     }
+
+    getCourseProgress(course) {
+        // Isola tutti gli esercizi del corso attuale
+        const courseProbs = this.problems.filter(p => p.course === course);
+        if (!courseProbs.length) return { passed: 0, total: 0, str: "[..........] 0%" };
+
+        // Estrae tutti i gruppi unici (Topic + Difficoltà) mantenendo l'ordine
+        const uniqueGroups = [...new Set(courseProbs.map(p => this.getGroupKey(p)))];
+        
+        let passedCount = 0;
+        for (const gKey of uniqueGroups) {
+            const rec = this.state.topicRecords[gKey];
+            if (rec && rec.status === 'passed') {
+                passedCount++;
+            } else {
+                // Si ferma al primo non superato, calcolando la progressione reale e lineare
+                break;
+            }
+        }
+
+        const total = uniqueGroups.length;
+        const pct = Math.round((passedCount / total) * 100);
+        
+        // Genera la barra brutalista es: [####------]
+        const bars = Math.round(pct / 10);
+        const barStr = `[${'#'.repeat(bars)}${'-'.repeat(10 - bars)}]`;
+
+        return {
+            passed: passedCount,
+            total,
+            str: `${barStr} ${pct}% (${passedCount}/${total} STEP SUPERATI)`
+        };
+    }
 }

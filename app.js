@@ -8,7 +8,6 @@ const mathEngine = new MathEngine();
 const gistSync = new GistSync();
 
 let currentProblemObj = null;
-let problemElapsedSeconds = 0;
 let problemTimerInterval = null;
 
 // Stato UI Mental Math
@@ -83,7 +82,8 @@ function setupProblemSolvingUI() {
     btnNext.addEventListener('click', () => {
         if (!currentProblemObj) return;
         const val = parseFloat(slider.value);
-        problemEngine.submitEvaluation(currentProblemObj.id, val, problemElapsedSeconds);
+        // Rimossa l'iniezione dei secondi
+        problemEngine.submitEvaluation(currentProblemObj.id, val); 
         updateTopStreakPills();
         renderCurrentProblem(true);
     });
@@ -99,6 +99,7 @@ function renderCurrentProblem(forceNew = false) {
 
     if (!next || !next.problem) {
         document.getElementById('prob-breadcrumb').textContent = '// FINE PERCORSO';
+        document.getElementById('prob-progress').textContent = '';
         document.getElementById('prob-statement').textContent = 'Nessun problema rimanente o da ripassare. Sincronizza nuovo JSON.';
         return;
     }
@@ -106,9 +107,14 @@ function renderCurrentProblem(forceNew = false) {
     currentProblemObj = next.problem;
     const p = currentProblemObj;
     
-    // Breadcrumb essenziale: [MODO] Corso > Argomento
+    // Aggiorna Breadcrumb
     document.getElementById('prob-breadcrumb').textContent = `[${next.mode}] ${p.course.toUpperCase()} > ${p.topic.toUpperCase()}`;
+    
+    // Aggiorna Barra di Progressione Lineare
+    const prog = problemEngine.getCourseProgress(p.course);
+    document.getElementById('prob-progress').textContent = prog.str;
 
+    // Renderizza LaTeX
     const statementEl = document.getElementById('prob-statement');
     statementEl.innerHTML = p.statement;
     if (window.renderMathInElement) {
@@ -122,28 +128,8 @@ function renderCurrentProblem(forceNew = false) {
             throwOnError: false
         });
     }
-    startProblemTimer();
 }
 
-function startProblemTimer() {
-    stopProblemTimer();
-    problemElapsedSeconds = 0;
-    const timerEl = document.getElementById('prob-timer');
-    timerEl.textContent = '00:00';
-    problemTimerInterval = setInterval(() => {
-        problemElapsedSeconds++;
-        const mins = String(Math.floor(problemElapsedSeconds / 60)).padStart(2, '0');
-        const secs = String(problemElapsedSeconds % 60).padStart(2, '0');
-        timerEl.textContent = `${mins}:${secs}`;
-    }, 1000);
-}
-
-function stopProblemTimer() {
-    if (problemTimerInterval) {
-        clearInterval(problemTimerInterval);
-        problemTimerInterval = null;
-    }
-}
 
 // --- MENTAL MATH E ALTRE FUNZIONI INVARIATE (Ma rimosso codice obsoleto) ---
 // (Puoi incollare qui le tue funzioni setupMentalMathUI, setupDashboardUI e setupSyncUI mantenendone la logica come ti ho sistemato nell'HTML pulito)
