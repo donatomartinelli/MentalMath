@@ -3,283 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MATH-HUB // Personal Competency & Mental Math Platform</title>
-    <link rel="manifest" href="manifest.json">
+    <title>MATH-HUB // TERMINAL</title>
     <link rel="stylesheet" href="style.css">
-
-    <!-- KaTeX per rendering matematico istantaneo ad alto contrasto -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-
-    <!-- Chart.js per Radar dello Spettro e Serie Temporali -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <!-- TOP BAR BRUTALISTA -->
     <header class="top-nav">
-        <div class="brand">MATH-HUB // SPECCHIO MATEMATICO</div>
         <nav class="nav-tabs">
-            <button class="nav-btn active" data-target="sec-problems">[01] PROBLEM-SOLVING</button>
-            <button class="nav-btn" data-target="sec-mental">[02] MENTAL MATH</button>
-            <button class="nav-btn" data-target="sec-dashboard">[03] SPETTRO &amp; DASHBOARD</button>
-            <button class="nav-btn" data-target="sec-sync">[04] GIST SYNC</button>
+            <button class="nav-btn active" data-target="sec-problems">PROBLEM-SOLVING</button>
+            <button class="nav-btn" data-target="sec-mental">MENTAL MATH</button>
+            <button class="nav-btn" data-target="sec-dashboard">DASHBOARD</button>
+            <button class="nav-btn" data-target="sec-sync">SYNC</button>
         </nav>
         <div class="nav-streaks">
-            <div class="streak-pill">PROB: <strong id="nav-streak-prob">0g</strong></div>
-            <div class="streak-pill">CALC: <strong id="nav-streak-calc">0g</strong></div>
+            <span id="nav-streak-prob">PROB: 0</span>
+            <span id="nav-streak-calc">CALC: 0</span>
         </div>
     </header>
 
-    <!-- CONTENITORE PRINCIPALE -->
     <main class="workspace">
-
-        <!-- SEZIONE 1: PROBLEM-SOLVING ULTRA-ESSENZIALE -->
-        <section id="sec-problems" class="problem-view-wrapper">
-            <div class="filter-bar">
-                <div class="filter-group">
-                    <select id="filter-core" class="filter-select"></select>
-                    <select id="filter-course" class="filter-select"></select>
-                    <select id="filter-topic" class="filter-select"></select>
-                </div>
-                <div class="topic-telemetry">
-                    <span>PADRONANZA EMA: <strong id="tele-mastery">50%</strong></span>
-                    <span>COPERTURA TOPIC: <strong id="tele-coverage">0/0</strong></span>
-                    <span>CODA SALTATI: <strong id="tele-skipped">0</strong></span>
-                </div>
+        <!-- VISTA 1: PROBLEM SOLVING -->
+        <section id="sec-problems">
+            <div class="problem-meta">
+                <span id="prob-breadcrumb">CARICAMENTO IN CORSO...</span>
+                <span id="prob-timer">00:00</span>
             </div>
 
-            <article class="problem-card">
-                <div class="problem-header">
-                    <div id="prob-breadcrumb" class="breadcrumb">ANALISI &gt; PRE-ANALISI &gt; <strong>DISEQUAZIONI</strong></div>
-                    <div class="problem-meta">
-                        <span id="prob-mode-badge" class="badge badge-mode">NUOVO</span>
-                        <span id="prob-id-badge" class="badge">[ID]</span>
-                        <span id="prob-diff-badge" class="badge">DIFF: 1/10</span>
-                        <span id="prob-timer" class="timer-box">00:00</span>
-                    </div>
+            <div id="prob-statement" class="problem-statement"></div>
+
+            <div class="action-area">
+                <div id="stage-solve">
+                    <button id="btn-done" class="btn">[ DONE ]</button>
                 </div>
-
-                <div id="prob-statement" class="problem-statement">
-                    Caricamento esercizio dal database LaTeX...
-                </div>
-
-                <div class="problem-footer">
-                    <!-- FASE 1: RISOLUZIONE SU CARTA -->
-                    <div id="stage-solve">
-                        <button id="btn-reveal-rating" class="btn btn-primary" style="width:100%;">
-                            [ HO RISOLTO SU CARTA &mdash; VALUTA DIFFICOLT&Agrave; ]
-                        </button>
+                
+                <div id="stage-rate" class="slider-container hidden">
+                    <div class="slider-labels">
+                        <span>EASY</span>
+                        <span>HARD</span>
                     </div>
-
-                    <!-- FASE 2: SLIDER [0.00 - 1.00] -->
-                    <div id="stage-rate" class="rating-box hidden">
-                        <div class="slider-header">
-                            <span>STIMA DIFFICOLT&Agrave; PERCEPITA SULL'ESERCIZIO [0.00 = BANALE &mdash; 1.00 = RESA]:</span>
-                            <span id="slider-val-display" class="slider-value-display">0.35</span>
-                        </div>
-
-                        <input type="range" id="difficulty-slider" class="brutalist-slider" min="0" max="1" step="0.01" value="0.35">
-
-                        <div class="slider-scale-labels">
-                            <span>0.00 &mdash; Salto Avanti (&lt;0.20)</span>
-                            <span>0.35 &mdash; Progressione Standard</span>
-                            <span>0.75 &mdash; Consolidamento</span>
-                            <span>1.00 &mdash; Resa / Passo Indietro</span>
-                        </div>
-
-                        <div id="slider-action-preview" class="slider-action-preview"></div>
-
-                        <div class="rating-actions">
-                            <button id="btn-confirm-rating" class="btn btn-primary">[ CONFERMA E SBLOCCA SUCCESSIVO ]</button>
-                            <button id="btn-surrender" class="btn btn-danger">[ 1.00 &mdash; DICHIARA RESA / PASSO INDIETRO ]</button>
-                        </div>
-                    </div>
+                    <input type="range" id="diff-slider" class="raw-slider" min="0" max="1" step="0.01" value="0.5">
+                    <button id="btn-next" class="btn" style="margin-top: 15px;">[ NEXT ]</button>
                 </div>
-            </article>
+            </div>
         </section>
 
-        <!-- SEZIONE 2: MENTAL MATH (TRACHTENBERG) -->
-        <section id="sec-mental" class="mental-wrapper hidden">
+        <!-- VISTA 2: MENTAL MATH (Semplificata nei bordi, mantenuta logica) -->
+        <section id="sec-mental" class="hidden">
             <div id="mental-setup-box" class="view-container">
-                <h3 style="text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #333;padding-bottom:10px;">
-                    MENTAL MATH // SETUP ALLENAMENTO
-                </h3>
-
-                <div id="presets-container" class="presets-wrapper"></div>
-
-                <div class="config-row">
-                    <label>Cifre Moltiplicando:</label>
-                    <input type="text" id="config-digits" value="2" placeholder="es. 2, 2-4">
+                <p style="color:var(--fg-muted); margin-bottom:20px;">// SETUP TRACHTENBERG</p>
+                <div id="presets-container" style="display:flex; gap:10px; margin-bottom:20px;"></div>
+                <div style="display:flex; gap:20px; align-items:center;">
+                    <input type="text" id="config-digits" value="2" placeholder="Cifre (es. 2)" style="width:100px;">
+                    <input type="text" id="config-mult" value="11" placeholder="Molt. (es. 11)" style="width:100px;">
+                    <select id="config-mult-type"><option value="literal">Esatto</option><option value="digits">Cifre</option></select>
+                    <input type="number" id="config-time" value="60" style="width:60px;"><span>sec</span>
                 </div>
-
-                <div class="config-row">
-                    <label>Moltiplicatore:</label>
-                    <div style="display:flex;gap:6px;">
-                        <select id="config-mult-type">
-                            <option value="literal">Esatto</option>
-                            <option value="digits">Cifre</option>
-                        </select>
-                        <input type="text" id="config-mult" value="11,12" style="width:120px;" placeholder="es. 6-9, 11">
-                    </div>
-                </div>
-
-                <div class="config-row">
-                    <label>Durata Sessione:</label>
-                    <div style="display:flex;gap:6px;">
-                        <select id="config-time-type">
-                            <option value="s">Secondi</option>
-                            <option value="m">Minuti</option>
-                        </select>
-                        <input type="number" id="config-time" value="60" style="width:90px;">
-                    </div>
-                </div>
-
-                <button class="btn btn-primary" id="btn-start-session" style="margin-top:10px;">
-                    [ INIZIA SESSIONE VELOCIT&Agrave; ]
-                </button>
+                <button class="btn" id="btn-start-session" style="margin-top:30px;">[ START ]</button>
             </div>
 
-            <div id="mental-game-box" class="math-game-box hidden">
-                <div class="math-game-top">
-                    <button class="nav-btn" id="btn-exit-game">&lt; TERMINA E SALVA</button>
+            <div id="mental-game-box" class="hidden view-container" style="text-align:center;">
+                <div style="display:flex; justify-content:space-between; color:var(--fg-muted);">
                     <span id="mental-timer-display">TEMPO: 60s</span>
                     <span id="mental-score-display">PUNTI: 0</span>
                 </div>
-
-                <div id="trachtenberg-rule-banner" class="rule-banner"></div>
-
-                <div class="math-grid">
+                <div id="trachtenberg-rule-banner" style="margin:20px 0; color:var(--fg-muted);"></div>
+                <div style="font-size:4rem; margin-top:20px;">
                     <div id="multiplicand">--</div>
-                    <div id="multiplier"> * --</div>
-                    <input type="text" id="answer-input" autocomplete="off" inputmode="numeric">
+                    <div id="multiplier" style="color:var(--fg-muted);">* --</div>
+                    <input type="text" id="answer-input" autocomplete="off" inputmode="numeric" style="font-size:4rem; width:100%; text-align:right; border-bottom:2px solid var(--fg);">
                 </div>
+                <button class="btn" id="btn-exit-game" style="margin-top:40px;">[ END ]</button>
             </div>
         </section>
 
-        <!-- SEZIONE 3: SPETTRO DELLE COMPETENZE & DASHBOARD UNIFICATA -->
-        <section id="sec-dashboard" class="dashboard-wrapper hidden">
-            <!-- RIGA 1: DOPPIA STREAK E COPERTURA GLOBALE -->
-            <div class="kpi-grid">
-                <div class="dash-panel">
-                    <div class="dash-title">STREAK PROBLEM-SOLVING</div>
-                    <div id="kpi-prob-streak" class="kpi-big">0 GG</div>
-                    <div id="kpi-prob-sub" class="kpi-sub">Target giornaliero: almeno 1 problema risolto</div>
-                </div>
-                <div class="dash-panel">
-                    <div class="dash-title">STREAK MENTAL MATH</div>
-                    <div id="kpi-calc-streak" class="kpi-big">0 GG</div>
-                    <div id="kpi-calc-sub" class="kpi-sub">Sessioni di calcolo rapido</div>
-                </div>
-                <div class="dash-panel">
-                    <div class="dash-title">PADRONANZA EMA &amp; COPERTURA</div>
-                    <div id="kpi-global-mastery" class="kpi-big">50%</div>
-                    <div id="kpi-global-sub" class="kpi-sub">Invariante all'aggiunta dinamica di esercizi</div>
-                </div>
+        <!-- VISTA 3: DASHBOARD (Mantenuta struttura dati, rimossi bordi chiusi) -->
+        <section id="sec-dashboard" class="hidden">
+            <div class="dash-panel" style="display:flex; justify-content:space-between; font-size:2rem;">
+                <div>STREAK: <span id="kpi-prob-streak">0</span></div>
+                <div>MASTERY: <span id="kpi-global-mastery">0%</span></div>
             </div>
-
-            <!-- RIGA 2: HEATMAP DELLA COSTANZA & LATENZA TRACHTENBERG -->
-            <div class="dash-two-col">
-                <div class="dash-panel">
-                    <div class="dash-title">
-                        <span>CONSISTENCY TRACKER (HEATMAP ANNUALE)</span>
-                        <select id="heatmap-mode-select" class="filter-select" style="padding:2px 6px;font-size:0.75rem;">
-                            <option value="COMBINED">VISTA: COMBINATA</option>
-                            <option value="PROBLEMS">SOLO PROBLEMI TEORICI</option>
-                            <option value="MENTAL">SOLO MENTAL MATH</option>
-                        </select>
-                    </div>
-                    <div id="heatmap-grid" class="heatmap-grid"></div>
-                </div>
-                <div class="dash-panel">
-                    <div class="dash-title">LATENZA EMA MOLTIPLICATORI (MENTAL MATH)</div>
-                    <pre id="stats-text" style="font-size:0.8rem;color:#ccc;overflow-y:auto;max-height:130px;white-space:pre-wrap;"></pre>
-                </div>
-            </div>
-
-            <!-- RIGA 3: RADAR DELLO SPETTRO & MATRICE GRANULARE MICRO-ARGOMENTI -->
-            <div class="dash-equal-col">
-                <div class="dash-panel">
-                    <div class="dash-title">
-                        <span>SPETTRO DELLE COMPETENZE (RADAR)</span>
-                        <select id="radar-scope-select" class="filter-select" style="padding:2px 6px;font-size:0.75rem;">
-                            <option value="ALL_TOPICS">TUTTI I MICRO-ARGOMENTI</option>
-                            <option value="CORES">EQUILIBRIO NUCLEI (ANALISI / GEOMETRIA / ALGEBRA)</option>
-                            <option value="ANALISI">NUCLEO: ANALISI</option>
-                            <option value="GEOMETRIA">NUCLEO: GEOMETRIA</option>
-                            <option value="ALGEBRA">NUCLEO: ALGEBRA</option>
-                        </select>
-                    </div>
-                    <div class="chart-box"><canvas id="chart-radar"></canvas></div>
-                </div>
-
-                <div class="dash-panel">
-                    <div class="dash-title">MAPPATURA GRANULARE FORZE / DEBOLEZZE</div>
-                    <div class="spectrum-table-wrapper">
-                        <table class="spectrum-table">
-                            <thead>
-                                <tr>
-                                    <th>NUCLEO &gt; CORSO</th>
-                                    <th>MICRO-ARGOMENTO</th>
-                                    <th>PADRONANZA EMA</th>
-                                    <th>COPERTURA</th>
-                                    <th>STATO</th>
-                                </tr>
-                            </thead>
-                            <tbody id="spectrum-table-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- RIGA 4: SERIE TEMPORALI -->
-            <div class="dash-equal-col">
-                <div class="dash-panel">
-                    <div class="dash-title">SERIE TEMPORALE: PROBLEMI RISOLTI &amp; DIFFICOLT&Agrave; MEDIA</div>
-                    <div class="chart-box"><canvas id="chart-prob-timeline"></canvas></div>
-                </div>
-                <div class="dash-panel">
-                    <div class="dash-title">SERIE TEMPORALE: LATENZA MEDIA MENTAL MATH (S)</div>
-                    <div class="chart-box"><canvas id="chart-mental-latency"></canvas></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SEZIONE 4: SINCRONIZZAZIONE GITHUB GIST & BACKUP -->
-        <section id="sec-sync" class="sync-wrapper hidden">
             <div class="dash-panel">
-                <div class="dash-title">SINCRONIZZAZIONE MULTI-DISPOSITIVO (GITHUB GIST)</div>
-                <p style="font-size:0.8rem;color:#999;line-height:1.5;">
-                    Usa lo stesso meccanismo di Cortex per sincronizzare progressi, coda saltati, intervalli Anki e statistiche Mental Math tra PC, Tablet e Smartphone.
-                </p>
-
-                <div class="form-field">
-                    <label>GitHub Personal Access Token (con permesso <code>gist</code>):</label>
-                    <input type="password" id="gist-token" placeholder="ghp_...">
-                </div>
-
-                <div class="form-field">
-                    <label>Gist ID:</label>
-                    <input type="text" id="gist-id" placeholder="es. 8f3a1b9c4d2e...">
-                </div>
-
-                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
-                    <button id="btn-save-gist-cfg" class="btn">[ SALVA CREDENZIALI ]</button>
-                    <button id="btn-gist-push" class="btn btn-primary">[ PUSH STATO SU GIST ]</button>
-                    <button id="btn-gist-pull" class="btn">[ PULL STATO DA GIST ]</button>
-                </div>
-
-                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;border-top:1px solid #222;padding-top:12px;">
-                    <button id="btn-export-json" class="btn">[ ESPORTA BACKUP JSON ]</button>
-                    <button id="btn-import-json" class="btn">[ IMPORTA BACKUP JSON ]</button>
-                    <input type="file" id="import-json-file" accept=".json" class="hidden">
-                </div>
-
-                <div id="sync-log" class="sync-log">Pronto. Nessuna operazione cloud eseguita nella sessione corrente.</div>
+                <canvas id="chart-prob-timeline" style="height:250px; width:100%;"></canvas>
+            </div>
+            <div class="dash-panel">
+                <canvas id="chart-mental-latency" style="height:250px; width:100%;"></canvas>
             </div>
         </section>
 
+        <!-- VISTA 4: SYNC -->
+        <section id="sec-sync" class="hidden">
+            <div class="dash-panel">
+                <p style="color:var(--fg-muted); margin-bottom:20px;">// GITHUB GIST SYNC</p>
+                <input type="password" id="gist-token" placeholder="GitHub Token" style="width:100%; margin-bottom:10px;">
+                <input type="text" id="gist-id" placeholder="Gist ID" style="width:100%; margin-bottom:20px;">
+                <div style="display:flex; gap:20px;">
+                    <button id="btn-gist-push" class="btn">[ PUSH ]</button>
+                    <button id="btn-gist-pull" class="btn">[ PULL ]</button>
+                </div>
+                <div id="sync-log" style="margin-top:20px; min-height:50px;"></div>
+            </div>
+        </section>
     </main>
 
     <script type="module" src="app.js"></script>
