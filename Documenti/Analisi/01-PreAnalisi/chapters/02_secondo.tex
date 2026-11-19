@@ -1,0 +1,194 @@
+\part{Equazioni, Disequazioni e Sistemi}
+
+\section{Equazioni e Disequazioni di Primo Grado}
+\subsection{Equazioni lineari}
+\subsubsection{Principi di equivalenza}
+\textbf{Definizione:} Un'equazione è un'uguaglianza tra due espressioni algebriche, verificata solo per particolari valori attribuiti alle variabili (incognite). Due equazioni si dicono \textit{equivalenti} se ammettono lo stesso insieme di soluzioni.
+\begin{itemize}
+    \item \textbf{Primo principio di equivalenza:} Aggiungendo o sottraendo a entrambi i membri di un'equazione una stessa espressione (definita per tutti i valori del dominio), si ottiene un'equazione equivalente.
+    \item \textbf{Secondo principio di equivalenza:} Moltiplicando o dividendo entrambi i membri per un'espressione non nulla e indipendente dall'incognita, si ottiene un'equazione equivalente.
+\end{itemize}
+
+\subsubsection{Equazioni intere, fratte e letterali}
+La forma normale di un'equazione lineare intera in una incognita è $ax + b = 0$, la cui soluzione unica (per $a \neq 0$) è $x = -\frac{b}{a}$.
+\begin{itemize}
+    \item \textbf{Equazioni fratte:} L'incognita compare al denominatore. È tassativo determinare preventivamente le Condizioni di Esistenza (C.E.) ponendo i denominatori diversi da zero. Le soluzioni finali andranno confrontate con le C.E. per scartare eventuali radici estranee.
+    \item \textbf{Equazioni letterali:} Oltre all'incognita, figurano parametri letterali. La risoluzione richiede la \textit{discussione} dell'equazione al variare del parametro.
+\end{itemize}
+\textbf{Esempio (Discussione):} Sia $kx = 2$. Se $k \neq 0 \implies x = \frac{2}{k}$ (determinata). Se $k = 0$, l'equazione $0x = 2$ è impossibile.
+
+\subsection{Disequazioni lineari}
+\subsubsection{Principi di equivalenza per le disuguaglianze}
+Valgono principi analoghi alle equazioni, con una differenza fondamentale: \textit{moltiplicando o dividendo entrambi i membri per una quantità negativa, è necessario invertire il verso della disuguaglianza} affinché si ottenga una disequazione equivalente.
+\textbf{Esempio:} $-3x < 6 \implies x > -2$.
+
+\subsubsection{Disequazioni intere e fratte}
+Le disequazioni fratte (es. $\frac{N(x)}{D(x)} > 0$) non possono essere risolte "eliminando" il denominatore, poiché il suo segno, dipendendo dall'incognita, è a priori ignoto e potrebbe invertire il verso della disequazione. Si deve invece studiare il segno di numeratore e denominatore.
+
+\subsubsection{Studio del segno di un prodotto e di un quoziente}
+Si procede risolvendo separatamente le disequazioni $N(x) > 0$ e $D(x) > 0$ (o analogamente per i fattori di un prodotto). Si riportano i risultati su un grafico cartesiano unidimensionale e si applica la regola dei segni (prodotto/quoziente) per individuare gli intervalli in cui la frazione assume il segno richiesto dalla disequazione originaria.
+
+\subsection{Equazioni e disequazioni con modulo}
+L'equazione $|A(x)| = B(x)$ è equivalente all'unione di due sistemi (esplicitazione del modulo):
+\[
+\begin{cases} A(x) \ge 0 \\ A(x) = B(x) \end{cases} \cup \quad \begin{cases} A(x) < 0 \\ -A(x) = B(x) \end{cases}
+\]
+Per le disequazioni semplici con $k > 0$:
+\begin{itemize}
+    \item $|A(x)| < k \iff -k < A(x) < k$ (sistema: $A(x) < k \land A(x) > -k$)
+    \item $|A(x)| > k \iff A(x) < -k \lor A(x) > k$
+\end{itemize}
+
+\section{Sistemi di Equazioni e Disequazioni Lineari}
+\subsection{Sistemi di equazioni}
+\subsubsection{Definizione e grado di un sistema}
+Un sistema di equazioni è l'insieme di due o più equazioni di cui si ricercano le soluzioni comuni (intersezione degli insiemi delle soluzioni). Il grado di un sistema di equazioni polinomiali è pari al \textit{prodotto} dei gradi delle singole equazioni che lo compongono. Un sistema lineare ha grado 1.
+
+\subsubsection{Metodo di sostituzione}
+Consiste nell'esplicitare un'incognita (preferibilmente con coefficiente unitario) da un'equazione e sostituire l'espressione ottenuta nelle altre. È il metodo più generale.
+
+\subsubsection{Metodo del confronto}
+Si esplicita la \textit{stessa} incognita da due equazioni differenti e si uguagliano le due espressioni risultanti.
+
+\subsubsection{Metodo di riduzione (addizione e sottrazione)}
+Sfruttando il principio di addizione delle equazioni (combinazione lineare), si moltiplicano le equazioni per opportuni coefficienti affinché, sommandole membro a membro, una delle incognite si elida.
+
+\subsubsection{Metodo di Cramer}
+Basato sull'algebra lineare (determinanti). Per un sistema $2 \times 2$ in forma normale $\begin{cases} ax+by=c \\ a'x+b'y=c' \end{cases}$:
+Si definiscono il determinante della matrice dei coefficienti $\Delta = ab' - a'b$, e i determinanti incogniti $\Delta_x = cb' - c'b$, $\Delta_y = ac' - a'c$.
+\begin{itemize}
+    \item Se $\Delta \neq 0$: Sistema determinato, $x = \frac{\Delta_x}{\Delta}$, $y = \frac{\Delta_y}{\Delta}$.
+    \item Se $\Delta = 0$ e $\Delta_x = \Delta_y = 0$: Sistema indeterminato ($\infty$ soluzioni).
+    \item Se $\Delta = 0$ e $\Delta_x \neq 0 \lor \Delta_y \neq 0$: Sistema impossibile.
+\end{itemize}
+
+\subsection{Sistemi di tre equazioni in tre incognite}
+Si risolvono estendendo i metodi precedenti (sostituzione, combinazione lineare per ridurre a un sistema $2 \times 2$, o Regola di Cramer calcolando i determinanti $3 \times 3$ con la Regola di Sarrus o lo sviluppo di Laplace).
+
+\subsection{Sistemi di disequazioni lineari}
+Risolvere un sistema di disequazioni significa trovare l'intersezione degli insiemi delle soluzioni di ciascuna disequazione (non va confuso con lo studio del segno). Graficamente, si cercano gli intervalli della retta reale in cui tutte le disequazioni sono contemporaneamente verificate (linee continue sovrapposte).
+
+\section{Radicali}
+\subsection{Definizione e generalità}
+\subsubsection{Radici $n$-esime in $\mathbb{R}$}
+\textbf{Definizione:} Dati un numero reale $a$ e un intero $n \ge 2$, si dice radice $n$-esima di $a$ (indicata con $\sqrt[n]{a}$) quel numero reale $b$, se esiste, tale che $b^n = a$.
+
+\subsubsection{Condizioni di esistenza (indice pari e dispari)}
+\begin{itemize}
+    \item Se $n$ è \textbf{dispari}, $\sqrt[n]{a}$ è definita per ogni $a \in \mathbb{R}$. Il radicale mantiene il segno del radicando.
+    \item Se $n$ è \textbf{pari}, $\sqrt[n]{a}$ è definita solo per $a \ge 0$. In $\mathbb{R}$, il risultato della radice aritmetica di indice pari è per definizione sempre non negativo.
+\end{itemize}
+
+\subsubsection{Proprietà invariantiva e semplificazione}
+Moltiplicando o dividendo l'indice della radice e l'esponente del radicando per un medesimo intero positivo $p$, il radicale non cambia valore: $\sqrt[np]{a^{mp}} = \sqrt[n]{a^m}$.
+\textbf{Attenzione al rigore:} Se si divide per un intero pari (semplificazione), è necessario inserire il valore assoluto sul radicando per garantirne la positività.
+\textbf{Esempio:} $\sqrt{x^2} = |x|$, non $x$.
+
+\subsection{Operazioni con i radicali}
+\subsubsection{Moltiplicazione, divisione e trasporto sotto/fuori radice}
+Per moltiplicare/dividere radicali, occorre ridurli allo stesso indice calcolando il m.c.m. degli indici. Sotto opportune C.E. ($a, b \ge 0$): $\sqrt[n]{a} \cdot \sqrt[n]{b} = \sqrt[n]{ab}$.
+\begin{itemize}
+    \item \textbf{Trasporto fuori:} Se l'esponente del radicando $m \ge n$, si può estrarre eseguendo la divisione $m:n$. Il quoziente diventa l'esponente del fattore esterno, il resto l'esponente di quello interno. (Richiede valore assoluto su potenze ad esponente dispari se l'indice era pari).
+    \item \textbf{Trasporto dentro:} $c \sqrt[n]{a} = \sqrt[n]{c^n a}$ (valido per $c \ge 0$).
+\end{itemize}
+
+\subsubsection{Potenza e radice di un radicale}
+\begin{itemize}
+    \item Potenza: $(\sqrt[n]{a})^m = \sqrt[n]{a^m}$
+    \item Radice di radice: $\sqrt[m]{\sqrt[n]{a}} = \sqrt[mn]{a}$
+\end{itemize}
+
+\subsubsection{Addizione algebrica (radicali simili)}
+Due radicali si dicono simili se hanno lo stesso indice e lo stesso radicando. L'addizione è possibile solo tra radicali simili, sommando i coefficienti esterni (simile all'addizione tra monomi).
+
+\subsection{Razionalizzazione del denominatore}
+Procedura algebrica per trasformare una frazione in una equivalente priva di radicali al denominatore.
+\subsubsection{Razionalizzazione con monomi}
+Per razionalizzare $\frac{c}{\sqrt[n]{a^m}}$ (con $m < n$), si moltiplica numeratore e denominatore per il fattore razionalizzante $\sqrt[n]{a^{n-m}}$.
+
+\subsubsection{Razionalizzazione con binomi (somma e differenza)}
+Per espressioni del tipo $\frac{c}{\sqrt{a} \pm \sqrt{b}}$, si sfrutta il prodotto notevole $(A+B)(A-B) = A^2 - B^2$. Si moltiplica per il fattore coniugato $\sqrt{a} \mp \sqrt{b}$.
+
+\subsection{Potenze ad esponente razionale}
+La potenza con esponente frazionario è definita come $a^{m/n} = \sqrt[n]{a^m}$, per ogni $a > 0$ in $\mathbb{R}$. È fondamentale che la base sia strettamente positiva per preservare la biunivocità e le proprietà delle potenze.
+
+\subsection{Radicali quadratici doppi}
+Un radicale doppio del tipo $\sqrt{a \pm \sqrt{b}}$ può essere ricondotto alla somma algebrica di due radicali semplici $\sqrt{\frac{a + c}{2}} \pm \sqrt{\frac{a - c}{2}}$ dove $c = \sqrt{a^2 - b}$, a patto che la quantità $(a^2 - b)$ sia un quadrato perfetto.
+
+\section{Equazioni e Disequazioni di Secondo Grado e Superiore}
+\subsection{Equazioni di secondo grado}
+La forma normale è $ax^2 + bx + c = 0$, con $a \neq 0$.
+
+\subsubsection{Risoluzione di equazioni incomplete (pure, spurie, monomie)}
+\begin{itemize}
+    \item \textbf{Monomia ($b=c=0$):} $ax^2 = 0 \implies x_1=x_2=0$.
+    \item \textbf{Pura ($b=0$):} $ax^2 + c = 0 \implies x^2 = -c/a$. Se i coefficienti sono discordi, $x = \pm \sqrt{-c/a}$.
+    \item \textbf{Spuria ($c=0$):} $ax^2 + bx = 0 \implies x(ax+b)=0$. Soluzioni: $x_1=0, x_2=-b/a$.
+\end{itemize}
+
+\subsubsection{Formula risolutiva generale e formula ridotta}
+Se completa, si utilizza la formula derivata dal completamento del quadrato:
+\[ x = \frac{-b \pm \sqrt{\Delta}}{2a} \]
+Se $b$ è pari ($b = 2k$), si può usare la formula ridotta: $x = \frac{-\frac{b}{2} \pm \sqrt{\frac{\Delta}{4}}}{a}$.
+
+\subsubsection{Discriminante ($\Delta$) e natura delle soluzioni}
+Il discriminante $\Delta = b^2 - 4ac$ governa la natura delle soluzioni nel campo reale:
+\begin{itemize}
+    \item $\Delta > 0$: Due radici reali e distinte.
+    \item $\Delta = 0$: Due radici reali e coincidenti (il trinomio è un quadrato di binomio).
+    \item $\Delta < 0$: Nessuna radice reale (le soluzioni apparterranno a $\mathbb{C}$ come complesse coniugate).
+\end{itemize}
+
+\subsubsection{Relazioni tra radici e coefficienti}
+Per il Teorema di Viète, date le radici $x_1, x_2$:
+Somma: $S = x_1 + x_2 = -\frac{b}{a}$. \quad Prodotto: $P = x_1 \cdot x_2 = \frac{c}{a}$.
+
+\subsubsection{Regola di Cartesio}
+Permette di determinare il segno delle radici (se $\Delta \ge 0$) analizzando le variazioni e permanenze di segno nella successione dei coefficienti $a, b, c$.
+Ogni variazione corrisponde a una radice positiva, ogni permanenza a una radice negativa.
+
+\subsubsection{Equazioni parametriche}
+Equazioni in cui i coefficienti dipendono da uno o più parametri. Si risolvono imponendo algebricamente le condizioni richieste (es. radici reali $\Delta \ge 0$, radici opposte $b=0$, reciproche $a=c$) e intersecando le soluzioni con la condizione di realtà.
+
+\subsection{Disequazioni di secondo grado}
+\subsubsection{Studio del segno del trinomio}
+Risolvere $ax^2+bx+c \gtrless 0$. Interpretando il trinomio come una parabola $y = ax^2+bx+c$ (se $a>0$, concavità verso l'alto):
+\begin{itemize}
+    \item $\Delta > 0$: La parabola interseca l'asse $x$ in $x_1, x_2$. $y > 0$ per valori esterni all'intervallo $[x_1, x_2]$, $y < 0$ per valori interni.
+    \item $\Delta = 0$: Tangente all'asse $x$. $y \ge 0$ per ogni $x \in \mathbb{R}$ (annullandosi nel vertice).
+    \item $\Delta < 0$: Nessuna intersezione. $y > 0$ strettamente per ogni $x \in \mathbb{R}$.
+\end{itemize}
+
+\subsubsection{Disequazioni fratte e sistemi di disequazioni}
+Si applicano le regole viste nel primo grado (studio del segno su asse reale per le fratte, intersezione di insiemi per i sistemi), fattorizzando i trinomi in polinomi di grado inferiore ove possibile.
+
+\subsection{Equazioni e disequazioni di grado superiore}
+\subsubsection{Equazioni binomie, trinomie e biquadratiche}
+\begin{itemize}
+    \item \textbf{Binomie:} $ax^n + b = 0 \implies x^n = -b/a$. Si risolve per estrazione di radice (attenzione al segno se $n$ è pari).
+    \item \textbf{Trinomie:} $ax^{2n} + bx^n + c = 0$. Si riportano al secondo grado tramite la sostituzione $t = x^n$.
+    \item \textbf{Biquadratiche:} Caso particolare delle trinomie con $n=2$ ($ax^4+bx^2+c=0$). Si pone $t=x^2 \ge 0$.
+\end{itemize}
+
+\subsubsection{Equazioni risolvibili mediante scomposizione}
+Tramite raccoglimenti o Regola di Ruffini, si fattorizza il polinomio $P(x)=0$ in forma $A(x)B(x)C(x)=0$. Per la Legge di annullamento del prodotto, le radici si ottengono ponendo a zero i singoli fattori.
+
+\subsection{Equazioni e disequazioni irrazionali}
+\subsubsection{Risoluzione di $\sqrt{A(x)} = B(x)$}
+L'elevamento al quadrato di ambo i membri \textit{non} produce in generale un'equazione equivalente, poiché $A=B^2$ perderebbe l'informazione sul segno di $B(x)$. L'equazione equivale al sistema misto:
+\[
+\begin{cases} B(x) \ge 0 \\ A(x) = [B(x)]^2 \end{cases}
+\]
+La condizione $A(x) \ge 0$ (C.E. del radicale) è intrinsecamente soddisfatta dalla seconda equazione, essendo uguagliata a un quadrato, e può essere omessa dal sistema.
+
+\subsubsection{Risoluzione di $\sqrt{A(x)} < B(x)$ e $\sqrt{A(x)} > B(x)$}
+\begin{itemize}
+    \item Per $\sqrt{A(x)} < B(x)$, si esige che $B(x)$ sia strettamente positivo e che il radicando sia definito. Equivale a:
+    \[ \begin{cases} A(x) \ge 0 \\ B(x) > 0 \\ A(x) < [B(x)]^2 \end{cases} \]
+    
+    \item Per $\sqrt{A(x)} > B(x)$, il termine $B(x)$ può essere sia negativo (in tal caso la disuguaglianza è ovvia purché il radicale esista) sia positivo (in cui si eleva al quadrato). Equivale all'unione di due sistemi:
+    \[ \begin{cases} B(x) < 0 \\ A(x) \ge 0 \end{cases} \cup \quad \begin{cases} B(x) \ge 0 \\ A(x) > [B(x)]^2 \end{cases} \]
+\end{itemize}
+
+\subsection{Sistemi di grado superiore al primo}
+Si definisce grado del sistema il prodotto dei gradi delle singole equazioni (es. retta intersecata con conica genera un sistema di secondo grado). Il metodo risolutivo d'elezione è la \textit{sostituzione}, esplicitando un'incognita dall'equazione lineare per abbassare il grado di quella superiore, giungendo a un'equazione \textit{risolvente} in una sola variabile.

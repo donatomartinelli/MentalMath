@@ -1,0 +1,133 @@
+\ProvidesPackage{preamble} % Dichiara che questo è un pacchetto personalizzato
+
+% --- 1. CODIFICA E LINGUA ---
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel} 
+
+% --- 2. MATEMATICA E SIMBOLI ---
+\usepackage{mathtools} 
+\usepackage{amssymb, amsfonts, amsthm}
+\usepackage{cancel}
+\usepackage{graphicx} % <--- Integrato dal secondo preambolo
+\setcounter{MaxMatrixCols}{20}
+
+% --- 3. TIPOGRAFIA AVANZATA E FONT ---
+\usepackage{microtype}
+\usepackage{newpxtext, newpxmath} 
+
+% --- 4. GEOMETRIA E LAYOUT ---
+\usepackage{geometry}
+\geometry{inner=2.5cm, outer=3.5cm, top=3cm, bottom=3cm}
+\usepackage{multicol, float}
+
+% --- 5. COLORI E GRAFICA ---
+\usepackage{xcolor}
+\usepackage{tikz, pgfplots}
+\usetikzlibrary{positioning}
+\usetikzlibrary{patterns}
+\pgfplotsset{compat=1.18}
+
+% --- 6. UTILITY E IMPORTAZIONI ---
+\usepackage{enumitem, comment}
+\usepackage{import, xifthen, pdfpages, transparent}
+\usepackage{listings} % <--- Integrato dal secondo preambolo
+
+
+% --- 6.1 CONFIGURAZIONE LISTINGS (MATLAB E CODICE) ---
+\lstset{
+    inputencoding=utf8,
+    extendedchars=true,
+    literate={à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {È}{{\`E}}1 {é}{{\'e}}1,
+}
+
+% Ambiente fittizio per nascondere il codice web durante la compilazione del PDF
+\usepackage{comment}
+\excludecomment{quarto_interactive}
+\excludecomment{plotly} % Ignora il codice Python nella compilazione del PDF
+
+% Definizione colori stile MATLAB
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{mBack}{rgb}{0.95,0.95,0.92}
+
+% Stile per il CODICE
+\lstdefinestyle{matlabCode}{
+    language=Matlab,
+    backgroundcolor=\color{white},
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    frame=single
+}
+
+% Stile per l'Output
+\lstdefinestyle{matlabOutput}{
+    language={},
+    backgroundcolor=\color{gray!10},
+    basicstyle=\ttfamily\footnotesize,
+    frame=single,
+    breaklines=true,
+    showstringspaces=false
+}
+
+% --- 7. TEOREMI E BOX ---
+\usepackage{mdframed}
+\mdfdefinestyle{math_box}{
+    linecolor=black!70, linewidth=0.8pt, roundcorner=2pt,
+    innertopmargin=8pt, innerbottommargin=8pt,
+    innerleftmargin=12pt, innerrightmargin=12pt,
+    backgroundcolor=black!3
+}
+\theoremstyle{plain}
+\newtheorem{thm}{Teorema}[chapter] 
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposizione}
+\newtheorem{cor}[thm]{Corollario}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definizione}[chapter]
+\newtheorem{exmp}{Esempio}[chapter]
+\newtheorem{exmpnr}{Esempio}[chapter] % <--- Presente nel tuo primo preambolo
+\newtheorem{xca}[exmp]{Esercizio}
+
+\theoremstyle{remark}
+\newtheorem{rem}{Osservazione}
+\newtheorem{note}{Nota}
+\newtheorem{case}{Caso}
+
+\surroundwithmdframed[style=math_box]{thm}
+\surroundwithmdframed[style=math_box]{defn}
+\surroundwithmdframed[style=math_box]{lem}
+\surroundwithmdframed[style=math_box]{prop}
+\surroundwithmdframed[style=math_box]{cor}
+
+% --- 8. ESCLUSIONI ---
+%\excludecomment{proof}
+%\excludecomment{xca}
+%\excludecomment{exmp}
+%\excludecomment{note}
+%\excludecomment{rem}
+%\excludecomment{case}
+
+% --- 10. TESTATINE DINAMICHE ---
+\usepackage[automark, headsepline]{scrlayer-scrpage}
+\clearpairofpagestyles
+\ohead{\pagemark}
+\ihead{\headmark}
+\pagestyle{scrheadings}
+
+% --- 11. HYPERREF ---
+\usepackage[colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue]{hyperref}

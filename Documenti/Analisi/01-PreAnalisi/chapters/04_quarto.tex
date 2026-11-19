@@ -1,0 +1,248 @@
+\part{Limiti e Derivate}
+
+\section{Successioni Numeriche Reali (Cenni)}
+\subsection{Generalità}
+\subsubsection{Definizione e successioni monotone}
+\textbf{Definizione:} Una successione numerica reale è una funzione $a: \mathbb{N} \to \mathbb{R}$ che associa a ogni numero naturale $n$ (spesso $n \ge 1$) un numero reale $a_n$, detto termine $n$-esimo della successione. Si indica solitamente con $\{a_n\}_{n \in \mathbb{N}}$.
+\begin{itemize}
+    \item Una successione è \textbf{monotòna crescente} se $\forall n \in \mathbb{N}, a_{n+1} \ge a_n$ (strettamente se $>$).
+    \item È \textbf{monotòna decrescente} se $\forall n \in \mathbb{N}, a_{n+1} \le a_n$ (strettamente se $<$).
+\end{itemize}
+
+\subsubsection{Progressioni aritmetiche e geometriche}
+\begin{itemize}
+    \item \textbf{Progressione aritmetica:} Ogni termine differisce dal precedente per una quantità costante $d$, detta \textit{ragione}. Il termine generale è $a_n = a_1 + (n-1)d$. La somma dei primi $n$ termini è $S_n = n \frac{a_1 + a_n}{2}$.
+    \item \textbf{Progressione geometrica:} Il rapporto tra un termine e il precedente è costante e pari a $q$ (\textit{ragione}). Il termine generale è $a_n = a_1 q^{n-1}$. La somma dei primi $n$ termini (per $q \neq 1$) è $S_n = a_1 \frac{1 - q^n}{1 - q}$.
+\end{itemize}
+
+\subsection{Limite di una successione}
+\textbf{Definizione:} Si dice che la successione $\{a_n\}$ ammette limite $l \in \mathbb{R}$ (e converge a $l$) per $n \to +\infty$, e si scrive $\lim_{n \to \infty} a_n = l$, se:
+\[ \forall \varepsilon > 0, \exists N \in \mathbb{N} : \forall n > N, |a_n - l| < \varepsilon \]
+Se il limite è $\pm \infty$, la successione si dice \textit{divergente}. Se il limite non esiste (es. $a_n = (-1)^n$), la successione è detta \textit{irregolare} o indeterminata.
+\textbf{Teorema:} Ogni successione monotòna e limitata è convergente (ammette limite finito pari al suo estremo superiore/inferiore).
+
+\section{Limiti di Funzioni}
+\subsection{Definizioni di Limite}
+Sia $f: D \to \mathbb{R}$ una funzione e $x_0$ un punto di accumulazione per $D$ (ovvero in ogni intorno di $x_0$ cade almeno un punto di $D$ distinto da $x_0$).
+\subsubsection{Limite finito per $x \to x_0$ (definizione con $\varepsilon, \delta$)}
+Si dice che $\lim_{x \to x_0} f(x) = l$, con $l \in \mathbb{R}$, se per ogni intorno $I$ di $l$ esiste un intorno $J$ di $x_0$ tale che, per ogni $x \in J \cap D \setminus \{x_0\}$, si abbia $f(x) \in I$. In metrica euclidea:
+\[ \forall \varepsilon > 0, \exists \delta > 0 : \forall x \in D \setminus \{x_0\}, 0 < |x - x_0| < \delta \implies |f(x) - l| < \varepsilon \]
+
+\subsubsection{Limite infinito per $x \to x_0$ (asintoto verticale)}
+Si dice che $\lim_{x \to x_0} f(x) = +\infty$ se:
+\[ \forall M > 0, \exists \delta > 0 : \forall x \in D \setminus \{x_0\}, 0 < |x - x_0| < \delta \implies f(x) > M \]
+(Analogamente per $-\infty$ ponendo $f(x) < -M$). In tal caso, la retta $x = x_0$ è un \textbf{asintoto verticale} per il grafico della funzione.
+
+\subsubsection{Limite finito/infinito per $x \to \infty$ (asintoto orizzontale)}
+Si dice che $\lim_{x \to +\infty} f(x) = l$ se:
+\[ \forall \varepsilon > 0, \exists K > 0 : \forall x \in D, x > K \implies |f(x) - l| < \varepsilon \]
+La retta $y = l$ costituisce un \textbf{asintoto orizzontale}.
+Per il limite infinito: $\lim_{x \to +\infty} f(x) = +\infty \iff \forall M > 0, \exists K > 0 : x > K \implies f(x) > M$.
+
+\subsubsection{Limite destro e limite sinistro}
+Il limite è calcolato considerando solo i valori che si avvicinano a $x_0$ da destra ($x \to x_0^+$ con $x > x_0$) o da sinistra ($x \to x_0^-$ con $x < x_0$).
+\textbf{Teorema:} Il $\lim_{x \to x_0} f(x) = l$ esiste se e solo se esistono entrambi i limiti destro e sinistro e sono coincidenti (e pari a $l$).
+
+\subsection{Teoremi sui limiti}
+\subsubsection{Unicità del limite}
+\textbf{Teorema:} Se una funzione $f(x)$ ammette limite per $x \to x_0$, tale limite è unico. (Si dimostra per assurdo ponendo l'esistenza di $l_1 \neq l_2$ e scegliendo $\varepsilon < \frac{|l_1-l_2|}{2}$).
+
+\subsubsection{Permanenza del segno e Teorema del confronto (Carabinieri)}
+\begin{itemize}
+    \item \textbf{Teorema della permanenza del segno:} Se $\lim_{x \to x_0} f(x) = l \neq 0$, allora esiste un intorno di $x_0$ in cui la funzione assume lo stesso segno del suo limite $l$.
+    \item \textbf{Teorema del confronto (dei Carabinieri):} Siano $f(x), g(x), h(x)$ tre funzioni tali che, in un intorno di $x_0$ (escluso al più $x_0$), valga $f(x) \le g(x) \le h(x)$. Se $\lim_{x \to x_0} f(x) = \lim_{x \to x_0} h(x) = l$, allora anche $\lim_{x \to x_0} g(x) = l$.
+\end{itemize}
+
+\subsection{Calcolo dei limiti e Forme Indeterminate}
+\subsubsection{Algebra dei limiti}
+Se $\lim_{x \to x_0} f(x) = l_1$ e $\lim_{x \to x_0} g(x) = l_2$ (limiti finiti), allora il limite della somma, prodotto e quoziente delle funzioni coincide rispettivamente con $l_1+l_2$, $l_1 \cdot l_2$ e $l_1/l_2$ (con $l_2 \neq 0$). Questo si estende parzialmente al caso infinito (es. $l + \infty = +\infty$), ma genera dei casi in cui l'algebra standard fallisce.
+
+\subsubsection{Risoluzione delle forme indeterminate polinomiali e razionali}
+Le forme indeterminate classiche sono $\left[\frac{0}{0}\right], \left[\frac{\infty}{\infty}\right], [0 \cdot \infty], [\infty - \infty], [1^\infty], [0^0], [\infty^0]$.
+\begin{itemize}
+    \item \textbf{Caso polinomiale $\left[\frac{0}{0}\right]$:} Se per $x \to x_0$ si annullano numeratore e denominatore, per il Teorema di Ruffini sono entrambi divisibili per $(x-x_0)$. Si fattorizza e si semplifica.
+    \item \textbf{Caso razionale $\left[\frac{\infty}{\infty}\right]$:} Per $x \to \infty$, in un rapporto tra polinomi dominano i termini di grado massimo. Se il grado del numeratore supera quello del denominatore il limite è infinito, se è minore è $0$, se sono uguali è il rapporto tra i coefficienti direttori.
+    \item Per forme irrazionali si ricorre spesso alla \textit{razionalizzazione} (moltiplicazione per il fattore coniugato).
+\end{itemize}
+
+\subsubsection{Limiti notevoli (goniometrici, esponenziali e logaritmici)}
+Sono limiti fondamentali risolti per via geometrica o per definizione, usati come mattoni per limiti più complessi:
+\begin{itemize}
+    \item $\lim_{x \to 0} \frac{\sin x}{x} = 1$ \quad (Da cui derivano: $\lim_{x \to 0} \frac{1-\cos x}{x} = 0$, $\lim_{x \to 0} \frac{1-\cos x}{x^2} = \frac{1}{2}$)
+    \item $\lim_{x \to \pm\infty} \left(1 + \frac{1}{x}\right)^x = e$ \quad (Da cui deriva la generalizzazione continua: $\lim_{x \to 0} (1+x)^{\frac{1}{x}} = e$)
+    \item $\lim_{x \to 0} \frac{\ln(1+x)}{x} = 1$
+    \item $\lim_{x \to 0} \frac{e^x - 1}{x} = 1$
+\end{itemize}
+
+\subsubsection{Infiniti, infinitesimi e principio di sostituzione}
+\begin{itemize}
+    \item Una funzione $f(x)$ si dice \textbf{infinitesima} per $x \to x_0$ se $\lim_{x \to x_0} f(x) = 0$.
+    \item Due infinitesimi $f, g$ per $x \to x_0$ si dicono \textit{asintoticamente equivalenti} ($f \sim g$) se $\lim_{x \to x_0} \frac{f(x)}{g(x)} = 1$.
+\end{itemize}
+\textbf{Principio di sostituzione degli infinitesimi (e infiniti):} In un limite dato dal prodotto o quoziente di funzioni, è possibile sostituire un infinitesimo (o un infinito) con uno a esso asintoticamente equivalente senza alterare il risultato del limite. 
+\textbf{Esempio:} Per $x \to 0$, poiché $\sin x \sim x$, si ha $\lim_{x \to 0} \frac{\sin(3x)}{2x} = \lim_{x \to 0} \frac{3x}{2x} = \frac{3}{2}$.
+
+\section{Continuità e Asintoti}
+\subsection{Funzioni continue}
+\subsubsection{Definizione di continuità in un punto e in un intervallo}
+\textbf{Definizione:} Una funzione $f: D \to \mathbb{R}$ si dice continua in un punto $x_0 \in D$ (che sia di accumulazione per $D$) se il limite per $x \to x_0$ esiste finito e coincide con il valore assunto dalla funzione nel punto:
+\[ \lim_{x \to x_0} f(x) = f(x_0) \]
+La funzione si dice continua in un intervallo se è continua in ogni suo punto.
+
+\subsubsection{Continuità delle funzioni elementari}
+Tutte le funzioni elementari (polinomiali, razionali, radicali, esponenziali, logaritmiche, goniometriche e goniometriche inverse) sono continue in tutto il loro dominio naturale di definizione. Operazioni di somma, prodotto, quoziente e composizione tra funzioni continue generano funzioni continue nel proprio dominio.
+
+\subsection{Classificazione delle discontinuità}
+Se una funzione non è continua in $x_0$ (punto di accumulazione del dominio, appartenente o meno a $D$), vi è una \textit{singolarità} o discontinuità, classificabile calcolando i limiti destro ($l^+$) e sinistro ($l^-$).
+\subsubsection{Discontinuità di prima specie (salto)}
+Si verifica quando $l^+$ e $l^-$ esistono finiti, ma sono \textit{diversi}. La differenza $|l^+ - l^-|$ è definita \textbf{salto} della funzione in $x_0$. (Tipico della funzione segno $y = \text{sgn}(x)$ o della parte intera $y = \lfloor x \rfloor$).
+
+\subsubsection{Discontinuità di seconda specie}
+Si verifica quando almeno uno dei due limiti ($l^+$ o $l^-$) è infinito oppure non esiste. (Esempio: $y = \frac{1}{x}$ in $x=0$, oppure $y = \sin\left(\frac{1}{x}\right)$ in $x=0$).
+
+\subsubsection{Discontinuità di terza specie (eliminabile)}
+Si verifica quando $l^+$ e $l^-$ esistono finiti e sono \textit{uguali} a $l$, ma $l \neq f(x_0)$ (oppure $x_0 \notin D$). La discontinuità si "elimina" ridefinendo (o prolungando per continuità) la funzione in modo che valga $l$ in $x_0$.
+
+\subsection{Teoremi sulle funzioni continue}
+Tutti i seguenti teoremi richiedono l'ipotesi di continuità.
+\subsubsection{Teorema di Weierstrass}
+Se $f$ è continua in un intervallo chiuso e limitato $[a, b]$, allora $f$ assume un valore massimo assoluto $M$ e un valore minimo assoluto $m$ in tale intervallo.
+
+\subsubsection{Teorema dei valori intermedi (Darboux)}
+Se $f$ è continua in un intervallo chiuso e limitato $[a,b]$, allora essa assume tutti i valori compresi tra il suo minimo $m$ e il suo massimo $M$. 
+
+\subsubsection{Teorema di esistenza degli zeri}
+(Corollario del Teorema di Darboux). Se $f$ è continua in $[a, b]$ e assume valori di segno opposto agli estremi (ovvero $f(a) \cdot f(b) < 0$), allora esiste almeno un punto $c \in (a, b)$ tale che $f(c) = 0$.
+
+\subsection{Ricerca degli asintoti}
+\subsubsection{Asintoti verticali e orizzontali}
+\begin{itemize}
+    \item \textbf{Verticale:} Si ricerca nei punti di frontiera del dominio in cui la funzione non è definita. Se $\lim_{x \to x_0} f(x) = \pm\infty$, $x=x_0$ è asintoto verticale.
+    \item \textbf{Orizzontale:} Si ricerca per $x \to \pm\infty$. Se $\lim_{x \to \pm\infty} f(x) = l \in \mathbb{R}$, la retta $y=l$ è asintoto orizzontale. Se la funzione ammette asintoto orizzontale a $+\infty$, non può ammettere in quella stessa direzione un asintoto obliquo.
+\end{itemize}
+
+\subsubsection{Ricerca dell'asintoto obliquo}
+Se $\lim_{x \to \pm\infty} f(x) = \pm\infty$, potrebbe esistere un asintoto obliquo di equazione $y = mx + q$. I coefficienti si determinano calcolando:
+\[ m = \lim_{x \to \pm\infty} \frac{f(x)}{x} \quad (\text{deve essere } m \in \mathbb{R}, m \neq 0) \]
+\[ q = \lim_{x \to \pm\infty} [f(x) - mx] \quad (\text{deve essere } q \in \mathbb{R}) \]
+Se entrambi i limiti esistono finiti, la retta trovata è asintoto obliquo.
+
+\section{Derivate e Calcolo Differenziale}
+\subsection{Definizione di derivata}
+\subsubsection{Rapporto incrementale}
+Data $f(x)$ definita in un intorno di $x_0$, fissato un incremento $h \neq 0$, si definisce rapporto incrementale di $f$ relativo al punto $x_0$ e all'incremento $h$ la quantità:
+\[ \frac{\Delta y}{\Delta x} = \frac{f(x_0 + h) - f(x_0)}{h} \]
+Geometricamente rappresenta il coefficiente angolare della retta secante passante per i punti $(x_0, f(x_0))$ e $(x_0+h, f(x_0+h))$.
+
+\subsubsection{Derivata prima in un punto e funzione derivata}
+\textbf{Definizione:} Si definisce \textit{derivata prima} di $f$ nel punto $x_0$, e si indica con $f'(x_0)$ o $\left.\frac{df}{dx}\right|_{x=x_0}$, il limite (se esiste finito) del rapporto incrementale al tendere a zero dell'incremento:
+\[ f'(x_0) = \lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h} \]
+Se il limite esiste per ogni $x$ in un intervallo $I \subseteq D$, si definisce la \textit{funzione derivata} $f'(x)$.
+
+\subsubsection{Significato geometrico (retta tangente)}
+Geometricamente, il limite del rapporto incrementale per $h \to 0$ fa collassare la retta secante sulla retta tangente al grafico. Quindi $f'(x_0)$ coincide con il coefficiente angolare $m$ della retta tangente al grafico di $f$ nel punto di ascissa $x_0$. 
+L'equazione della retta tangente è: $y - f(x_0) = f'(x_0)(x - x_0)$.
+
+\subsubsection{Continuità e derivabilità (punti angolosi, cuspidi, flessi a tangente verticale)}
+\textbf{Teorema:} Se $f$ è derivabile in $x_0$, allora $f$ è continua in $x_0$. (Il viceversa non vale, es. $y=|x|$ in $x=0$).
+Se $f$ è continua ma non derivabile in $x_0$, si classificano i punti di non derivabilità analizzando il limite destro ($f'_+$) e sinistro ($f'_-$) del rapporto incrementale:
+\begin{itemize}
+    \item \textbf{Punto angoloso:} $f'_+$ e $f'_-$ sono finiti ma diversi, oppure uno è finito e l'altro infinito.
+    \item \textbf{Cuspide:} $f'_+$ e $f'_-$ sono entrambi infiniti ma di segno opposto.
+    \item \textbf{Flesso a tangente verticale:} $f'_+$ e $f'_-$ sono entrambi infiniti e dello stesso segno ($+\infty$ o $-\infty$).
+\end{itemize}
+
+\subsection{Regole di derivazione}
+\subsubsection{Derivate delle funzioni elementari}
+Dimostrabili applicando la definizione di limite del rapporto incrementale. Esempi notevoli:
+$D[k] = 0$, $D[x^\alpha] = \alpha x^{\alpha-1}$, $D[\sin x] = \cos x$, $D[\cos x] = -\sin x$, $D[e^x] = e^x$, $D[\ln x] = \frac{1}{x}$.
+
+\subsubsection{Regole di somma, prodotto e quoziente}
+Siano $f, g$ derivabili. L'operatore derivata è lineare.
+\begin{itemize}
+    \item \textbf{Somma (Linearità):} $D[kf(x) + cg(x)] = kf'(x) + cg'(x)$.
+    \item \textbf{Prodotto (Regola di Leibniz):} $D[f(x) \cdot g(x)] = f'(x)g(x) + f(x)g'(x)$.
+    \item \textbf{Quoziente:} $D\left[\frac{f(x)}{g(x)}\right] = \frac{f'(x)g(x) - f(x)g'(x)}{[g(x)]^2}$, per $g(x) \neq 0$.
+\end{itemize}
+
+\subsubsection{Derivata di funzione composta (Chain rule)}
+$D[f(g(x))] = f'(g(x)) \cdot g'(x)$. Questa regola può essere iterata per composizioni multiple.
+\textbf{Esempio:} $D[\sin^2(3x)] = 2\sin(3x) \cdot \cos(3x) \cdot 3$.
+
+\subsubsection{Derivata della funzione inversa}
+Se $f$ è biunivoca e derivabile con $f'(x_0) \neq 0$, allora la funzione inversa $f^{-1}$ è derivabile in $y_0 = f(x_0)$ e risulta:
+\[ D[f^{-1}](y_0) = \frac{1}{f'(x_0)} \]
+\textbf{Esempio:} Derivata di $\arcsin x$. Essendo inversa di $\sin y$ ristretta a $[-\pi/2, \pi/2]$, $D[\arcsin x] = \frac{1}{\cos(\arcsin x)} = \frac{1}{\sqrt{1-x^2}}$.
+
+\subsection{Teoremi del calcolo differenziale}
+\subsubsection{Teorema di Fermat}
+Se una funzione $f$ definita in $[a,b]$ ammette un punto di massimo o di minimo relativo $x_0$ \textit{interno} all'intervallo ($a < x_0 < b$) e in tale punto è derivabile, allora $f'(x_0) = 0$. I punti in cui si annulla la derivata prima si dicono \textit{punti stazionari}.
+
+\subsubsection{Teoremi di Rolle, Lagrange e Cauchy}
+\begin{itemize}
+    \item \textbf{Teorema di Rolle:} Se $f$ è continua in $[a,b]$, derivabile in $(a,b)$ e se $f(a)=f(b)$, allora esiste almeno un punto $c \in (a,b)$ tale che $f'(c) = 0$. (Esiste un punto con tangente orizzontale).
+    \item \textbf{Teorema di Lagrange (Valor Medio):} Se $f$ è continua in $[a,b]$ e derivabile in $(a,b)$, allora esiste almeno un punto $c \in (a,b)$ tale che $f'(c) = \frac{f(b)-f(a)}{b-a}$. (Esiste un punto con tangente parallela alla retta che congiunge gli estremi).
+    \item \textbf{Teorema di Cauchy:} Siano $f, g$ continue in $[a,b]$ e derivabili in $(a,b)$ con $g'(x) \neq 0$. Esiste un punto $c \in (a,b)$ tale che $\frac{f'(c)}{g'(c)} = \frac{f(b)-f(a)}{g(b)-g(a)}$.
+\end{itemize}
+
+\subsubsection{Regola di De L'Hôpital}
+Strumento analitico per risolvere le forme indeterminate $\left[\frac{0}{0}\right]$ e $\left[\frac{\infty}{\infty}\right]$. 
+Siano $f, g$ derivabili in un intorno di $x_0$ (escluso al più $x_0$) con $g'(x) \neq 0$. Se $\lim_{x \to x_0} f(x) = \lim_{x \to x_0} g(x) = 0$ (oppure $\infty$), e se \textit{esiste} il limite $\lim_{x \to x_0} \frac{f'(x)}{g'(x)} = l \in \bar{\mathbb{R}}$, allora:
+\[ \lim_{x \to x_0} \frac{f(x)}{g(x)} = \lim_{x \to x_0} \frac{f'(x)}{g'(x)} = l \]
+
+\section{Studio del Grafico di una Funzione}
+\subsection{Derivata prima e monotonia}
+\subsubsection{Ricerca dei punti stazionari (massimi, minimi, flessi a tangente orizzontale)}
+Per il Teorema di Fermat, i candidati a essere massimi o minimi relativi (interni e per funzioni derivabili) si trovano ponendo $f'(x) = 0$.
+\begin{itemize}
+    \item Un punto stazionario non è necessariamente un estremo relativo (potrebbe essere un flesso a tangente orizzontale, come $x=0$ in $y=x^3$).
+    \item I punti di massimo e minimo possono trovarsi anche dove la derivata \textit{non esiste} (punti angolosi, cuspidi) o agli \textit{estremi} dell'intervallo.
+\end{itemize}
+
+\subsubsection{Studio del segno della derivata prima}
+Dal Teorema di Lagrange discende che, in un intervallo $I$:
+\begin{itemize}
+    \item Se $f'(x) > 0 \implies f(x)$ è strettamente crescente.
+    \item Se $f'(x) < 0 \implies f(x)$ è strettamente decrescente.
+\end{itemize}
+Studiando la disequazione $f'(x) > 0$ si individuano gli intervalli di monotonia. Passando da crescenza a decrescenza attraverso $x_0$ si individua un massimo; viceversa un minimo.
+
+\subsection{Derivata seconda e concavità}
+\subsubsection{Studio del segno della derivata seconda}
+La derivata seconda $f''(x) = D[f'(x)]$ indica il tasso di variazione della derivata prima (l'andamento delle pendenze).
+\begin{itemize}
+    \item Se $f''(x) > 0$ in $I \implies f'(x)$ è crescente, la funzione ha \textbf{concavità rivolta verso l'alto} ($\cup$).
+    \item Se $f''(x) < 0$ in $I \implies f'(x)$ è decrescente, la funzione ha \textbf{concavità rivolta verso il basso} ($\cap$).
+\end{itemize}
+
+\subsubsection{Ricerca dei punti di flesso a tangente obliqua}
+Un \textit{punto di flesso} è un punto $x_F$ in cui la funzione cambia concavità. Se $f$ ammette derivata seconda continua, condizione necessaria per un flesso è $f''(x_F) = 0$.
+Studiando il segno della disequazione $f''(x) > 0$, ogni punto in cui si verifica una variazione di segno è un punto di flesso. Se la derivata prima in $x_F$ non è nulla ($f'(x_F) \neq 0$), il flesso è a \textit{tangente obliqua}.
+
+\subsection{Schema generale per lo studio di funzione}
+Lo studio completo della funzione $y = f(x)$ si articola nei seguenti passi:
+\subsubsection{Campo di esistenza, simmetrie, intersezioni, segno}
+\begin{itemize}
+    \item \textbf{C.E.:} Si impongono i vincoli (denominatori $\neq 0$, radicandi pari $\ge 0$, argomenti dei logaritmi $> 0$).
+    \item \textbf{Simmetrie e periodicità:} Si verifica se $f(-x) = \pm f(x)$ (pari/dispari) per poter studiare la funzione solo per $x \ge 0$.
+    \item \textbf{Intersezioni con gli assi:} Sistema con $x=0$ (asse $y$) e con $y=0$ (asse $x$).
+    \item \textbf{Segno:} Risoluzione di $f(x) > 0$ per individuare le porzioni di piano in cui si snoda il grafico.
+\end{itemize}
+
+\subsubsection{Limiti, asintoti e grafico probabile}
+\begin{itemize}
+    \item Si calcolano i limiti per $x$ tendente agli estremi del dominio (punti di frontiera e $\pm\infty$).
+    \item Si deducono eventuali asintoti (verticali, orizzontali, obliqui). Si abbozza un "grafico probabile".
+\end{itemize}
+
+\subsubsection{Studio delle derivate e tracciamento del grafico completo}
+\begin{itemize}
+    \item Calcolo di $f'(x)$, dominio della derivata e studio del segno (ricerca di massimi e minimi).
+    \item Analisi di eventuali punti di non derivabilità (limiti di $f'(x)$).
+    \item Calcolo di $f''(x)$ e studio del segno (ricerca di flessi).
+    \item Compilazione del grafico finale unendo i dati analitici raccolti.
+\end{itemize}
+
+\subsection{Problemi di massimo e minimo (Ottimizzazione)}
+Problemi applicativi (provenienti da geometria euclidea, solida o fisica) in cui è richiesta la massimizzazione o minimizzazione di una grandezza obiettiva (es. area, volume, costo).
+Si procede parametrizzando il problema mediante l'individuazione di un'unica incognita $x$ e fissando il suo dominio geometrico/fisico $[a, b]$. Si modella la grandezza da ottimizzare come funzione $f(x)$ e se ne cercano i massimi/minimi assoluti calcolando $f'(x)$, valutandola agli estremi del dominio e confrontando i valori.

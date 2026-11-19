@@ -1,0 +1,154 @@
+\part{I Numeri Reali e il Calcolo Letterale}
+
+\section{I Numeri Reali}
+\subsection{Definizione e struttura di $\mathbb{R}$}
+\subsubsection{Numeri razionali e irrazionali}
+L'insieme dei numeri razionali $\mathbb{Q}$ è costituito dalle classi di equivalenza delle frazioni $\frac{p}{q}$ con $p,q \in \mathbb{Z}$ e $q \neq 0$. Sebbene $\mathbb{Q}$ sia un campo totalmente ordinato e denso, esso è \textit{incompleto}. L'equazione $x^2 = 2$, ad esempio, non ammette soluzioni in $\mathbb{Q}$.
+I numeri non esprimibili come rapporto di interi, che possiedono un allineamento decimale illimitato e non periodico, sono detti \textit{irrazionali} (es. $\sqrt{2}, \pi, e$). L'unione degli insiemi dei numeri razionali e irrazionali costituisce l'insieme dei numeri reali $\mathbb{R}$.
+
+\textbf{Esempio.} Si dimostra per assurdo che $\sqrt{2} \notin \mathbb{Q}$. Se per assurdo $\sqrt{2} = \frac{p}{q}$ con $\text{MCD}(p,q)=1$, elevando al quadrato si ottiene $2q^2 = p^2$. Dunque $p^2$ è pari, il che implica che anche $p$ sia pari (ovvero $p=2k$). Sostituendo si ha $2q^2 = 4k^2 \implies q^2 = 2k^2$. Ne consegue che anche $q$ è pari, contraddicendo l'ipotesi iniziale di coprimalità tra $p$ e $q$.
+
+\subsubsection{Assioma di continuità (Completezza di $\mathbb{R}$)}
+Ciò che distingue strutturalmente $\mathbb{R}$ da $\mathbb{Q}$ è l'Assioma di Completezza (o di Dedekind). 
+\textbf{Definizione (Assioma di separazione):} Dati due sottoinsiemi non vuoti $A, B \subset \mathbb{R}$ tali che per ogni $a \in A$ e per ogni $b \in B$ risulti $a \le b$ (insiemi separati), esiste sempre almeno un elemento $c \in \mathbb{R}$ tale che $a \le c \le b$ per ogni $a \in A$ e $b \in B$.
+L'elemento $c$ è detto \textit{elemento separatore}. In $\mathbb{R}$ esso esiste sempre; in $\mathbb{Q}$ no. 
+
+\textbf{Esempio.} Siano $A=\{x \in \mathbb{Q} \mid x>0 \land x^2<2\}$ e $B=\{x \in \mathbb{Q} \mid x>0 \land x^2>2\}$. $A$ e $B$ sono separati, ma non ammettono alcun elemento separatore in $\mathbb{Q}$. In $\mathbb{R}$, l'elemento separatore è $\sqrt{2}$.
+
+\subsubsection{Intervalli e intorni}
+\textbf{Definizione:} Un intervallo è un sottoinsieme di $\mathbb{R}$ che gode della proprietà di connessione: se contiene due numeri, contiene anche tutti i numeri compresi tra essi. 
+Tipi di intervalli limitati (con estremi $a, b \in \mathbb{R}$ e $a < b$):
+\begin{itemize}
+    \item Chiuso: $[a,b] = \{x \in \mathbb{R} \mid a \le x \le b\}$
+    \item Aperto: $(a,b) = \{x \in \mathbb{R} \mid a < x < b\}$
+\end{itemize}
+\textbf{Definizione:} Si definisce \textit{intorno circolare} (o sferico) di un punto $x_0 \in \mathbb{R}$ di raggio $r > 0$ l'intervallo aperto $I_r(x_0) = (x_0 - r, x_0 + r)$. Tale concetto è fondamentale per la successiva formalizzazione topologica dei limiti.
+
+\subsection{Valore assoluto}
+\subsubsection{Definizione e proprietà geometriche}
+\textbf{Definizione:} Il valore assoluto (o modulo) di un numero reale $x$ è definito come:
+\[
+|x| = \begin{cases} 
+x & \text{se } x \ge 0 \\ 
+-x & \text{se } x < 0 
+\end{cases}
+\]
+Geometricamente, rappresenta la distanza dell'origine dal punto di coordinata $x$ sulla retta reale.
+\textbf{Proprietà principali:}
+\begin{itemize}
+    \item $|x| \ge 0$ e $|x| = 0 \iff x = 0$ (Definita positività)
+    \item $|xy| = |x||y|$ (Moltiplicatività)
+    \item $|x+y| \le |x| + |y|$ (Disuguaglianza triangolare)
+\end{itemize}
+
+\subsubsection{Distanza tra due punti sulla retta reale}
+\textbf{Definizione:} La distanza $d(x,y)$ tra due punti $x, y \in \mathbb{R}$ è definita come $d(x,y) = |x-y|$. 
+Questa funzione soddisfa gli assiomi di metrica (positività, simmetria, disuguaglianza triangolare), dotando $\mathbb{R}$ della struttura di spazio metrico unidimensionale.
+
+\section{Monomi e Polinomi}
+\subsection{Monomi}
+\subsubsection{Definizione, grado e monomi simili}
+\textbf{Definizione:} Un monomio è un'espressione algebrica in cui compaiono esclusivamente operazioni di moltiplicazione tra una parte numerica (coefficiente) e variabili letterali con esponenti interi non negativi. La forma normale è $k \cdot x_1^{a_1} x_2^{a_2} \dots x_n^{a_n}$.
+\textbf{Definizione:} Il \textit{grado complessivo} di un monomio è la somma degli esponenti di tutte le sue variabili.
+\textbf{Definizione:} Due monomi si dicono \textit{simili} se e solo se presentano la medesima parte letterale.
+
+\subsubsection{Operazioni tra monomi}
+\begin{itemize}
+    \item \textbf{Addizione/Sottrazione:} Operazione definita internamente solo tra monomi simili. Si sommano algebricamente i coefficienti. \textbf{Esempio:} $3x^2y - 5x^2y = -2x^2y$.
+    \item \textbf{Moltiplicazione:} Prodotto dei coefficienti e somma degli esponenti per le variabili omonime. \textbf{Esempio:} $(2x^3y) \cdot (-3xy^2) = -6x^4y^3$.
+    \item \textbf{Divisione:} Il quoziente è un monomio se e solo se il grado di ogni variabile nel dividendo è maggiore o uguale a quello corrispondente nel divisore.
+    \item \textbf{Potenza:} Si eleva il coefficiente all'esponente richiesto e si moltiplicano gli esponenti delle variabili per l'esponente della potenza.
+\end{itemize}
+
+\subsection{Polinomi}
+\subsubsection{Definizione e grado di un polinomio}
+\textbf{Definizione:} Un polinomio è la somma algebrica di un numero finito di monomi. Se i monomi (termini) non sono simili tra loro, il polinomio si dice ridotto in \textit{forma normale}.
+\textbf{Definizione:} Il grado complessivo di un polinomio è il massimo tra i gradi complessivi dei monomi non nulli che lo compongono.
+
+\subsubsection{Somma algebrica e prodotto di polinomi}
+L'insieme dei polinomi in una variabile a coefficienti reali, denotato con $\mathbb{R}[x]$, possiede una struttura algebrica di anello commutativo con unità rispetto alle operazioni di addizione e moltiplicazione.
+\begin{itemize}
+    \item \textbf{Somma:} Consiste nella somma formale e successiva riduzione dei termini simili.
+    \item \textbf{Prodotto:} Si applica reiteratamente la proprietà distributiva, moltiplicando ogni termine del primo polinomio per ogni termine del secondo.
+\end{itemize}
+
+\subsection{Prodotti notevoli}
+I prodotti notevoli sono identità algebriche fondamentali che permettono di calcolare specifici prodotti o potenze in modo diretto.
+\subsubsection{Quadrato e cubo di binomio}
+\begin{itemize}
+    \item $(a+b)^2 = a^2 + 2ab + b^2$
+    \item $(a+b)^3 = a^3 + 3a^2b + 3ab^2 + b^3$
+\end{itemize}
+\subsubsection{Somma per differenza}
+\begin{itemize}
+    \item $(a+b)(a-b) = a^2 - b^2$
+\end{itemize}
+\textbf{Esempio:} $(2x - 3y)(2x + 3y) = 4x^2 - 9y^2$.
+\subsubsection{Quadrato di trinomio}
+\begin{itemize}
+    \item $(a+b+c)^2 = a^2 + b^2 + c^2 + 2ab + 2ac + 2bc$
+\end{itemize}
+\subsubsection{Potenza $n$-esima di un binomio (Triangolo di Tartaglia)}
+\textbf{Teorema del Binomio di Newton:} Per ogni $n \in \mathbb{N}$, vale lo sviluppo:
+\[
+(a+b)^n = \sum_{k=0}^n \binom{n}{k} a^{n-k}b^k
+\]
+I coefficienti binomiali $\binom{n}{k}$ possono essere ricavati analiticamente tramite i fattoriali oppure disposti ricorsivamente nel Triangolo di Tartaglia.
+
+\subsection{Divisione tra polinomi}
+\subsubsection{Divisione euclidea}
+\textbf{Teorema:} Dati due polinomi $A(x), B(x) \in \mathbb{R}[x]$ con $B(x) \neq 0$, esistono e sono unici due polinomi $Q(x)$ (quoziente) e $R(x)$ (resto) tali che:
+\[ A(x) = B(x)Q(x) + R(x) \]
+con il grado di $R(x)$ strettamente minore del grado di $B(x)$, oppure $R(x)=0$ (polinomio nullo).
+
+\subsubsection{Regola di Ruffini e Teorema del Resto}
+La Regola di Ruffini è un algoritmo sintetico per la divisione euclidea, applicabile esclusivamente quando il divisore è un binomio monico di primo grado della forma $(x-c)$.
+\textbf{Teorema del Resto:} Il resto della divisione di un polinomio $P(x)$ per il binomio $(x-c)$ è dato dal valore che il polinomio assume quando si valuta la variabile $x$ in $c$, ovvero $R = P(c)$.
+\textbf{Esempio:} Il resto della divisione di $P(x) = x^3 - 2x + 5$ per $(x-2)$ è $P(2) = 2^3 - 2(2) + 5 = 9$.
+
+\subsubsection{Teorema di Ruffini (zeri di un polinomio)}
+\textbf{Teorema (Corollario del Teorema del Resto):} Un polinomio $P(x)$ è divisibile per $(x-c)$ (cioè il resto è nullo) se e solo se $P(c) = 0$. In tal caso, $c$ è detto \textit{radice} o \textit{zero} del polinomio.
+
+\section{Scomposizioni e Frazioni Algebriche}
+\subsection{Scomposizione in fattori}
+Scomporre un polinomio significa fattorizzarlo, ovvero esprimerlo come prodotto di polinomi di grado inferiore. Un polinomio si dice \textit{irriducibile} in $\mathbb{R}[x]$ se non ammette fattorizzazioni non banali.
+
+\subsubsection{Raccoglimento totale a fattore comune}
+Sfrutta in senso inverso la proprietà distributiva: si individua il M.C.D. tra tutti i termini del polinomio e lo si raccoglie a fattore.
+\textbf{Esempio:} $6x^3y^2 - 9x^2y^3 = 3x^2y^2(2x - 3y)$.
+
+\subsubsection{Raccoglimento parziale}
+Si effettua tipicamente in polinomi con un numero pari di termini, raccogliendo fattori comuni a sottogruppi, per poi procedere con un raccoglimento totale sulla parentesi binomiale ottenuta.
+\textbf{Esempio:} $ax + ay + 2x + 2y = a(x+y) + 2(x+y) = (a+2)(x+y)$.
+
+\subsubsection{Scomposizione mediante prodotti notevoli}
+Si basa sul riconoscimento visivo degli sviluppi dei prodotti notevoli analizzati in precedenza.
+\textbf{Esempio:} $16x^4 - 1 = (4x^2 - 1)(4x^2 + 1) = (2x - 1)(2x + 1)(4x^2 + 1)$. (Notare che $4x^2+1$ è irriducibile in $\mathbb{R}$).
+
+\subsubsection{Scomposizione del trinomio di secondo grado (trinomio speciale)}
+Un trinomio monico del tipo $x^2 + sx + p$ si scompone in $(x-x_1)(x-x_2)$ qualora si individuino due numeri $x_1, x_2$ la cui somma sia $s$ e il cui prodotto sia $p$.
+Nel caso generale $ax^2 + bx + c$, se l'equazione associata ammette radici $x_1, x_2$ reali (cioè se il discriminante $\Delta \ge 0$), la scomposizione è $a(x-x_1)(x-x_2)$. Se $\Delta < 0$, il trinomio è irriducibile in $\mathbb{R}$.
+
+\subsubsection{Scomposizione mediante la Regola di Ruffini}
+Se un polinomio $P(x)$ a coefficienti interi ammette una radice razionale $\frac{p}{q}$, allora $p$ divide il termine noto e $q$ divide il coefficiente direttore (Teorema delle radici razionali). Individuata una radice $c$, $P(x)$ si fattorizza come $(x-c)Q(x)$, abbassando il grado del polinomio tramite l'algoritmo di Ruffini.
+
+\subsection{M.C.D. e m.c.m. di polinomi}
+\begin{itemize}
+    \item \textbf{M.C.D.:} È il polinomio monico di grado massimo che divide tutti i polinomi dati. Operativamente, si scompongono i polinomi in fattori irriducibili e si moltiplicano i soli fattori \textit{comuni}, presi una singola volta con l'esponente \textit{minore}.
+    \item \textbf{m.c.m.:} È il polinomio monico di grado minimo che è multiplo di tutti i polinomi dati. Si moltiplicano i fattori \textit{comuni e non comuni}, presi una singola volta con l'esponente \textit{maggiore}.
+\end{itemize}
+
+\subsection{Frazioni algebriche}
+\subsubsection{Condizioni di esistenza}
+\textbf{Definizione:} Una frazione algebrica è definita come il rapporto $\frac{A(x)}{B(x)}$ tra due polinomi, con $B(x)$ non nullo. Il dominio (o Condizione di Esistenza, C.E.) si determina ponendo il denominatore diverso da zero: $B(x) \neq 0$.
+\textbf{Esempio:} Per $\frac{x+1}{x^2 - 4}$, la C.E. è $x^2 - 4 \neq 0 \implies x \neq \pm 2$.
+
+\subsubsection{Semplificazione di frazioni algebriche}
+In virtù della proprietà invariantiva, la divisione del numeratore e del denominatore per un loro fattore comune genera una frazione equivalente. La semplificazione richiede rigorosamente la preliminare fattorizzazione completa di $A(x)$ e $B(x)$.
+
+\subsubsection{Operazioni (addizione, moltiplicazione, divisione, potenza)}
+\begin{itemize}
+    \item \textbf{Addizione algebrica:} Si determinano le C.E., si calcola il m.c.m. dei denominatori scomposti e si riducono le frazioni allo stesso denominatore prima di sommare i numeratori.
+    \item \textbf{Moltiplicazione:} È buona prassi eseguire preventivamente semplificazioni "a croce" tra i numeratori e i denominatori fattorizzati, per poi effettuare il prodotto in riga.
+    \item \textbf{Divisione:} Si riconduce a una moltiplicazione della prima frazione per la frazione reciproca del divisore.
+\end{itemize}
