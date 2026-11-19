@@ -26,23 +26,22 @@
     </header>
 
     <main class="workspace">
+        
         <!-- VISTA 1: PROBLEM SOLVING -->
         <section id="sec-problems">
             
-            <!-- SCHERMATA 1: SELEZIONE CORSO (Stile Duolingo) -->
-            <div id="course-selection" class="action-area">
-                <p style="color:var(--fg-muted); margin-bottom: 20px;">// SELEZIONA UN CORSO PER INIZIARE</p>
-                <div id="course-list" style="display:flex; flex-direction:column; gap:15px; width: 100%; max-width: 450px;">
-                    <!-- I bottoni dei corsi verranno generati qui da JavaScript -->
-                </div>
+            <!-- SCHERMATA SELEZIONE CORSI -->
+            <div id="course-selection" class="action-area" style="margin-top:0;">
+                <p style="color:var(--fg-muted); margin-bottom: 20px; align-self: flex-start;">// SELEZIONA UN CORSO PER INIZIARE</p>
+                <div id="course-list" style="display:flex; flex-direction:column; gap:15px; width: 100%;"></div>
             </div>
 
-            <!-- SCHERMATA 2: AREA DI LAVORO (Nascosta di default) -->
+            <!-- SCHERMATA AREA DI LAVORO -->
             <div id="problem-solving-area" class="hidden">
                 <div class="problem-meta">
                     <div style="display:flex; flex-direction:column; gap:5px;">
-                        <span id="prob-breadcrumb">CARICAMENTO IN CORSO...</span>
-                        <span id="prob-progress" style="font-size: 0.75rem; color: var(--fg-muted); font-family: var(--font-mono);"></span>
+                        <span id="prob-breadcrumb">CARICAMENTO...</span>
+                        <span id="prob-progress" style="color: var(--fg-muted);"></span>
                     </div>
                     <button id="btn-back-courses" class="nav-btn" style="border:none;">[ ESCI ]</button>
                 </div>
@@ -66,7 +65,7 @@
             </div>
         </section>
 
-        <!-- VISTA 2: MENTAL MATH (Semplificata nei bordi, mantenuta logica) -->
+        <!-- VISTA 2: MENTAL MATH -->
         <section id="sec-mental" class="hidden">
             <div id="mental-setup-box" class="view-container">
                 <p style="color:var(--fg-muted); margin-bottom:20px;">// SETUP TRACHTENBERG</p>
@@ -95,31 +94,33 @@
             </div>
         </section>
 
-        <!-- VISTA 3: DASHBOARD (Mantenuta struttura dati, rimossi bordi chiusi) -->
+        <!-- VISTA 3: DASHBOARD ESSENZIALE -->
         <section id="sec-dashboard" class="hidden">
             <div class="dash-panel" style="display:flex; justify-content:space-between; font-size:2rem;">
                 <div>STREAK: <span id="kpi-prob-streak">0</span></div>
                 <div>MASTERY: <span id="kpi-global-mastery">0%</span></div>
             </div>
             <div class="dash-panel">
+                <p style="color:var(--fg-muted); margin-bottom:15px;">// PROBLEMI RISOLTI (VOLUMI & DIFFICOLTÀ)</p>
                 <canvas id="chart-prob-timeline" style="height:250px; width:100%;"></canvas>
             </div>
             <div class="dash-panel">
+                <p style="color:var(--fg-muted); margin-bottom:15px;">// MENTAL MATH LATENCY (SECONDI)</p>
                 <canvas id="chart-mental-latency" style="height:250px; width:100%;"></canvas>
             </div>
         </section>
 
-        <!-- VISTA 4: SYNC -->
+        <!-- VISTA 4: SYNC GIST -->
         <section id="sec-sync" class="hidden">
             <div class="dash-panel">
                 <p style="color:var(--fg-muted); margin-bottom:20px;">// GITHUB GIST SYNC</p>
-                <input type="password" id="gist-token" placeholder="GitHub Token" style="width:100%; margin-bottom:10px;">
+                <input type="password" id="gist-token" placeholder="GitHub Token (ghp_...)" style="width:100%; margin-bottom:10px;">
                 <input type="text" id="gist-id" placeholder="Gist ID" style="width:100%; margin-bottom:20px;">
                 <div style="display:flex; gap:20px;">
                     <button id="btn-gist-push" class="btn">[ PUSH ]</button>
                     <button id="btn-gist-pull" class="btn">[ PULL ]</button>
                 </div>
-                <div id="sync-log" style="margin-top:20px; min-height:50px;"></div>
+                <div id="sync-log" style="margin-top:30px; min-height:50px; color:var(--fg-muted);"></div>
             </div>
         </section>
     </main>

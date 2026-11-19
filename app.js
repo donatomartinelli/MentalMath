@@ -8,7 +8,6 @@ const mathEngine = new MathEngine();
 const gistSync = new GistSync();
 
 let currentProblemObj = null;
-let problemTimerInterval = null;
 
 // Stato UI Mental Math
 let currentOperation = null, mentalTimerInterval = null, mentalTimeLeft = 0;
@@ -17,10 +16,9 @@ let probTimelineChartInstance = null, mentalLatencyChartInstance = null;
 
 window.addEventListener('DOMContentLoaded', async () => {
     setupNavigation();
-    await loadProblemsDatabase();
-    setupProblemSolvingUI();
+    await loadProblemsDatabase(); 
+    setupProblemSolvingUI();      
     setupMentalMathUI();
-    setupDashboardUI();
     setupSyncUI();
     updateTopStreakPills();
 });
@@ -49,6 +47,13 @@ function setupNavigation() {
             document.getElementById(target).classList.remove('hidden');
 
             if (target === 'sec-dashboard') refreshDashboard();
+            if (target === 'sec-problems') {
+                if (problemEngine.state.activeCourse) {
+                    renderCurrentProblem(false);
+                } else {
+                    renderCourseSelection();
+                }
+            }
             updateTopStreakPills();
         });
     });
@@ -61,9 +66,7 @@ function updateTopStreakPills() {
     document.getElementById('nav-streak-calc').textContent = `CALC: ${mData.streaks.current}`;
 }
 
-// --- PROBLEMI (NO FILTRI, FLUSSO CONTINUO) ---
-// Aggiungi queste logiche nel tuo file app.js dentro la funzione setupProblemSolvingUI()
-
+// --- PROBLEM SOLVING & ROUTING DEI CORSI ---
 function setupProblemSolvingUI() {
     const btnDone = document.getElementById('btn-done');
     const stageSolve = document.getElementById('stage-solve');
@@ -87,13 +90,11 @@ function setupProblemSolvingUI() {
         renderCurrentProblem(true);
     });
 
-    // Tasto ESCI per tornare alla selezione del corso
     btnBack.addEventListener('click', () => {
         problemEngine.setActiveCourse(null);
         renderCourseSelection();
     });
 
-    // Scegli cosa renderizzare all'avvio
     if (problemEngine.state.activeCourse) {
         renderCurrentProblem(false);
     } else {
@@ -101,7 +102,6 @@ function setupProblemSolvingUI() {
     }
 }
 
-// Nuova funzione per disegnare i corsi stile Duolingo
 function renderCourseSelection() {
     document.getElementById('course-selection').classList.remove('hidden');
     document.getElementById('problem-solving-area').classList.add('hidden');
@@ -118,23 +118,17 @@ function renderCourseSelection() {
     courses.forEach(course => {
         const prog = problemEngine.getCourseProgress(course);
         const btn = document.createElement('button');
-        btn.className = 'btn';
-        btn.style.textAlign = 'left';
-        btn.style.display = 'flex';
-        btn.style.flexDirection = 'column';
-        btn.style.gap = '5px';
-        btn.style.border = '1px solid var(--fg-muted)';
-        
+        btn.className = 'btn btn-course';
         btn.innerHTML = `
             <span>[ ${course.toUpperCase()} ]</span>
-            <span style="font-size:0.75rem; color:var(--fg-muted);">${prog.str}</span>
+            <span style="font-size:0.75rem; color:var(--fg-muted); font-family:var(--font-mono);">${prog.str}</span>
         `;
         
         btn.addEventListener('click', () => {
             problemEngine.setActiveCourse(course);
             document.getElementById('course-selection').classList.add('hidden');
             document.getElementById('problem-solving-area').classList.remove('hidden');
-            renderCurrentProblem(true); // Genera il primo problema di quel corso
+            renderCurrentProblem(true);
         });
         
         listEl.appendChild(btn);
@@ -158,7 +152,6 @@ function renderCurrentProblem(forceNew = false) {
     const p = currentProblemObj;
     
     document.getElementById('prob-breadcrumb').textContent = `[${next.mode}] ${p.course.toUpperCase()} > ${p.topic.toUpperCase()}`;
-    
     const prog = problemEngine.getCourseProgress(p.course);
     document.getElementById('prob-progress').textContent = prog.str;
 
@@ -177,11 +170,229 @@ function renderCurrentProblem(forceNew = false) {
     }
 }
 
+// --- MENTAL MATH ---
+function setupMentalMathUI() {
+    const multiplicandDisplay = document.getElementById('multiplicand');
+    const multiplierDisplay = document.getElementById('multiplier');
+    const answerInput = document.getElementById('answer-input');
+    const ruleBanner = document.getElementById('trachtenberg-rule-banner');
+    const timerDisplay = document.getElementById('mental-timer-display');
+    const scoreDisplay = document.getElementById('mental-score-display');
+    const setupBox = document.getElementById('mental-setup-box');
+    const gameBox = document.getElementById('mental-game-box');
 
-// --- MENTAL MATH E ALTRE FUNZIONI INVARIATE (Ma rimosso codice obsoleto) ---
-// (Puoi incollare qui le tue funzioni setupMentalMathUI, setupDashboardUI e setupSyncUI mantenendone la logica come ti ho sistemato nell'HTML pulito)
+    function loadPresetsUI() {
+        const container = document.getElementById('presets-container');
+        container.innerHTML = '';
+        const presets = mathEngine.getPresets();
+        Object.keys(presets).forEach(name => {
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.style.padding = '5px 10px';
+            btn.style.fontSize = '0.8rem';
+            btn.textContent = `[ ${name.toUpperCase()} ]`;
+            btn.addEventListener('click', () => {
+                const c = presets[name];
+                document.getElementById('config-digits').value = c.digits;
+                document.getElementById('config-mult').value = c.mult;
+                document.getElementById('config-mult-type').value = c.multType;
+                document.getElementById('config-time').value = c.time;
+            });
+            container.appendChild(btn);
+        });
+    }
 
-function setupMentalMathUI() { /* Identica logica del tuo file originario */ }
-function setupDashboardUI() { /* Identica logica, rimuovi solo riferimenti a tabelle o dropdown inesistenti */ }
-function refreshDashboard() { /* Disegna i due chart line/bar */ }
-function setupSyncUI() { /* Identica logica Gist */ }
+    loadPresetsUI();
+
+    document.getElementById('btn-start-session').addEventListener('click', () => {
+        const digits = document.getElementById('config-digits').value.trim() || '2';
+        const mult = document.getElementById('config-mult').value.trim() || '11';
+        const multType = document.getElementById('config-mult-type').value;
+        const timeValue = parseInt(document.getElementById('config-time').value, 10) || 60;
+
+        mentalTimeLeft = timeValue;
+        mentalScore = 0;
+        sessionStats = [];
+
+        mathEngine.updateConfig({ digits, mult, multType });
+        answerInput.disabled = false;
+
+        setupBox.classList.add('hidden');
+        gameBox.classList.remove('hidden');
+
+        clearInterval(mentalTimerInterval);
+        timerDisplay.textContent = `TEMPO: ${mentalTimeLeft}s`;
+        scoreDisplay.textContent = `PUNTI: 0`;
+
+        mentalTimerInterval = setInterval(() => {
+            mentalTimeLeft--;
+            timerDisplay.textContent = `TEMPO: ${mentalTimeLeft}s`;
+            if (mentalTimeLeft <= 0) endMentalSession();
+        }, 1000);
+
+        renderNewOperation();
+    });
+
+    document.getElementById('btn-exit-game').addEventListener('click', () => {
+        clearInterval(mentalTimerInterval);
+        mathEngine.updateWeights(sessionStats);
+        updateTopStreakPills();
+        gameBox.classList.add('hidden');
+        setupBox.classList.remove('hidden');
+    });
+
+    function endMentalSession() {
+        clearInterval(mentalTimerInterval);
+        answerInput.disabled = true;
+        multiplicandDisplay.textContent = 'STOP';
+        multiplierDisplay.textContent = '';
+        answerInput.value = `TOT: ${mentalScore}`;
+        mathEngine.updateWeights(sessionStats);
+        updateTopStreakPills();
+    }
+
+    function renderNewOperation() {
+        currentOperation = mathEngine.generateOperation();
+        multiplicandDisplay.textContent = currentOperation.multiplicand;
+        multiplierDisplay.textContent = `* ${currentOperation.multiplier}`;
+        ruleBanner.textContent = `// ` + mathEngine.getRuleForMultiplier(currentOperation.multiplier).toUpperCase();
+        answerInput.value = '';
+        opStartTime = performance.now();
+        currentErrors = 0;
+        answerInput.focus();
+    }
+
+    answerInput.addEventListener('keydown', (e) => {
+        if (answerInput.disabled) return;
+        if (e.key.length > 1 && e.key !== 'Backspace') return;
+        e.preventDefault();
+
+        if (e.key === 'Backspace') {
+            answerInput.value = answerInput.value.slice(1);
+        } else if (/^\d$/.test(e.key)) {
+            answerInput.value = e.key + answerInput.value;
+        } else {
+            return;
+        }
+
+        answerInput.setSelectionRange(0, 0);
+        if (!currentOperation) return;
+
+        const validation = mathEngine.validateInput(answerInput.value, currentOperation.targetStr);
+        if (validation.status === 'CORRECT') {
+            const timeTaken = performance.now() - opStartTime;
+            sessionStats.push({
+                key: currentOperation.key,
+                multiplicand: currentOperation.rawMultiplicand,
+                time: timeTaken,
+                errors: currentErrors
+            });
+            mentalScore++;
+            scoreDisplay.textContent = `PUNTI: ${mentalScore}`;
+            renderNewOperation();
+        } else if (validation.status === 'ERROR') {
+            currentErrors++;
+            answerInput.style.borderBottomColor = 'var(--bg)';
+            setTimeout(() => {
+                answerInput.value = '';
+                answerInput.style.borderBottomColor = 'var(--fg)';
+            }, 150);
+        }
+    });
+}
+
+// --- DASHBOARD ESSENZIALE ---
+function refreshDashboard() {
+    const pStreak = problemEngine.getStreakData();
+    const mData = mathEngine.getStreakAndDashboardData();
+    
+    document.getElementById('kpi-prob-streak').textContent = `${pStreak.current} GG`;
+    const masteryPct = problemEngine.state.globalEmaMastery ? Math.round(problemEngine.state.globalEmaMastery * 100) : 50;
+    document.getElementById('kpi-global-mastery').textContent = `${masteryPct}%`;
+
+    if (typeof Chart === 'undefined') return;
+
+    // Timeline Problemi
+    const pHist = problemEngine.state.dailyHistory;
+    const pDates = Object.keys(pHist).sort();
+    const todayISO = problemEngine.getTodayISO();
+    const labelsProb = pDates.length ? pDates : [todayISO];
+    const probCounts = labelsProb.map(d => pHist[d]?.count || 0);
+
+    const ctxProb = document.getElementById('chart-prob-timeline');
+    if (probTimelineChartInstance) probTimelineChartInstance.destroy();
+    probTimelineChartInstance = new Chart(ctxProb, {
+        type: 'bar',
+        data: {
+            labels: labelsProb,
+            datasets: [{
+                label: 'Problemi Risolti',
+                data: probCounts,
+                backgroundColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#888' } },
+                x: { grid: { display: false }, ticks: { color: '#888' } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // Latenza Mental Math
+    const ctxLat = document.getElementById('chart-mental-latency');
+    if (mentalLatencyChartInstance) mentalLatencyChartInstance.destroy();
+    mentalLatencyChartInstance = new Chart(ctxLat, {
+        type: 'line',
+        data: {
+            labels: mData.labels,
+            datasets: mData.latencyDatasets.length ? mData.latencyDatasets : [{
+                label: 'Latenza (s)', data: [0], borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#888' } },
+                x: { grid: { color: '#333' }, ticks: { color: '#888' } }
+            },
+            plugins: { legend: { labels: { color: '#fff', font: { family: 'monospace' } } } }
+        }
+    });
+}
+
+// --- SYNC GITHUB GIST ---
+function setupSyncUI() {
+    const tokenInput = document.getElementById('gist-token');
+    const idInput = document.getElementById('gist-id');
+    const logEl = document.getElementById('sync-log');
+
+    const cfg = gistSync.getConfig();
+    tokenInput.value = cfg.token || '';
+    idInput.value = cfg.gistId || '';
+    if (cfg.lastSync) logEl.textContent = `// ULTIMO SYNC: ${cfg.lastSync}`;
+
+    document.getElementById('btn-gist-push').addEventListener('click', async () => {
+        gistSync.saveConfig(tokenInput.value, idInput.value);
+        logEl.textContent = '// PUSH IN CORSO...';
+        try {
+            const stamp = await gistSync.pushToGist();
+            logEl.textContent = `// PUSH OK (${stamp})`;
+        } catch (err) { logEl.textContent = `// ERRORE: ${err.message}`; }
+    });
+
+    document.getElementById('btn-gist-pull').addEventListener('click', async () => {
+        gistSync.saveConfig(tokenInput.value, idInput.value);
+        logEl.textContent = '// PULL IN CORSO...';
+        try {
+            const stamp = await gistSync.pullFromGist();
+            problemEngine.state = problemEngine.loadState();
+            mathEngine.reloadFromStorage();
+            if (problemEngine.state.activeCourse) renderCurrentProblem(false);
+            updateTopStreakPills();
+            logEl.textContent = `// PULL OK (${stamp})`;
+        } catch (err) { logEl.textContent = `// ERRORE: ${err.message}`; }
+    });
+}

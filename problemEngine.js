@@ -1,4 +1,4 @@
-// MATH-HUB // PROBLEM ENGINE (CORSI ISOLATI + ANKI INEDITO)
+// MATH-HUB // PROBLEM ENGINE (CORSI ISOLATI + ANKI INEDITO + PROGRESSIONE LINEARE)
 export class ProblemEngine {
     constructor() {
         this.storageKey = 'mathHubProblemState';
@@ -20,7 +20,7 @@ export class ProblemEngine {
             dailyHistory: {},   
             activeProblemId: null,
             activeMode: 'NUOVO',
-            activeCourse: null, // TRACCIA IL CORSO ATTUALE
+            activeCourse: null,
             globalEmaMastery: 0.5
         };
     }
@@ -37,7 +37,6 @@ export class ProblemEngine {
         return `${p.course}::${p.topic}::${p.baseDiff}`;
     }
 
-    // Estrae i nomi dei corsi disponibili dal JSON
     getAvailableCourses() {
         const courses = [];
         for (const p of this.problems) {
@@ -46,17 +45,15 @@ export class ProblemEngine {
         return courses;
     }
 
-    // Imposta il corso su cui vuoi lavorare
     setActiveCourse(courseName) {
         this.state.activeCourse = courseName;
-        this.state.activeProblemId = null; // Forza il calcolo del nuovo problema
+        this.state.activeProblemId = null;
         this.saveState();
     }
 
     getNextProblem(forceRecompute = false) {
         if (!this.problems.length || !this.state.activeCourse) return null;
 
-        // ISOLA I PROBLEMI SOLO DEL CORSO ATTIVO
         const courseProbs = this.problems.filter(p => p.course === this.state.activeCourse);
         if (!courseProbs.length) return null;
 
@@ -66,10 +63,9 @@ export class ProblemEngine {
         }
 
         const today = this.getTodayISO();
-        // uniqueGroups rispetta l'ordine esatto di estrazione dal file LaTeX
         const uniqueGroups = [...new Set(courseProbs.map(p => this.getGroupKey(p)))];
 
-        // 1. FASE RIPASSO (ANKI): Cerca scadenze *solo* nel corso attuale
+        // 1. FASE RIPASSO (ANKI SULLO STORICO DEL CORSO)
         const dueGroups = uniqueGroups.filter(key => {
             const rec = this.state.topicRecords[key];
             return rec && rec.dueDate && rec.dueDate <= today && (rec.status === 'passed' || rec.status === 'failed');
@@ -87,6 +83,7 @@ export class ProblemEngine {
             const rec = this.state.topicRecords[targetGroupKey];
             const groupSubset = courseProbs.filter(p => this.getGroupKey(p) === targetGroupKey);
             
+            // Pesca la prima variante non usata
             let chosen = groupSubset.find(p => !rec.usedIds.includes(p.id));
             if (!chosen) chosen = groupSubset[Math.floor(Math.random() * groupSubset.length)];
 
@@ -96,7 +93,7 @@ export class ProblemEngine {
             return { problem: chosen, mode: this.state.activeMode };
         }
 
-        // 2. FASE NUOVO (PROGRESSIONE LINEARE)
+        // 2. FASE NUOVO (PROGRESSIONE LINEARE A SBLOCCO)
         for (const gKey of uniqueGroups) {
             const rec = this.state.topicRecords[gKey];
             if (!rec || rec.status !== 'passed') {
@@ -111,7 +108,7 @@ export class ProblemEngine {
             }
         }
 
-        // 3. FASE CONSOLIDAMENTO
+        // 3. FASE CONSOLIDAMENTO (Tutto superato)
         const hardProbs = courseProbs.filter(p => p.baseDiff >= 3);
         const fallbackPool = hardProbs.length ? hardProbs : courseProbs;
         const randomProb = fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
@@ -154,6 +151,11 @@ export class ProblemEngine {
         this.state.dailyHistory[today].count += 1;
         this.state.dailyHistory[today].sumSlider += s;
 
+        // Aggiorna l'EMA globale 
+        const alpha = 0.1;
+        const oldEma = this.state.globalEmaMastery ?? 0.50;
+        this.state.globalEmaMastery = (alpha * (1 - s)) + ((1 - alpha) * oldEma);
+
         this.state.activeProblemId = null; 
         this.saveState();
     }
@@ -167,15 +169,16 @@ export class ProblemEngine {
         for (const gKey of uniqueGroups) {
             const rec = this.state.topicRecords[gKey];
             if (rec && rec.status === 'passed') passedCount++;
-            else break; // Si ferma alla prima lacuna
+            else break; // Si blocca al primo ostacolo
         }
 
         const total = uniqueGroups.length;
         const pct = Math.round((passedCount / total) * 100);
-        const bars = Math.round(pct / 10);
+        const safePct = isNaN(pct) ? 0 : pct;
+        const bars = Math.round(safePct / 10);
         const barStr = `[${'#'.repeat(bars)}${'-'.repeat(10 - bars)}]`;
 
-        return { passed: passedCount, total, str: `${barStr} ${pct}% (${passedCount}/${total})` };
+        return { passed: passedCount, total, str: `${barStr} ${safePct}% (${passedCount}/${total})` };
     }
 
     getStreakData() {

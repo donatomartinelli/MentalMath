@@ -79,6 +79,7 @@ body {
     margin-bottom: 40px;
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 }
 
 .problem-statement {
@@ -89,7 +90,7 @@ body {
 
 /* KaTeX Override */
 .katex { color: var(--fg) !important; font-size: 1.2em !important; }
-.katex-display { margin: 1.5em 0 !important; }
+.katex-display { margin: 1.5em 0 !important; overflow-x: auto; }
 
 /* --- SLIDER E BOTTONI --- */
 .action-area {
@@ -109,9 +110,20 @@ body {
     padding: 10px 20px;
     text-transform: uppercase;
     transition: opacity 0.2s;
+    border: 1px solid transparent;
 }
 
 .btn:hover { opacity: 0.6; }
+
+.btn-course {
+    border: 1px solid var(--fg-muted);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+.btn-course:hover { border: 1px solid var(--fg); }
 
 .slider-container {
     width: 100%;
