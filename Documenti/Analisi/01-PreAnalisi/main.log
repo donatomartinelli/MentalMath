@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.9)  19 NOV 2026 02:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.9)  19 NOV 2026 20:04
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1151,7 +1151,7 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 28
 \Hy@SectionHShift=\skip147
 ) (../utils/macros.tex)
 LaTeX Font Info:    Font shape `T1/zpltlf/m/n' will be
-(Font)              scaled to size 10.95pt on input line 17.
+(Font)              scaled to size 10.95pt on input line 16.
 Class scrbook Info: loading recommended package `bookmark'.
 (scrbook)           Using `bookmark' together with `hyperref' is recommended,
 (scrbook)           because of handling of possible bookmark level gaps.
@@ -1159,7 +1159,7 @@ Class scrbook Info: loading recommended package `bookmark'.
 (scrbook)           `bookmarkpackage=false' before \begin{document} and
 (scrbook)           you can avoid this message adding:
 (scrbook)             \usepackage{bookmark}
-(scrbook)           before \begin{document} on input line 17.
+(scrbook)           before \begin{document} on input line 16.
  (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/bookmark\bookmark.sty
 Package: bookmark 2026-05-21 v1.32 PDF bookmarks (HO)
  (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/bookmark\bkm-pdftex.def
@@ -1168,48 +1168,48 @@ File: bkm-pdftex.def 2026-05-21 v1.32 bookmark driver for pdfTeX (HO)
 )) (main.aux (chapters/01_primo.aux) (chapters/02_secondo.aux) (chapters/03_terzo.aux) (chapters/04_quarto.aux) (chapters/05_quinto.aux))
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/npxmi/m/it on input line 17.
-LaTeX Font Info:    Trying to load font information for OML+npxmi on input line 17.
+LaTeX Font Info:    Checking defaults for OML/npxmi/m/it on input line 16.
+LaTeX Font Info:    Trying to load font information for OML+npxmi on input line 16.
  (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/newpx\omlnpxmi.fd
 File: omlnpxmi.fd 2013/03/21 Fontinst v1.933 font definitions for OML/npxmi.
 )
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for U/npxexa/m/n on input line 17.
-LaTeX Font Info:    Trying to load font information for U+npxexa on input line 17.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for U/npxexa/m/n on input line 16.
+LaTeX Font Info:    Trying to load font information for U+npxexa on input line 16.
  (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/newpx\unpxexa.fd
 File: unpxexa.fd 2013/03/24 Fontinst v1.933 font definitions for U/npxexa.
 )
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for LMS/npxsy/m/n on input line 17.
-LaTeX Font Info:    Trying to load font information for LMS+npxsy on input line 17.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for LMS/npxsy/m/n on input line 16.
+LaTeX Font Info:    Trying to load font information for LMS+npxsy on input line 16.
  (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/newpx\lmsnpxsy.fd
 File: lmsnpxsy.fd 2016/07/04 Fontinst v1.933 font definitions for LMS/npxsy.
 )
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for LMX/npxexx/m/n on input line 17.
-LaTeX Font Info:    Trying to load font information for LMX+npxexx on input line 17.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for LMX/npxexx/m/n on input line 16.
+LaTeX Font Info:    Trying to load font information for LMX+npxexx on input line 16.
  (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/newpx\lmxnpxexx.fd
 File: lmxnpxexx.fd 2016/07/04 Fontinst v1.933 font definitions for LMX/npxexx.
 )
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Info: Redefining \it@ocap on input line 17.
-LaTeX Info: Redefining \it@ccap on input line 17.
-LaTeX Info: Command `\dddot' is already robust on input line 17.
-LaTeX Info: Command `\ddddot' is already robust on input line 17.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Info: Redefining \it@ocap on input line 16.
+LaTeX Info: Redefining \it@ccap on input line 16.
+LaTeX Info: Command `\dddot' is already robust on input line 16.
+LaTeX Info: Command `\ddddot' is already robust on input line 16.
  (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count401
@@ -1229,13 +1229,13 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Info: Redefining \microtypecontext on input line 17.
-Package microtype Info: Applying patch `item' on input line 17.
-Package microtype Info: Applying patch `toc' on input line 17.
-Package microtype Info: Applying patch `eqnum' on input line 17.
-Package microtype Info: Applying patch `footnote' on input line 17.
-Package microtype Info: Applying patch `verbatim' on input line 17.
-LaTeX Info: Redefining \microtypesetup on input line 17.
+LaTeX Info: Redefining \microtypecontext on input line 16.
+Package microtype Info: Applying patch `item' on input line 16.
+Package microtype Info: Applying patch `toc' on input line 16.
+Package microtype Info: Applying patch `eqnum' on input line 16.
+Package microtype Info: Applying patch `footnote' on input line 16.
+Package microtype Info: Applying patch `verbatim' on input line 16.
+LaTeX Info: Redefining \microtypesetup on input line 16.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1298,46 +1298,38 @@ Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ))
 \c@lstlisting=\count409
-Package tocbasic Info: setting babel extension for `lol' on input line 17.
+Package tocbasic Info: setting babel extension for `lol' on input line 16.
 \scr@dte@lstlisting@maxnumwidth=\skip148
-Package hyperref Info: Link coloring ON on input line 17.
+Package hyperref Info: Link coloring ON on input line 16.
 Package babel Info: Main language set to 'italian'.
-LaTeX Font Info:    Font shape `T1/zpltlf/b/n' will be
-(Font)              scaled to size 10.95pt on input line 20.
-LaTeX Font Info:    Font shape `T1/zpltlf/b/n' will be
-(Font)              scaled to size 14.4pt on input line 20.
-LaTeX Font Info:    Font shape `T1/zpltlf/m/n' will be
-(Font)              scaled to size 14.4pt on input line 20.
-LaTeX Font Info:    Font shape `T1/zpltlf/m/it' will be
-(Font)              scaled to size 14.4pt on input line 20.
-LaTeX Font Info:    Trying to load font information for T1+qhv on input line 20.
+LaTeX Font Info:    Trying to load font information for T1+qhv on input line 19.
  (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\t1qhv.fd
 File: t1qhv.fd 2009/09/25 v1.2 font definition file for T1/qhv
 )
 LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
-(Font)              scaled to size 10.29301pt on input line 20.
+(Font)              scaled to size 10.29301pt on input line 19.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `qhv' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 10.29301pt on input line 20.
+(Font)              scaled to size 10.29301pt on input line 19.
 LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 19.49565pt on input line 20.
+(Font)              scaled to size 19.49565pt on input line 19.
+LaTeX Font Info:    Font shape `T1/zpltlf/m/n' will be
+(Font)              scaled to size 14.4pt on input line 19.
+LaTeX Font Info:    Font shape `T1/zpltlf/b/n' will be
+(Font)              scaled to size 14.4pt on input line 19.
  [1
 
 
 
-{C:/Users/donat/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ec.enc}] [2
+{C:/Users/donat/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ec.enc}{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}] [2
 
 
 ]
-Package tocbasic Info: character protrusion at toc deactivated on input line 20.
+Package tocbasic Info: character protrusion at toc deactivated on input line 19.
  (main.toc
-LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 11.28003pt on input line 3.
-LaTeX Font Info:    Font shape `T1/zpltlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 3.
 LaTeX Font Info:    Trying to load font information for OT1+minzpl on input line 4.
  (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/newpx\ot1minzpl.fd
 File: ot1minzpl.fd 2021/05/25 v1.0 font definition file for OT1/minzpl/TLF
@@ -1377,8 +1369,15 @@ LaTeX Font Info:    Trying to load font information for U+npxsyc on input line 4
 File: unpxsyc.fd 2013/03/24 Fontinst v1.933 font definitions for U/npxsyc.
 )
 LaTeX Font Info:    Font shape `T1/zpltlf/m/sl' will be
-(Font)              scaled to size 10.95pt on input line 105.
- [3] [4{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newtx/ntx-ecth-tlf.enc}])
+(Font)              scaled to size 10.95pt on input line 100.
+ [3]
+LaTeX Font Info:    Trying to load font information for TS1+zpltlf on input line 102.
+ (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/newpx\ts1zpltlf.fd
+File: ts1zpltlf.fd 2021/11/24 v1.0 fd file for TS1/zpltlf
+)
+LaTeX Font Info:    Font shape `TS1/zpltlf/m/n' will be
+(Font)              scaled to size 10.95pt on input line 102.
+ [4{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newtx/ntx-ecth-tlf.enc}{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newpx/zpl_TOsF.enc}])
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
@@ -1390,22 +1389,17 @@ LaTeX Font Info:    Font shape `T1/zpltlf/m/sl' will be
 
 
 ]
-part I.
-Package scrkbase Info: You've told me to use the font selection of the element
-(scrkbase)             `partprefix' that is an alias of element `partnumber'
-(scrkbase)              on input line 1.
-LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 23.38725pt on input line 1.
-[7] [8]
+chapter 1.
 LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
 (Font)              scaled to size 13.53603pt on input line 3.
+LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
+(Font)              scaled to size 11.28003pt on input line 4.
 LaTeX Font Info:    Font shape `OT1/minzpl/m/n' will be
 (Font)              scaled to size 12.0pt on input line 4.
 LaTeX Font Info:    Font shape `OT1/minzpl/m/n' will be
 (Font)              scaled to size 8.8pt on input line 4.
 LaTeX Font Info:    Font shape `OT1/minzpl/m/n' will be
 (Font)              scaled to size 6.6pt on input line 4.
-
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 4.
@@ -1416,45 +1410,88 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 
 LaTeX Font Info:    Font shape `T1/zpltlf/m/it' will be
 (Font)              scaled to size 10.95pt on input line 6.
+LaTeX Font Info:    Font shape `T1/zpltlf/b/n' will be
+(Font)              scaled to size 10.95pt on input line 9.
 LaTeX Font Info:    Font shape `T1/zpltlf/m/n' will be
 (Font)              scaled to size 8.0pt on input line 9.
 LaTeX Font Info:    Font shape `T1/zpltlf/m/n' will be
 (Font)              scaled to size 6.1pt on input line 9.
-LaTeX Font Info:    Trying to load font information for TS1+zpltlf on input line 22.
-(C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/newpx\ts1zpltlf.fd
-File: ts1zpltlf.fd 2021/11/24 v1.0 fd file for TS1/zpltlf
-)
-LaTeX Font Info:    Font shape `TS1/zpltlf/m/n' will be
-(Font)              scaled to size 10.95pt on input line 22.
- [9{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newpx/px-lms.enc}{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newpx/zpl_TOsF.enc}] [10] [11] [12]) [13]
+[7{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newpx/px-lms.enc}{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}] [8] [9] [10]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 159.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 159.
+
+[11] [12]
+Overfull \vbox (11.7532pt too high) has occurred while \output is active []
+
+ [13] [14]) [15]
 \openout2 = `chapters/02_secondo.aux'.
 
- (chapters/02_secondo.tex [14
+ (chapters/02_secondo.tex [16
 
 
 
 
 
 ]
-part II.
-Package scrkbase Info: You've told me to use the font selection of the element
-(scrkbase)             `partprefix' that is an alias of element `partnumber'
-(scrkbase)              on input line 1.
-[15] [16] [17] [18] [19] [20] [21]) [22] [23]
+chapter 2.
+[17] [18] [19] [20] [21] [22]
+LaTeX Font Info:    Font shape `TS1/zpltlf/b/n' will be
+(Font)              scaled to size 10.95pt on input line 202.
+LaTeX Font Info:    Font shape `TS1/zpltlf/m/it' will be
+(Font)              scaled to size 10.95pt on input line 224.
+ [23]
+Underfull \hbox (badness 10000) in paragraph at lines 239--240
+[]\T1/zpltlf/b/n/10.95 (+20) [Sist 3x3 | Lvl 2]  \T1/zpltlf/m/n/10.95 (+20) Ri-sol-vi:
+ []
+
+
+Underfull \hbox (badness 8019) in paragraph at lines 242--243
+[]\T1/zpltlf/b/n/10.95 (+20) [Sist Dis | Lvl 1]  \T1/zpltlf/m/n/10.95 (+20) Ri-sol-vi:
+ []
+
+
+Underfull \hbox (badness 8019) in paragraph at lines 243--244
+[]\T1/zpltlf/b/n/10.95 (+20) [Sist Dis | Lvl 1]  \T1/zpltlf/m/n/10.95 (+20) Ri-sol-vi:
+ []
+
+
+Underfull \hbox (badness 8019) in paragraph at lines 244--245
+[]\T1/zpltlf/b/n/10.95 (+20) [Sist Dis | Lvl 2]  \T1/zpltlf/m/n/10.95 (+20) Ri-sol-vi:
+ []
+
+
+Underfull \hbox (badness 8019) in paragraph at lines 245--246
+[]\T1/zpltlf/b/n/10.95 (+20) [Sist Dis | Lvl 3]  \T1/zpltlf/m/n/10.95 (+20) Ri-sol-vi:
+ []
+
+[24]
+LaTeX Font Info:    Trying to load font information for TS1+qhv on input line 278.
+ (C:\Users\donat\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qhv.fd
+File: ts1qhv.fd 2009/09/25 v1.2 font definition file for TS1/qhv
+)
+LaTeX Font Info:    Font shape `TS1/qhv/b/n' will be
+(Font)              scaled to size 11.28003pt on input line 278.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `qhv' (encoding: TS1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+ [25{C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1.enc}]) [26]
 \openout2 = `chapters/03_terzo.aux'.
 
- (chapters/03_terzo.tex [24
+ (chapters/03_terzo.tex
+chapter 3.
+[27
 
 
 
 
 
 ]
-part III.
-Package scrkbase Info: You've told me to use the font selection of the element
-(scrkbase)             `partprefix' that is an alias of element `partnumber'
-(scrkbase)              on input line 1.
-[25] [26] [27]
 LaTeX Font Info:    Font shape `OT1/minzpl/b/n' will be
 (Font)              scaled to size 10.95pt on input line 49.
 LaTeX Font Info:    Font shape `OT1/minzpl/b/n' will be
@@ -1485,57 +1522,117 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 175.
 
-[32]) [33]
+[32] [33]
+Overfull \vbox (11.80437pt too high) has occurred while \output is active []
+
+ [34]
+Underfull \hbox (badness 10000) in paragraph at lines 322--323
+[]\T1/zpltlf/b/n/10.95 (+20) [Identit‡ | Lvl 2]  \T1/zpltlf/m/n/10.95 (+20) Ve-ri-fi-ca:
+ []
+
+[35] [36]) [37]
 \openout2 = `chapters/04_quarto.aux'.
 
- (chapters/04_quarto.tex [34
+ (chapters/04_quarto.tex [38
 
 
 
 
 
 ]
-part IV.
-Package scrkbase Info: You've told me to use the font selection of the element
-(scrkbase)             `partprefix' that is an alias of element `partnumber'
-(scrkbase)              on input line 1.
-[35] [36] [37] [38] [39] [40] [41]
+chapter 4.
+[39] [40] [41] [42] [43]
 Overfull \hbox (1.3307pt too wide) in paragraph at lines 174--176
 \T1/zpltlf/b/n/10.95 (-20) Esempio: \T1/zpltlf/m/n/10.95 (-20) De-ri-va-ta di $[] \OML/npxmi/m/it/10.95 x$\T1/zpltlf/m/n/10.95 (-20) . Es-sen-do in-ver-sa di $[] \OML/npxmi/m/it/10.95 y$ \T1/zpltlf/m/n/10.95 (-20) ri-stret-ta a $\LMS/npxsy/m/n/10.95 ª^^@\OML/npxmi/m/it/10.95 ^^Y\LMS/npxsy/m/n/10.95 ù\OT1/minzpl/m/n/10.95 2\OML/npxmi/m/it/10.95 ; ^^Y\LMS/npxsy/m/n/10.95 ù\OT1/minzpl/m/n/10.95 2\LMS/npxsy/m/n/10.95 º$\T1/zpltlf/m/n/10.95 (-20) , $\OML/npxmi/m/it/10.95 D\LMS/npxsy/m/n/10.95 ª[] \OML/npxmi/m/it/10.95 x\LMS/npxsy/m/n/10.95 º \U/npxmia/m/it/10.95 =
  []
 
-[42] [43]) [44] [45]
+[44] [45] [46]
+Underfull \hbox (badness 6300) in paragraph at lines 267--268
+\T1/zpltlf/m/n/10.95 (+20) do la de-fi-ni-zio-ne, ve-ri-fi-ca che
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 278--279
+[]\T1/zpltlf/b/n/10.95 (+20) [Def Li-mi-te Fi-ni-to | Lvl 3]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 278--279
+\T1/zpltlf/m/n/10.95 (+20) Ve-ri-fi-ca tra-mi-te la de-fi-ni-zio-ne:
+ []
+
+[47] [48]
+Underfull \hbox (badness 7030) in paragraph at lines 356--357
+[]\T1/zpltlf/b/n/10.95 (+20) [Derivata Quo-zien-te | Lvl 1]
+ []
+
+
+Underfull \hbox (badness 7030) in paragraph at lines 357--358
+[]\T1/zpltlf/b/n/10.95 (+20) [Derivata Quo-zien-te | Lvl 2]
+ []
+
+
+Underfull \hbox (badness 7030) in paragraph at lines 358--360
+[]\T1/zpltlf/b/n/10.95 (+20) [Derivata Quo-zien-te | Lvl 2]
+ []
+
+[49]) [50]
 \openout2 = `chapters/05_quinto.aux'.
 
- (chapters/05_quinto.tex [46
+ (chapters/05_quinto.tex
+chapter 5.
+[51
 
 
 
 
 
-]
-part V.
-Package scrkbase Info: You've told me to use the font selection of the element
-(scrkbase)             `partprefix' that is an alias of element `partnumber'
-(scrkbase)              on input line 1.
-[47] [48] [49] [50] [51] [52] [53]) [54] [55] (main.aux (chapters/01_primo.aux) (chapters/02_secondo.aux) (chapters/03_terzo.aux) (chapters/04_quarto.aux) (chapters/05_quinto.aux))
+] [52] [53] [54] [55] [56]
+Underfull \hbox (badness 10000) in paragraph at lines 210--211
+\T1/zpltlf/m/n/10.95 (+20) co-la (Her-mi-te/Radici mul-ti-ple):
+ []
+
+[57]
+Underfull \hbox (badness 6001) in paragraph at lines 233--234
+[]\T1/zpltlf/b/n/10.95 (+20) [Int Par-ti | Lvl 3]  \T1/zpltlf/m/n/10.95 (+20) Cal-co-la:
+ []
+
+
+Overfull \vbox (0.83076pt too high) has occurred while \output is active []
+
+ [58]
+Underfull \hbox (badness 10000) in paragraph at lines 291--292
+\T1/zpltlf/m/n/10.95 (+20) sol-vi il pro-ble-ma di Cau-chy:
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 297--298
+\T1/zpltlf/m/n/10.95 (+20) sol-vi il pro-ble-ma di Cau-chy:
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 297--298
+[]$ \T1/zpltlf/m/it/10.95 (+20) (per $\OML/npxmi/m/it/10.95 x \LMS/npxsy/m/n/10.95 2
+ []
+
+[59]) [60] (main.aux (chapters/01_primo.aux) (chapters/02_secondo.aux) (chapters/03_terzo.aux) (chapters/04_quarto.aux) (chapters/05_quinto.aux))
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2020/03/25>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 47991 strings out of 467510
- 1078814 string characters out of 5408795
- 1759197 words of memory out of 5000000
- 75868 multiletter control sequences out of 15000+600000
- 724661 words of font info for 260 fonts, out of 8000000 for 9000
+ 48602 strings out of 467510
+ 1084252 string characters out of 5408795
+ 1784185 words of memory out of 5000000
+ 75928 multiletter control sequences out of 15000+600000
+ 717361 words of font info for 271 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  108i,20n,108p,11310b,813s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/type1/public/newpx/NewPXMI.pfb><C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/type1/public/newpx/NewPXMI_gnu.pfb><C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/type1/public/newpx/pxmiaX.pfb><C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/type1/public/newpx/pxsys.pfb><C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qhvb.pfb><C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/txexs.pfb><C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/txsym.pfb><C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/type1/public/newpx/zplb.pfb><C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/type1/public/newpx/zplr.pfb><C:/Users/donat/AppData/Local/Programs/MiKTeX/fonts/type1/public/newpx/zplri.pfb>
-Output written on main.pdf (55 pages, 442373 bytes).
+Output written on main.pdf (60 pages, 603536 bytes).
 PDF statistics:
- 987 PDF objects out of 1000 (max. 8388607)
- 306 named destinations out of 1000 (max. 500000)
- 41701 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 1765 PDF objects out of 2073 (max. 8388607)
+ 828 named destinations out of 1000 (max. 500000)
+ 41957 words of extra memory for PDF output out of 42996 (max. 10000000)
 

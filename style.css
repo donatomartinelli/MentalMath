@@ -672,3 +672,57 @@ body {
     min-height: 90px;
     white-space: pre-line;
 }
+
+
+/* NAVIGAZIONE PIÙ PULITA */
+.nav-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 10px 4px;
+    font-size: 0.85rem;
+}
+.nav-btn:hover {
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--text-secondary);
+}
+.nav-btn.active {
+    background: transparent;
+    border-bottom: 2px solid var(--text-primary);
+}
+
+/* MENO GABBIE, PIÙ ARIA */
+.problem-card, .dash-panel, .view-container, .math-game-box {
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    border-top: 2px solid var(--border-color);
+    padding: 32px 0; /* Aumenta il respiro verticale, toglie quello orizzontale */
+}
+
+/* INPUT CRUDI E DIRETTI */
+input[type="text"], input[type="password"], input[type="number"], .filter-select {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid var(--text-secondary) !important;
+    border-radius: 0;
+    padding: 8px 0 !important;
+}
+input:focus, .filter-select:focus {
+    border-bottom: 1px solid var(--text-primary) !important;
+}
+
+/* BOTTONI D'AZIONE PIÙ NETTI */
+.btn {
+    background: transparent;
+    border: 1px solid var(--text-secondary);
+}
+.btn-primary {
+    background: var(--text-primary);
+    color: var(--bg-main);
+    border: none;
+}
+.btn-primary:hover {
+    background: #cccccc; /* Leggero dimming invece dell'inversione */
+    color: var(--bg-main);
+}

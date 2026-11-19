@@ -1,4 +1,4 @@
-\part{Calcolo Integrale ed Equazioni Differenziali}
+\chapter{Calcolo Integrale ed Equazioni Differenziali}
 
 \section{Integrazione Indefinita}
 \subsection{Primitive e integrale indefinito}
@@ -179,3 +179,130 @@ Se $f(x) = 0$, l'equazione è $ay'' + by' + cy = 0$. La forma dell'integrale gen
 \subsubsection{Equazioni lineari a coefficienti costanti non omogenee (cenni sui metodi risolutivi)}
 La soluzione generale di un'equazione lineare completa è data dalla somma dell'integrale generale dell'equazione omogenea associata ($y_o$) e di un integrale particolare qualsiasi dell'equazione completa ($y_p$): $y(x) = y_o(x) + y_p(x)$.
 La ricerca di $y_p(x)$ avviene per via algebrica tramite il \textit{metodo di somiglianza} (o dei coefficienti indeterminati). Se $f(x)$ ha forma polinomiale, esponenziale, sinusoidale o una loro composizione lineare, si imposta $y_p(x)$ con una forma analoga contenente parametri da determinare sostituendola nell'equazione di partenza. Un metodo più generale ma analiticamente gravoso è quello della \textit{variazione delle costanti arbitrarie}.
+
+\section{Esercizi}
+
+\subsection{Integrazione Indefinita: Immediati, Scomposizione e Fratti Semplici}
+\begin{multicols}{2}
+\begin{enumerate}
+    % Integrali immediati e per scomposizione
+    \item \tagprob{Int Immediato}{1} Calcola: $\int (3x^2 - 4x + 5) \, dx$
+    \item \tagprob{Int Immediato}{1} Calcola: $\int \left(\frac{1}{x} + \frac{2}{x^2} - e^x\right) \, dx$
+    \item \tagprob{Int Scomposizione}{1} Calcola: $\int \frac{x^2 - 3x + 1}{x} \, dx$
+    \item \tagprob{Int Scomposizione}{1} Calcola: $\int \frac{x^3 + 8}{x+2} \, dx$ \textit{(Suggerimento: somma di cubi)}
+    \item \tagprob{Int Quasi Immediato}{2} Calcola: $\int \sin(3x) \, dx$
+    \item \tagprob{Int Quasi Immediato}{2} Calcola: $\int x e^{x^2} \, dx$
+    \item \tagprob{Int Quasi Immediato}{2} Calcola: $\int \frac{2x}{x^2+4} \, dx$
+    \item \tagprob{Int Quasi Immediato}{2} Calcola: $\int \tan x \, dx$ \textit{(Suggerimento: $\tan x = \frac{\sin x}{\cos x}$)}
+    \item \tagprob{Int Scomposizione}{2} Calcola sfruttando identità trigonometriche: $\int \cos^2 x \, dx$
+    \item \tagprob{Int Scomposizione}{3} Calcola: $\int \frac{1}{\sin^2 x \cos^2 x} \, dx$ \textit{(Suggerimento: $1 = \sin^2 x + \cos^2 x$)}
+    
+    % Integrazione Funzioni Razionali Fratte
+    \item \tagprob{Int Fratti Sempl}{1} Divisione tra polinomi: $\int \frac{x^2+1}{x-1} \, dx$
+    \item \tagprob{Int Fratti Sempl}{1} Denominatore radici reali distinte: $\int \frac{1}{x^2 - 4} \, dx$
+    \item \tagprob{Int Fratti Sempl}{2} Denominatore radici reali distinte: $\int \frac{3x}{x^2 - 3x + 2} \, dx$
+    \item \tagprob{Int Fratti Sempl}{2} Denominatore radice doppia: $\int \frac{x}{(x-1)^2} \, dx$
+    \item \tagprob{Int Fratti Sempl}{2} Denominatore non fattorizzabile ($\Delta < 0$): $\int \frac{1}{x^2 + 4x + 5} \, dx$
+    \item \tagprob{Int Fratti Sempl}{2} Denominatore con $\Delta < 0$ e numeratore grado 1: $\int \frac{2x+1}{x^2+9} \, dx$
+    \item \tagprob{Int Fratti Sempl}{3} Numeratore grado superiore: $\int \frac{x^3 - 1}{x^2 - x - 2} \, dx$
+    \item \tagprob{Int Fratti Sempl}{3} Metodo dei fratti complessi: $\int \frac{1}{x(x^2+1)} \, dx$
+    \item \tagprob{Int Fratti Sempl}{3} Calcola: $\int \frac{2x^2+3}{(x^2+1)(x-2)} \, dx$
+    \item \tagprob{Int Fratti Sempl}{3} Calcola (Hermite/Radici multiple): $\int \frac{1}{(x^2-1)^2} \, dx$
+\end{enumerate}
+\end{multicols}
+
+\subsection{Integrazione per Sostituzione e per Parti}
+\begin{multicols}{2}
+\begin{enumerate}
+    % Sostituzione
+    \item \tagprob{Int Sostituzione}{1} Calcola ponendo $t = x^2$: $\int x \cos(x^2) \, dx$
+    \item \tagprob{Int Sostituzione}{1} Calcola ponendo $t = \ln x$: $\int \frac{\ln x}{x} \, dx$
+    \item \tagprob{Int Sostituzione}{2} Calcola ponendo $t = \sqrt{x-1}$: $\int \frac{x}{\sqrt{x-1}} \, dx$
+    \item \tagprob{Int Sostituzione}{2} Calcola: $\int \frac{e^x}{e^{2x} + 1} \, dx$
+    \item \tagprob{Int Sostituzione}{2} Calcola: $\int \frac{1}{x \sqrt{\ln x}} \, dx$
+    \item \tagprob{Int Sostituzione}{3} Calcola ponendo $t = e^x$: $\int \frac{e^{2x}}{e^x - 1} \, dx$
+    \item \tagprob{Int Sostituzione}{3} Calcola ponendo $x = \sin t$: $\int \sqrt{1 - x^2} \, dx$
+    
+    % Per Parti
+    \item \tagprob{Int Parti}{1} Calcola scegliendo $f(x)=x$: $\int x e^x \, dx$
+    \item \tagprob{Int Parti}{1} Calcola scegliendo $f(x)=x$: $\int x \sin x \, dx$
+    \item \tagprob{Int Parti}{2} Calcola (fattore differenziale $1 \, dx$): $\int \ln x \, dx$
+    \item \tagprob{Int Parti}{2} Calcola (fattore differenziale $1 \, dx$): $\int \arctan x \, dx$
+    \item \tagprob{Int Parti}{2} Calcola applicando le parti due volte: $\int x^2 e^{-x} \, dx$
+    \item \tagprob{Int Parti}{3} Calcola (integrale ciclico): $\int e^x \sin x \, dx$
+    \item \tagprob{Int Parti}{3} Calcola: $\int x \ln(x^2) \, dx$
+    \item \tagprob{Int Parti}{3} Calcola applicando prima sostituzione e poi parti: $\int \sin(\ln x) \, dx$
+\end{enumerate}
+\end{multicols}
+
+\subsection{Integrazione Definita, Aree e Volumi}
+\begin{multicols}{2}
+\begin{enumerate}
+    % Integrali Definiti di base
+    \item \tagprob{Int Definito}{1} Calcola: $\int_1^2 (3x^2 - 1) \, dx$
+    \item \tagprob{Int Definito}{1} Calcola: $\int_0^{\pi/2} \cos x \, dx$
+    \item \tagprob{Int Definito}{2} Calcola applicando la sostituzione e aggiornando gli estremi: $\int_0^1 x e^{x^2} \, dx$
+    \item \tagprob{Int Definito}{2} Calcola integrando per parti: $\int_1^e \ln x \, dx$
+    \item \tagprob{Int Definito}{2} Calcola gestendo il valore assoluto: $\int_{-1}^2 |x| \, dx$
+    
+    % Calcolo di Aree
+    \item \tagprob{Area Piana}{1} Calcola l'area della regione sottesa dalla parabola $y=4-x^2$ e l'asse $x$.
+    \item \tagprob{Area Piana}{2} Calcola l'area compresa tra $y = x^2$ e la retta $y = x$.
+    \item \tagprob{Area Piana}{2} Calcola l'area compresa tra $y = \sin x$ e l'asse $x$ nell'intervallo $[0, 2\pi]$.
+    \item \tagprob{Area Piana}{3} Calcola l'area della regione finita compresa tra $y = e^x$, $y = e^{-x}$ e la retta $x = \ln 2$.
+    \item \tagprob{Area Piana}{3} Calcola l'area compresa tra $y = \frac{1}{x}$ e la retta passante per i punti $(1,1)$ e $(2, 1/2)$.
+    
+    % Volumi e Teorema Media
+    \item \tagprob{Volume Rotazione}{2} Calcola il volume del cono ottenuto ruotando $y = x$ per $x \in [0, h]$ attorno all'asse $x$.
+    \item \tagprob{Volume Rotazione}{2} Calcola il volume del solido (paraboloide) ottenuto ruotando $y = \sqrt{x}$ per $x \in [0, 4]$ attorno all'asse $x$.
+    \item \tagprob{Volume Rotazione}{3} Sfruttando il metodo dei gusci, calcola il volume ottenuto ruotando $y = 4-x^2$ (con $x \in [0,2]$) attorno all'asse $y$.
+    \item \tagprob{Teorema Media}{2} Determina il valore medio della funzione $f(x) = x^2$ in $[0,3]$ e trova il punto $c$ garantito dal teorema.
+    \item \tagprob{Funzione Integrale}{3} Data $F(x) = \int_0^x e^{t^2} dt$, scrivi l'equazione della retta tangente al grafico di $F(x)$ in $x=0$.
+\end{enumerate}
+\end{multicols}
+
+\subsection{Serie Numeriche, Sviluppi di Taylor e Integrali Impropri}
+\begin{multicols}{2}
+\begin{enumerate}
+    % Integrali Impropri
+    \item \tagprob{Int Improprio}{1} Stabilisci se converge e, in caso, calcola: $\int_1^{+\infty} \frac{1}{x^2} \, dx$
+    \item \tagprob{Int Improprio}{1} Mostra tramite calcolo diretto che $\int_1^{+\infty} \frac{1}{x} \, dx$ diverge.
+    \item \tagprob{Int Improprio}{2} Stabilisci se converge e calcola: $\int_0^1 \frac{1}{\sqrt{x}} \, dx$
+    \item \tagprob{Int Improprio}{3} Stabilisci se l'integrale \textit{campana di Gauss} (solo $x \ge 0$) converge: $\int_0^{+\infty} x e^{-x^2} \, dx$.
+    
+    % Serie Numeriche e Taylor
+    \item \tagprob{Serie Geometrica}{1} Calcola la somma della serie $\sum_{n=0}^\infty \left(\frac{1}{3}\right)^n$.
+    \item \tagprob{Serie Armonica}{1} Determina il carattere della serie $\sum_{n=1}^\infty \frac{1}{\sqrt{n}}$.
+    \item \tagprob{Serie Criterio}{2} Usa il criterio del rapporto per studiare $\sum_{n=1}^\infty \frac{n}{2^n}$.
+    \item \tagprob{Serie Criterio}{2} Usa il criterio della radice per studiare $\sum_{n=1}^\infty \left(\frac{n}{3n+1}\right)^n$.
+    \item \tagprob{Serie Confronto}{3} Studia il carattere della serie usando il confronto asintotico: $\sum_{n=1}^\infty \sin\left(\frac{1}{n^2}\right)$.
+    \item \tagprob{Polinomio Taylor}{2} Scrivi il polinomio di Maclaurin di grado 3 per $f(x) = e^{2x}$.
+    \item \tagprob{Polinomio Taylor}{3} Usando gli sviluppi notevoli, calcola $\lim_{x \to 0} \frac{x - \sin x}{x^3}$.
+\end{enumerate}
+\end{multicols}
+
+\subsection{Equazioni Differenziali}
+\begin{multicols}{2}
+\begin{enumerate}
+    % A variabili separabili
+    \item \tagprob{Eq Diff Separabili}{1} Risolvi determinando l'integrale generale: $y' = 2x y$
+    \item \tagprob{Eq Diff Separabili}{1} Risolvi l'equazione differenziale: $y' = x^2 e^{-y}$
+    \item \tagprob{Cauchy Separabili}{2} Risolvi il problema di Cauchy: $\begin{cases} y' = -y \\ y(0) = 5 \end{cases}$
+    \item \tagprob{Cauchy Separabili}{2} Risolvi il problema di Cauchy: $\begin{cases} y' = y \cos x \\ y(\pi/2) = 1 \end{cases}$
+    \item \tagprob{Eq Diff Separabili}{3} Trova la soluzione in forma implicita di $y' = \frac{x}{y}$.
+    
+    % Lineari del 1° ordine
+    \item \tagprob{Eq Diff 1 Ordine}{2} Determina l'integrale generale: $y' + 2y = e^{-x}$
+    \item \tagprob{Eq Diff 1 Ordine}{2} Risolvi: $y' - \frac{1}{x} y = x^2$
+    \item \tagprob{Cauchy 1 Ordine}{3} Risolvi il problema di Cauchy: $\begin{cases} y' + y \tan x = \sin x \\ y(0) = 2 \end{cases}$ \textit{(per $x \in (-\pi/2, \pi/2)$)}
+    
+    % Lineari del 2° ordine a coefficienti costanti
+    \item \tagprob{Eq Diff 2 Ordine}{1} Omogenea ($\Delta > 0$): $y'' - 5y' + 6y = 0$
+    \item \tagprob{Eq Diff 2 Ordine}{1} Omogenea ($\Delta = 0$): $y'' - 4y' + 4y = 0$
+    \item \tagprob{Eq Diff 2 Ordine}{2} Omogenea ($\Delta < 0$): $y'' + 9y = 0$ (Eq. dell'oscillatore armonico)
+    \item \tagprob{Cauchy 2 Ordine}{2} Risolvi il problema di Cauchy: $\begin{cases} y'' - y = 0 \\ y(0) = 1 \\ y'(0) = 0 \end{cases}$
+    \item \tagprob{Eq Diff Completa}{3} Usa il metodo di somiglianza per risolvere: $y'' - y' = 2x$
+    \item \tagprob{Eq Diff Completa}{3} Usa il metodo di somiglianza per risolvere: $y'' + y = e^x$
+    \item \tagprob{Eq Diff Mista}{3} Determina la famiglia di curve tali che la derivata seconda è costantemente uguale a 4 e che passano per l'origine.
+\end{enumerate}
+\end{multicols}
