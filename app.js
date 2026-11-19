@@ -19,6 +19,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     await loadProblemsDatabase(); 
     setupProblemSolvingUI();      
     setupMentalMathUI();
+    setupDashboardUI();
     setupSyncUI();
     updateTopStreakPills();
 });
@@ -126,8 +127,6 @@ function renderCourseSelection() {
         
         btn.addEventListener('click', () => {
             problemEngine.setActiveCourse(course);
-            document.getElementById('course-selection').classList.add('hidden');
-            document.getElementById('problem-solving-area').classList.remove('hidden');
             renderCurrentProblem(true);
         });
         
@@ -136,6 +135,10 @@ function renderCourseSelection() {
 }
 
 function renderCurrentProblem(forceNew = false) {
+    // IL FIX È QUI: forza l'interfaccia a mostrare l'area di lavoro ed eliminare la tendina dei corsi
+    document.getElementById('course-selection').classList.add('hidden');
+    document.getElementById('problem-solving-area').classList.remove('hidden');
+
     const next = problemEngine.getNextProblem(forceNew);
     
     document.getElementById('stage-solve').classList.remove('hidden');
@@ -302,6 +305,10 @@ function setupMentalMathUI() {
 }
 
 // --- DASHBOARD ESSENZIALE ---
+function setupDashboardUI() {
+    // Inizializzazione della Dashboard (puoi aggiungere listener qui se necessario)
+}
+
 function refreshDashboard() {
     const pStreak = problemEngine.getStreakData();
     const mData = mathEngine.getStreakAndDashboardData();
