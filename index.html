@@ -28,28 +28,40 @@
     <main class="workspace">
         <!-- VISTA 1: PROBLEM SOLVING -->
         <section id="sec-problems">
-            <div class="problem-meta">
-                <div style="display:flex; flex-direction:column; gap:5px;">
-                    <span id="prob-breadcrumb">CARICAMENTO IN CORSO...</span>
-                    <!-- NUOVA BARRA PROGRESSIONE -->
-                    <span id="prob-progress" style="font-size: 0.75rem; color: var(--fg-muted); font-family: var(--font-mono);"></span>
+            
+            <!-- SCHERMATA 1: SELEZIONE CORSO (Stile Duolingo) -->
+            <div id="course-selection" class="action-area">
+                <p style="color:var(--fg-muted); margin-bottom: 20px;">// SELEZIONA UN CORSO PER INIZIARE</p>
+                <div id="course-list" style="display:flex; flex-direction:column; gap:15px; width: 100%; max-width: 450px;">
+                    <!-- I bottoni dei corsi verranno generati qui da JavaScript -->
                 </div>
             </div>
 
-            <div id="prob-statement" class="problem-statement"></div>
-
-            <div class="action-area">
-                <div id="stage-solve">
-                    <button id="btn-done" class="btn">[ DONE ]</button>
-                </div>
-                
-                <div id="stage-rate" class="slider-container hidden">
-                    <div class="slider-labels">
-                        <span>EASY</span>
-                        <span>HARD</span>
+            <!-- SCHERMATA 2: AREA DI LAVORO (Nascosta di default) -->
+            <div id="problem-solving-area" class="hidden">
+                <div class="problem-meta">
+                    <div style="display:flex; flex-direction:column; gap:5px;">
+                        <span id="prob-breadcrumb">CARICAMENTO IN CORSO...</span>
+                        <span id="prob-progress" style="font-size: 0.75rem; color: var(--fg-muted); font-family: var(--font-mono);"></span>
                     </div>
-                    <input type="range" id="diff-slider" class="raw-slider" min="0" max="1" step="0.01" value="0.5">
-                    <button id="btn-next" class="btn" style="margin-top: 15px;">[ NEXT ]</button>
+                    <button id="btn-back-courses" class="nav-btn" style="border:none;">[ ESCI ]</button>
+                </div>
+
+                <div id="prob-statement" class="problem-statement"></div>
+
+                <div class="action-area">
+                    <div id="stage-solve">
+                        <button id="btn-done" class="btn">[ DONE ]</button>
+                    </div>
+                    
+                    <div id="stage-rate" class="slider-container hidden">
+                        <div class="slider-labels">
+                            <span>EASY</span>
+                            <span>HARD</span>
+                        </div>
+                        <input type="range" id="diff-slider" class="raw-slider" min="0" max="1" step="0.01" value="0.5">
+                        <button id="btn-next" class="btn" style="margin-top: 15px;">[ NEXT ]</button>
+                    </div>
                 </div>
             </div>
         </section>

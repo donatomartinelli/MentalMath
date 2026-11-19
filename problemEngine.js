@@ -1,4 +1,4 @@
-// MATH-HUB // PROBLEM ENGINE (ANKI A VARIANTI INEDITE + SBLOCCO LINEARE)
+// MATH-HUB // PROBLEM ENGINE (CORSI ISOLATI + ANKI INEDITO)
 export class ProblemEngine {
     constructor() {
         this.storageKey = 'mathHubProblemState';
@@ -16,11 +16,11 @@ export class ProblemEngine {
             try { return JSON.parse(raw); } catch (e) { console.error(e); }
         }
         return {
-            // Lo stato ora traccia l'aggregato "Corso::Argomento::LivelloDifficoltà"
-            topicRecords: {}, // Es: { "Analisi 1::Limiti e Asintotici::3": { status: 'learning'|'passed'|'failed', interval: 1, dueDate: '2026-11-20', usedIds: [] } }
+            topicRecords: {}, 
             dailyHistory: {},   
             activeProblemId: null,
             activeMode: 'NUOVO',
+            activeCourse: null, // TRACCIA IL CORSO ATTUALE
             globalEmaMastery: 0.5
         };
     }
@@ -30,36 +30,54 @@ export class ProblemEngine {
     }
 
     setProblems(problemsArray) {
-        // L'array eredita l'ordinamento strutturale del LaTeX e di Python
         this.problems = problemsArray;
     }
 
-    // Identificativo aggregato per lo sblocco e lo spaced repetition
     getGroupKey(p) {
         return `${p.course}::${p.topic}::${p.baseDiff}`;
     }
 
+    // Estrae i nomi dei corsi disponibili dal JSON
+    getAvailableCourses() {
+        const courses = [];
+        for (const p of this.problems) {
+            if (!courses.includes(p.course)) courses.push(p.course);
+        }
+        return courses;
+    }
+
+    // Imposta il corso su cui vuoi lavorare
+    setActiveCourse(courseName) {
+        this.state.activeCourse = courseName;
+        this.state.activeProblemId = null; // Forza il calcolo del nuovo problema
+        this.saveState();
+    }
+
     getNextProblem(forceRecompute = false) {
-        if (!this.problems.length) return null;
+        if (!this.problems.length || !this.state.activeCourse) return null;
+
+        // ISOLA I PROBLEMI SOLO DEL CORSO ATTIVO
+        const courseProbs = this.problems.filter(p => p.course === this.state.activeCourse);
+        if (!courseProbs.length) return null;
 
         if (!forceRecompute && this.state.activeProblemId) {
-            const locked = this.problems.find(p => p.id === this.state.activeProblemId);
+            const locked = courseProbs.find(p => p.id === this.state.activeProblemId);
             if (locked) return { problem: locked, mode: this.state.activeMode || 'IN CORSO' };
         }
 
         const today = this.getTodayISO();
+        // uniqueGroups rispetta l'ordine esatto di estrazione dal file LaTeX
+        const uniqueGroups = [...new Set(courseProbs.map(p => this.getGroupKey(p)))];
 
-        // 1. FASE RIPASSO (ANKI): Cerca gruppi in cui la scadenza è arrivata o passata
-        const dueGroups = Object.keys(this.state.topicRecords).filter(key => {
+        // 1. FASE RIPASSO (ANKI): Cerca scadenze *solo* nel corso attuale
+        const dueGroups = uniqueGroups.filter(key => {
             const rec = this.state.topicRecords[key];
-            return rec.dueDate && rec.dueDate <= today && (rec.status === 'passed' || rec.status === 'failed');
+            return rec && rec.dueDate && rec.dueDate <= today && (rec.status === 'passed' || rec.status === 'failed');
         });
 
         if (dueGroups.length > 0) {
-            // Priorità 1: Rese (failed) - Priorità 2: Intervalli più corti (argomenti ostici)
             dueGroups.sort((a, b) => {
-                const recA = this.state.topicRecords[a];
-                const recB = this.state.topicRecords[b];
+                const recA = this.state.topicRecords[a], recB = this.state.topicRecords[b];
                 if (recA.status === 'failed' && recB.status !== 'failed') return -1;
                 if (recB.status === 'failed' && recA.status !== 'failed') return 1;
                 return (recA.interval || 1) - (recB.interval || 1);
@@ -67,13 +85,10 @@ export class ProblemEngine {
 
             const targetGroupKey = dueGroups[0];
             const rec = this.state.topicRecords[targetGroupKey];
-            const groupProbs = this.problems.filter(p => this.getGroupKey(p) === targetGroupKey);
+            const groupSubset = courseProbs.filter(p => this.getGroupKey(p) === targetGroupKey);
             
-            // LA MAGIA: Cerca il primo esercizio di quell'argomento che NON hai mai visto
-            let chosen = groupProbs.find(p => !rec.usedIds.includes(p.id));
-            
-            // Fallback estremo: se hai divorato tutte e 10 le varianti, pesca un rand tra queste
-            if (!chosen) chosen = groupProbs[Math.floor(Math.random() * groupProbs.length)];
+            let chosen = groupSubset.find(p => !rec.usedIds.includes(p.id));
+            if (!chosen) chosen = groupSubset[Math.floor(Math.random() * groupSubset.length)];
 
             this.state.activeProblemId = chosen.id;
             this.state.activeMode = rec.status === 'failed' ? 'RESA' : 'RIPASSO';
@@ -81,19 +96,13 @@ export class ProblemEngine {
             return { problem: chosen, mode: this.state.activeMode };
         }
 
-        // 2. FASE NUOVO (PROGRESSIONE A SBLOCCO LINEARE)
-        // Estraiamo tutti i gruppi unici mantenendo l'ordine esatto del documento LaTeX
-        const uniqueGroups = [...new Set(this.problems.map(p => this.getGroupKey(p)))];
-        
+        // 2. FASE NUOVO (PROGRESSIONE LINEARE)
         for (const gKey of uniqueGroups) {
             const rec = this.state.topicRecords[gKey];
-            // Si ferma al primo argomento che non risulta "passed"
             if (!rec || rec.status !== 'passed') {
-                const groupProbs = this.problems.filter(p => this.getGroupKey(p) === gKey);
+                const groupSubset = courseProbs.filter(p => this.getGroupKey(p) === gKey);
                 const used = rec ? rec.usedIds : [];
-                
-                // Ti presenta la primissima variante intonsa di quel blocco
-                let chosen = groupProbs.find(p => !used.includes(p.id)) || groupProbs[0];
+                let chosen = groupSubset.find(p => !used.includes(p.id)) || groupSubset[0];
 
                 this.state.activeProblemId = chosen.id;
                 this.state.activeMode = 'NUOVO';
@@ -102,10 +111,9 @@ export class ProblemEngine {
             }
         }
 
-        // 3. FASE CONSOLIDAMENTO: Documento intero sbloccato. 
-        // Genera un esercizio rand tra i livelli 3
-        const hardProbs = this.problems.filter(p => p.baseDiff >= 3);
-        const fallbackPool = hardProbs.length ? hardProbs : this.problems;
+        // 3. FASE CONSOLIDAMENTO
+        const hardProbs = courseProbs.filter(p => p.baseDiff >= 3);
+        const fallbackPool = hardProbs.length ? hardProbs : courseProbs;
         const randomProb = fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
         
         this.state.activeProblemId = randomProb.id;
@@ -119,28 +127,21 @@ export class ProblemEngine {
         if (!problem) return;
 
         const s = Math.min(1, Math.max(0, parseFloat(sliderValue)));
-        const isFailed = (s >= 0.99); // Slider tutto a destra = 1.00
+        const isFailed = (s >= 0.99); 
         const gKey = this.getGroupKey(problem);
         
         if (!this.state.topicRecords[gKey]) {
             this.state.topicRecords[gKey] = { status: 'learning', interval: 1, dueDate: null, usedIds: [] };
         }
-        
         const rec = this.state.topicRecords[gKey];
-        
-        // Traccia per bruciare la variante ed evitare di rivederla ai ripassi
-        if (!rec.usedIds.includes(problemId)) {
-            rec.usedIds.push(problemId);
-        }
+        if (!rec.usedIds.includes(problemId)) rec.usedIds.push(problemId);
 
-        // Se dichiari resa, l'intero argomento+difficoltà fallisce e te lo richiede il giorno dopo
         if (isFailed) {
             rec.status = 'failed';
             rec.interval = 1;
         } else {
-            // Se fai bene, l'argomento passa a 'passed' e sblocchi il livello successivo nel documento
             rec.status = 'passed';
-            const factor = Math.max(1.1, 2.6 - 1.8 * s); // Da 1.1x (ostico) a 2.6x (facile)
+            const factor = Math.max(1.1, 2.6 - 1.8 * s);
             rec.interval = Math.max(1, Math.round((rec.interval || 1) * factor));
         }
 
@@ -148,19 +149,33 @@ export class ProblemEngine {
         dueDateObj.setDate(dueDateObj.getDate() + rec.interval);
         rec.dueDate = dueDateObj.toISOString().split('T')[0];
 
-        const alpha = 0.1;
-        const oldEma = this.state.globalEmaMastery ?? 0.50;
-        this.state.globalEmaMastery = (alpha * (1 - s)) + ((1 - alpha) * oldEma);
-
         const today = this.getTodayISO();
-        if (!this.state.dailyHistory[today]) {
-            this.state.dailyHistory[today] = { count: 0, sumSlider: 0 };
-        }
+        if (!this.state.dailyHistory[today]) this.state.dailyHistory[today] = { count: 0, sumSlider: 0 };
         this.state.dailyHistory[today].count += 1;
         this.state.dailyHistory[today].sumSlider += s;
 
         this.state.activeProblemId = null; 
         this.saveState();
+    }
+
+    getCourseProgress(course) {
+        const courseProbs = this.problems.filter(p => p.course === course);
+        if (!courseProbs.length) return { passed: 0, total: 0, str: "[..........] 0%" };
+
+        const uniqueGroups = [...new Set(courseProbs.map(p => this.getGroupKey(p)))];
+        let passedCount = 0;
+        for (const gKey of uniqueGroups) {
+            const rec = this.state.topicRecords[gKey];
+            if (rec && rec.status === 'passed') passedCount++;
+            else break; // Si ferma alla prima lacuna
+        }
+
+        const total = uniqueGroups.length;
+        const pct = Math.round((passedCount / total) * 100);
+        const bars = Math.round(pct / 10);
+        const barStr = `[${'#'.repeat(bars)}${'-'.repeat(10 - bars)}]`;
+
+        return { passed: passedCount, total, str: `${barStr} ${pct}% (${passedCount}/${total})` };
     }
 
     getStreakData() {
@@ -178,38 +193,5 @@ export class ProblemEngine {
             if (this.state.dailyHistory[dates[i]].count > 0) currentStreak++;
         }
         return { current: currentStreak, todayCount };
-    }
-
-    getCourseProgress(course) {
-        // Isola tutti gli esercizi del corso attuale
-        const courseProbs = this.problems.filter(p => p.course === course);
-        if (!courseProbs.length) return { passed: 0, total: 0, str: "[..........] 0%" };
-
-        // Estrae tutti i gruppi unici (Topic + Difficoltà) mantenendo l'ordine
-        const uniqueGroups = [...new Set(courseProbs.map(p => this.getGroupKey(p)))];
-        
-        let passedCount = 0;
-        for (const gKey of uniqueGroups) {
-            const rec = this.state.topicRecords[gKey];
-            if (rec && rec.status === 'passed') {
-                passedCount++;
-            } else {
-                // Si ferma al primo non superato, calcolando la progressione reale e lineare
-                break;
-            }
-        }
-
-        const total = uniqueGroups.length;
-        const pct = Math.round((passedCount / total) * 100);
-        
-        // Genera la barra brutalista es: [####------]
-        const bars = Math.round(pct / 10);
-        const barStr = `[${'#'.repeat(bars)}${'-'.repeat(10 - bars)}]`;
-
-        return {
-            passed: passedCount,
-            total,
-            str: `${barStr} ${pct}% (${passedCount}/${total} STEP SUPERATI)`
-        };
     }
 }
