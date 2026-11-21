@@ -11,11 +11,7 @@ export class ProblemEngine {
     }
 
     loadState() {
-        const raw = localStorage.getItem(this.storageKey);
-        if (raw) {
-            try { return JSON.parse(raw); } catch (e) { console.error(e); }
-        }
-        return {
+        const defaultState = {
             topicRecords: {}, 
             dailyHistory: {},   
             activeProblemId: null,
@@ -23,6 +19,23 @@ export class ProblemEngine {
             activeCourse: null,
             globalEmaMastery: 0.5
         };
+
+        const raw = localStorage.getItem(this.storageKey);
+        if (raw) {
+            try { 
+                const parsed = JSON.parse(raw);
+                // Il merge assicura che gli oggetti annidati esistano anche se il JSON locale è vecchio
+                return {
+                    ...defaultState,
+                    ...parsed,
+                    topicRecords: parsed.topicRecords || {},
+                    dailyHistory: parsed.dailyHistory || {}
+                };
+            } catch (e) { 
+                console.error(e); 
+            }
+        }
+        return defaultState;
     }
 
     saveState() {
