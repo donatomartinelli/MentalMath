@@ -3,9 +3,10 @@ import json
 import hashlib
 from pathlib import Path
 
-# Configurazione percorsi
-DOCS_DIR = Path("Documenti")
-JSON_PATH = Path("problems.json")
+# Ancoraggio dinamico: risolve la root a prescindere da dove viene lanciato lo script
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DOCS_DIR = ROOT_DIR / "Documenti"
+JSON_PATH = ROOT_DIR / "problems.json"
 
 PATTERN = re.compile(
     r'\\item\s+\\tagprob\{([^}]+)\}\{([^}]+)\}(.*?)(?=\\item\s+\\tagprob|\\end\{enumerate\})', 
@@ -24,21 +25,21 @@ def sync_database():
             except json.JSONDecodeError:
                 pass
                 
-    # Mappa gli esercizi esistenti per non perdere lo storico Anki
     existing_map = {p['id']: p for p in existing_problems}
     new_problems_list = []
-    
     added = 0
     skipped = 0
 
-    # IL SEGRETO È QUI: sorted() garantisce che legga 01_preanalisi, 02_equazioni, ecc. in ordine
     for tex_file in sorted(DOCS_DIR.rglob("chapters/*.tex")):
-        parts = tex_file.parts
+        # Estrae il percorso relativo alla root per mantenere l'indicizzazione delle cartelle intatta
+        rel_path = tex_file.relative_to(ROOT_DIR)
+        parts = rel_path.parts
+        
         if len(parts) < 4:
             continue
             
-        core = parts[1]      
-        course = parts[2]    
+        core = parts[1]      # "Documenti" è parts[0], "Analisi" è parts[1]
+        course = parts[2]    # "01_preAnalisi" è parts[2]
         
         content = tex_file.read_text(encoding='utf-8')
         matches = PATTERN.findall(content)
@@ -51,7 +52,6 @@ def sync_database():
             prefix = f"{core[:3].upper()}-{course[:2].upper()}"
             prob_id = f"{prefix}-{get_hash(statement)}"
             
-            # Se esiste, lo ripesca (con le sue statistiche intatte), altrimenti lo crea
             if prob_id in existing_map:
                 new_problems_list.append(existing_map[prob_id])
                 skipped += 1
@@ -66,7 +66,6 @@ def sync_database():
                 })
                 added += 1
                 
-    # Sovrascrive il JSON garantendo che l'array sia perfettamente in ordine
     with open(JSON_PATH, 'w', encoding='utf-8') as f:
         json.dump(new_problems_list, f, indent=2, ensure_ascii=False)
         
