@@ -12,6 +12,7 @@
     padding: 0;
     border: none;
     outline: none;
+    border-radius: 0 !important; /* Brutalist: no rounded corners */
 }
 
 body {
@@ -47,12 +48,21 @@ body {
     cursor: pointer;
     text-transform: uppercase;
     padding-bottom: 2px;
+    transition: none; /* No fading */
 }
 
-.nav-btn:hover { color: var(--fg); }
+.nav-btn:hover { 
+    color: var(--bg);
+    background-color: var(--fg);
+}
 .nav-btn.active {
     color: var(--fg);
     border-bottom: 1px solid var(--fg);
+    background-color: transparent;
+}
+.nav-btn.active:hover {
+    color: var(--bg);
+    background-color: var(--fg);
 }
 
 .nav-streaks {
@@ -109,11 +119,14 @@ body {
     cursor: pointer;
     padding: 10px 20px;
     text-transform: uppercase;
-    transition: opacity 0.2s;
-    border: 1px solid transparent;
+    border: 1px solid var(--fg);
+    transition: none; /* Brutalist hover */
 }
 
-.btn:hover { opacity: 0.6; }
+.btn:hover { 
+    background-color: var(--fg);
+    color: var(--bg);
+}
 
 .btn-course {
     border: 1px solid var(--fg-muted);
@@ -123,41 +136,25 @@ body {
     gap: 5px;
     width: 100%;
 }
-.btn-course:hover { border: 1px solid var(--fg); }
+.btn-course:hover { 
+    border: 1px solid var(--fg);
+    background-color: var(--fg);
+    color: var(--bg);
+}
+.btn-course:hover span {
+    color: var(--bg) !important; /* Forza i sottomenu a invertire colore */
+}
 
-.slider-container {
+.btn-rate {
+    border: 1px solid var(--fg);
+}
+
+.rate-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-}
-
-.slider-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: var(--fg-muted);
-}
-
-.raw-slider {
-    -webkit-appearance: none;
-    width: 100%;
-    background: transparent;
-}
-
-.raw-slider::-webkit-slider-runnable-track {
-    height: 1px;
-    background: var(--fg-muted);
-}
-
-.raw-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    height: 16px;
-    width: 16px;
-    background: var(--fg);
-    margin-top: -7px;
-    cursor: pointer;
 }
 
 /* --- ALTRE SEZIONI --- */
@@ -170,9 +167,19 @@ body {
 input, select {
     background: transparent;
     color: var(--fg);
-    border-bottom: 1px solid var(--fg-muted);
+    border: 1px solid var(--fg-muted);
     font-family: var(--font-mono);
-    padding: 5px;
+    padding: 8px;
     font-size: 1rem;
+    transition: none;
 }
-input:focus { border-bottom: 1px solid var(--fg); }
+input:focus, select:focus { 
+    border: 1px solid var(--fg); 
+    background-color: var(--fg);
+    color: var(--bg);
+}
+
+.docs-content code {
+    font-family: var(--font-mono);
+    color: var(--fg);
+}

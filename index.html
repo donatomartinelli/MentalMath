@@ -18,6 +18,7 @@
             <button class="nav-btn" data-target="sec-mental">MENTAL MATH</button>
             <button class="nav-btn" data-target="sec-dashboard">DASHBOARD</button>
             <button class="nav-btn" data-target="sec-sync">SYNC</button>
+            <button class="nav-btn" data-target="sec-docs">DOCS</button>
         </nav>
         <div class="nav-streaks">
             <span id="nav-streak-prob">PROB: 0</span>
@@ -53,13 +54,13 @@
                         <button id="btn-done" class="btn">[ DONE ]</button>
                     </div>
                     
-                    <div id="stage-rate" class="slider-container hidden">
-                        <div class="slider-labels">
-                            <span>EASY</span>
-                            <span>HARD</span>
+                    <div id="stage-rate" class="rate-container hidden">
+                        <div class="rating-buttons" style="display:flex; gap:15px; justify-content:center;">
+                            <button id="btn-fail" class="btn btn-rate">[ FAIL ]</button>
+                            <button id="btn-hard" class="btn btn-rate">[ HARD ]</button>
+                            <button id="btn-good" class="btn btn-rate">[ GOOD ]</button>
+                            <button id="btn-easy" class="btn btn-rate">[ EASY ]</button>
                         </div>
-                        <input type="range" id="diff-slider" class="raw-slider" min="0" max="1" step="0.01" value="0.5">
-                        <button id="btn-next" class="btn" style="margin-top: 15px;">[ NEXT ]</button>
                     </div>
                 </div>
             </div>
@@ -102,11 +103,15 @@
             </div>
             <div class="dash-panel">
                 <p style="color:var(--fg-muted); margin-bottom:15px;">// PROBLEMI RISOLTI (VOLUMI & DIFFICOLTÀ)</p>
-                <canvas id="chart-prob-timeline" style="height:250px; width:100%;"></canvas>
+                <div style="position: relative; height: 250px; width: 100%;">
+                    <canvas id="chart-prob-timeline"></canvas>
+                </div>
             </div>
             <div class="dash-panel">
                 <p style="color:var(--fg-muted); margin-bottom:15px;">// MENTAL MATH LATENCY (SECONDI)</p>
-                <canvas id="chart-mental-latency" style="height:250px; width:100%;"></canvas>
+                <div style="position: relative; height: 250px; width: 100%;">
+                    <canvas id="chart-mental-latency"></canvas>
+                </div>
             </div>
         </section>
 
@@ -121,6 +126,58 @@
                     <button id="btn-gist-pull" class="btn">[ PULL ]</button>
                 </div>
                 <div id="sync-log" style="margin-top:30px; min-height:50px; color:var(--fg-muted);"></div>
+            </div>
+        </section>
+        
+        <!-- VISTA 5: DOCS -->
+        <section id="sec-docs" class="hidden">
+            <div class="dash-panel docs-content">
+                <h2 style="margin-bottom: 20px;">// MATH-HUB DOCUMENTATION</h2>
+                <p style="color:var(--fg-muted); margin-bottom:15px;">MANUAL PAGE 1</p>
+                
+                <h3 style="margin-top:30px; margin-bottom:10px;">1. WORKFLOW E RISOLUZIONE</h3>
+                <p style="line-height: 1.6; margin-bottom: 15px;">
+                    L'approccio di Math-Hub è totalmente analogico-digitale (stile prompter). 
+                    Seleziona un corso, leggi il problema a schermo e calcola fisicamente sul tuo quaderno A5. 
+                    Il tablet serve solo a presentare la sfida e a raccogliere la valutazione finale.
+                    L'app è progettata per minimizzare le distrazioni e massimizzare il focus sul problem-solving puro.
+                </p>
+
+                <h3 style="margin-top:30px; margin-bottom:10px;">2. SISTEMA DI VALUTAZIONE E FSRS</h3>
+                <p style="line-height: 1.6; margin-bottom: 15px;">
+                    Al termine del problema, premi [ DONE ] e valuta la difficoltà usando i pulsanti:
+                    <ul style="list-style-type: none; margin-left: 15px; margin-top: 10px; margin-bottom: 15px;">
+                        <li><strong>[ FAIL ]</strong>: Non sei riuscito a risolverlo. Riprogrammato per la sessione attuale.</li>
+                        <li><strong>[ HARD ]</strong>: Risolto, ma con incertezze o aiuti. Riprogrammato a breve.</li>
+                        <li><strong>[ GOOD ]</strong>: Risolto in tempi normali senza errori. Riprogrammazione standard.</li>
+                        <li><strong>[ EASY ]</strong>: Risolto in modo fluido e veloce. Riprogrammato molto più in là nel tempo.</li>
+                    </ul>
+                    L'algoritmo calcolerà l'intervallo esatto per il prossimo ripasso.
+                </p>
+
+                <h3 style="margin-top:30px; margin-bottom:10px;">3. AGGIUNGERE NUOVI PROBLEMI (LATEX)</h3>
+                <p style="line-height: 1.6; margin-bottom: 15px;">
+                    Per aggiungere problemi, inseriscili nei tuoi file `.tex` all'interno della cartella `Documenti/Materia/Corso/chapters/` utilizzando la seguente sintassi:
+                    <br><br>
+                    <code style="background-color:#222; padding:2px 5px;">\item \tagprob{Nome Argomento}{Difficoltà Base 1-5} Il testo del problema...</code>
+                    <br><br>
+                    Esempio:
+                    <br>
+                    <code style="background-color:#222; padding:2px 5px;">\item \tagprob{Numeri Reali}{2.0} Dimostra per assurdo che $\sqrt{3} \notin \mathbb{Q}$.</code>
+                    <br><br>
+                    Quindi, lancia lo script `sync_problems.py` per aggiornare il database `problems.json` senza sovrascrivere lo storico dei ripassi.
+                </p>
+
+                <h3 style="margin-top:30px; margin-bottom:10px;">4. MENTAL MATH (TRACHTENBERG)</h3>
+                <p style="line-height: 1.6; margin-bottom: 15px;">
+                    La sezione Mental Math è progettata per allenare il Sistema Trachtenberg. Scegli le cifre del moltiplicando e il moltiplicatore esatto (o range). 
+                    L'app tiene traccia della latenza di risposta tramite una media mobile esponenziale, mostrandoti nel banner la regola specifica da applicare. L'inserimento dei numeri sulla tastiera avviene rigorosamente da destra verso sinistra.
+                </p>
+                
+                <h3 style="margin-top:30px; margin-bottom:10px;">5. GIST SYNC</h3>
+                <p style="line-height: 1.6; margin-bottom: 15px;">
+                    Inserisci il tuo Personal Access Token di GitHub e l'ID del Gist in cui vuoi salvare i tuoi progressi. Usa [ PUSH ] al termine della sessione per salvare sul cloud e [ PULL ] su un altro dispositivo per riprendere da dove hai lasciato.
+                </p>
             </div>
         </section>
     </main>

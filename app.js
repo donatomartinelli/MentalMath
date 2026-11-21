@@ -36,7 +36,7 @@ async function loadProblemsDatabase() {
 
 function setupNavigation() {
     const navButtons = document.querySelectorAll('.nav-btn');
-    const sections = ['sec-problems', 'sec-mental', 'sec-dashboard', 'sec-sync'];
+    const sections = ['sec-problems', 'sec-mental', 'sec-dashboard', 'sec-sync', 'sec-docs'];
 
     navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -44,8 +44,12 @@ function setupNavigation() {
             navButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            sections.forEach(s => document.getElementById(s).classList.add('hidden'));
-            document.getElementById(target).classList.remove('hidden');
+            sections.forEach(s => {
+                const el = document.getElementById(s);
+                if(el) el.classList.add('hidden');
+            });
+            const targetEl = document.getElementById(target);
+            if(targetEl) targetEl.classList.remove('hidden');
 
             if (target === 'sec-dashboard') refreshDashboard();
             if (target === 'sec-problems') {
@@ -72,24 +76,30 @@ function setupProblemSolvingUI() {
     const btnDone = document.getElementById('btn-done');
     const stageSolve = document.getElementById('stage-solve');
     const stageRate = document.getElementById('stage-rate');
-    const slider = document.getElementById('diff-slider');
-    const btnNext = document.getElementById('btn-next');
     const btnBack = document.getElementById('btn-back-courses');
+    
+    // Nuovi bottoni di valutazione
+    const btnFail = document.getElementById('btn-fail');
+    const btnHard = document.getElementById('btn-hard');
+    const btnGood = document.getElementById('btn-good');
+    const btnEasy = document.getElementById('btn-easy');
 
     btnDone.addEventListener('click', () => {
         stageSolve.classList.add('hidden');
         stageRate.classList.remove('hidden');
-        slider.value = '0.50'; 
-        slider.focus();
     });
 
-    btnNext.addEventListener('click', () => {
+    const handleRating = (val) => {
         if (!currentProblemObj) return;
-        const val = parseFloat(slider.value);
         problemEngine.submitEvaluation(currentProblemObj.id, val); 
         updateTopStreakPills();
         renderCurrentProblem(true);
-    });
+    };
+
+    if(btnFail) btnFail.addEventListener('click', () => handleRating(1.0));
+    if(btnHard) btnHard.addEventListener('click', () => handleRating(0.8));
+    if(btnGood) btnGood.addEventListener('click', () => handleRating(0.4));
+    if(btnEasy) btnEasy.addEventListener('click', () => handleRating(0.1));
 
     btnBack.addEventListener('click', () => {
         problemEngine.setActiveCourse(null);
@@ -135,7 +145,6 @@ function renderCourseSelection() {
 }
 
 function renderCurrentProblem(forceNew = false) {
-    // IL FIX È QUI: forza l'interfaccia a mostrare l'area di lavoro ed eliminare la tendina dei corsi
     document.getElementById('course-selection').classList.add('hidden');
     document.getElementById('problem-solving-area').classList.remove('hidden');
 
@@ -164,9 +173,9 @@ function renderCurrentProblem(forceNew = false) {
         window.renderMathInElement(statementEl, {
             delimiters: [
                 { left: '$$', right: '$$', display: true },
-                { left: '\\[', right: '\\]', display: true },
+                { left: '\[', right: '\]', display: true },
                 { left: '$', right: '$', display: false },
-                { left: '\\(', right: '\\)', display: false }
+                { left: '\(', right: '\)', display: false }
             ],
             throwOnError: false
         });
@@ -305,9 +314,7 @@ function setupMentalMathUI() {
 }
 
 // --- DASHBOARD ESSENZIALE ---
-function setupDashboardUI() {
-    // Inizializzazione della Dashboard (puoi aggiungere listener qui se necessario)
-}
+function setupDashboardUI() {}
 
 function refreshDashboard() {
     const pStreak = problemEngine.getStreakData();
@@ -319,7 +326,6 @@ function refreshDashboard() {
 
     if (typeof Chart === 'undefined') return;
 
-    // Timeline Problemi
     const pHist = problemEngine.state.dailyHistory;
     const pDates = Object.keys(pHist).sort();
     const todayISO = problemEngine.getTodayISO();
@@ -339,16 +345,25 @@ function refreshDashboard() {
             }]
         },
         options: {
-            responsive: true, maintainAspectRatio: false,
+            responsive: true, 
+            maintainAspectRatio: false,
             scales: {
-                y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#888' } },
-                x: { grid: { display: false }, ticks: { color: '#888' } }
+                y: { 
+                    beginAtZero: true, 
+                    grid: { display: false }, 
+                    border: { color: '#ffffff' }, 
+                    ticks: { color: '#888', font: { family: 'monospace' } } 
+                },
+                x: { 
+                    grid: { display: false }, 
+                    border: { color: '#ffffff' }, 
+                    ticks: { color: '#888', font: { family: 'monospace' } } 
+                }
             },
             plugins: { legend: { display: false } }
         }
     });
 
-    // Latenza Mental Math
     const ctxLat = document.getElementById('chart-mental-latency');
     if (mentalLatencyChartInstance) mentalLatencyChartInstance.destroy();
     mentalLatencyChartInstance = new Chart(ctxLat, {
@@ -356,16 +371,31 @@ function refreshDashboard() {
         data: {
             labels: mData.labels,
             datasets: mData.latencyDatasets.length ? mData.latencyDatasets : [{
-                label: 'Latenza (s)', data: [0], borderColor: '#ffffff'
+                label: 'Latenza (s)', data: [0], borderColor: '#ffffff', backgroundColor: '#ffffff', borderWidth: 1.5, tension: 0, stepped: true
             }]
         },
         options: {
-            responsive: true, maintainAspectRatio: false,
+            responsive: true, 
+            maintainAspectRatio: false,
             scales: {
-                y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#888' } },
-                x: { grid: { color: '#333' }, ticks: { color: '#888' } }
+                y: { 
+                    beginAtZero: true, 
+                    grid: { display: false }, 
+                    border: { color: '#ffffff' }, 
+                    ticks: { color: '#888', font: { family: 'monospace' } } 
+                },
+                x: { 
+                    grid: { display: false }, 
+                    border: { color: '#ffffff' }, 
+                    ticks: { color: '#888', font: { family: 'monospace' } } 
+                }
             },
-            plugins: { legend: { labels: { color: '#fff', font: { family: 'monospace' } } } }
+            plugins: { legend: { labels: { color: '#fff', font: { family: 'monospace' } } } },
+            elements: {
+                line: {
+                    stepped: true
+                }
+            }
         }
     });
 }

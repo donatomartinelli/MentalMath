@@ -24,7 +24,6 @@ export class ProblemEngine {
         if (raw) {
             try { 
                 const parsed = JSON.parse(raw);
-                // Il merge assicura che gli oggetti annidati esistano anche se il JSON locale è vecchio
                 return {
                     ...defaultState,
                     ...parsed,
@@ -96,7 +95,6 @@ export class ProblemEngine {
             const rec = this.state.topicRecords[targetGroupKey];
             const groupSubset = courseProbs.filter(p => this.getGroupKey(p) === targetGroupKey);
             
-            // Pesca la prima variante non usata
             let chosen = groupSubset.find(p => !rec.usedIds.includes(p.id));
             if (!chosen) chosen = groupSubset[Math.floor(Math.random() * groupSubset.length)];
 
@@ -151,6 +149,7 @@ export class ProblemEngine {
             rec.interval = 1;
         } else {
             rec.status = 'passed';
+            // FSRS semplificato / Modello EMA combinato
             const factor = Math.max(1.1, 2.6 - 1.8 * s);
             rec.interval = Math.max(1, Math.round((rec.interval || 1) * factor));
         }
@@ -164,7 +163,6 @@ export class ProblemEngine {
         this.state.dailyHistory[today].count += 1;
         this.state.dailyHistory[today].sumSlider += s;
 
-        // Aggiorna l'EMA globale 
         const alpha = 0.1;
         const oldEma = this.state.globalEmaMastery ?? 0.50;
         this.state.globalEmaMastery = (alpha * (1 - s)) + ((1 - alpha) * oldEma);
@@ -182,7 +180,7 @@ export class ProblemEngine {
         for (const gKey of uniqueGroups) {
             const rec = this.state.topicRecords[gKey];
             if (rec && rec.status === 'passed') passedCount++;
-            else break; // Si blocca al primo ostacolo
+            else break; 
         }
 
         const total = uniqueGroups.length;
