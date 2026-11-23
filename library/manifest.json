@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-23T13:29:48+00:00",
-  "sourceCommit": "daafe2a1d9a48c2c3037d584b577f58854edec26",
+  "generatedAt": "2026-11-23T13:35:32+00:00",
+  "sourceCommit": "6500d5d7ab293232a6c58b47e26df42efb628f27",
   "pdfs": [
     {
       "slug": "algebra",
@@ -9,8 +9,8 @@
       "file": "algebra.pdf",
       "pages": 166,
       "bytes": 798121,
-      "sha256": "32254e6a895a3400796f78cfd1c9baa4b2c613edc76f930f3934f822a8a324e6",
-      "builtAt": "2026-11-23T13:29:48+00:00"
+      "sha256": "e1e718670c8aa97a642f8261de9f7f62047d4447a052bf840b7f18c17beb4e1b",
+      "builtAt": "2026-11-23T13:35:32+00:00"
     },
     {
       "slug": "analisi",
@@ -18,8 +18,8 @@
       "file": "analisi.pdf",
       "pages": 465,
       "bytes": 1996920,
-      "sha256": "93bc8b968494a77769ef7a896929f51e04c23a325d36ba0930b24bb94d1f9892",
-      "builtAt": "2026-11-23T13:29:48+00:00"
+      "sha256": "501cde602239012e9d712386aba5ea2024211b299cbcc3c15b49169c7812bfa1",
+      "builtAt": "2026-11-23T13:35:32+00:00"
     },
     {
       "slug": "calcolo-scientifico",
@@ -27,8 +27,8 @@
       "file": "calcolo-scientifico.pdf",
       "pages": 152,
       "bytes": 1292594,
-      "sha256": "f273543a58f28b1fa253670261dc8be5a59fc47caf7cd5513516c8fc6e74fb9d",
-      "builtAt": "2026-11-23T13:29:48+00:00"
+      "sha256": "127698429f6d91dec5e82281cfe5706d494d67afdd46f12ed6f501008e821ddc",
+      "builtAt": "2026-11-23T13:35:32+00:00"
     },
     {
       "slug": "fisica",
@@ -36,8 +36,8 @@
       "file": "fisica.pdf",
       "pages": 95,
       "bytes": 581104,
-      "sha256": "c7377db5f43d8f952de496243fd00c0756592f1b29b06a30937f994cf503cf7f",
-      "builtAt": "2026-11-23T13:29:48+00:00"
+      "sha256": "ef411488cc01b6568407e9329708e1b06f5b263281511de81c336e8bc2192e03",
+      "builtAt": "2026-11-23T13:35:32+00:00"
     },
     {
       "slug": "geometria",
@@ -45,8 +45,8 @@
       "file": "geometria.pdf",
       "pages": 103,
       "bytes": 661070,
-      "sha256": "a5729587c7c67b8660b6b673edc4fb12c8071c5f90959baf6b5d080e05c2a12c",
-      "builtAt": "2026-11-23T13:29:48+00:00"
+      "sha256": "e4e08aa1ab4ba26f77a64d2a411370b23703edc298e9c87dfab65bdc2ba6f429",
+      "builtAt": "2026-11-23T13:35:32+00:00"
     },
     {
       "slug": "meccanica-razionale",
@@ -54,8 +54,8 @@
       "file": "meccanica-razionale.pdf",
       "pages": 75,
       "bytes": 562023,
-      "sha256": "4196e34eea1539f8297c5214afeb627787550ead1a9c73a8f5e2510ca6e7cc29",
-      "builtAt": "2026-11-23T13:29:48+00:00"
+      "sha256": "cd5fab042d9b3986bde4e219d3da96ae95d184a28b7172a6265edb7929c393ac",
+      "builtAt": "2026-11-23T13:35:32+00:00"
     },
     {
       "slug": "pre-analisi",
@@ -63,8 +63,8 @@
       "file": "pre-analisi.pdf",
       "pages": 60,
       "bytes": 419598,
-      "sha256": "9acb85748e717eed000b93bea90aa4b2e9c1ee80dab233dc1ca351498db7e805",
-      "builtAt": "2026-11-23T13:29:48+00:00"
+      "sha256": "c8c087c56fba698a126058219fec14e5068facaec80fed2c00ad61d8da3df7e0",
+      "builtAt": "2026-11-23T13:35:32+00:00"
     }
   ]
 }
