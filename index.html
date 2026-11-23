@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MATH-HUB // TERMINAL</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a0a">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -17,6 +19,7 @@
             <button class="nav-btn active" data-target="sec-problems">PROBLEM-SOLVING</button>
             <button class="nav-btn" data-target="sec-mental">MENTAL MATH</button>
             <button class="nav-btn" data-target="sec-dashboard">DASHBOARD</button>
+            <button class="nav-btn" data-target="sec-library">LIBRERIA</button>
             <button class="nav-btn" data-target="sec-sync">SYNC</button>
             <button class="nav-btn" data-target="sec-docs">DOCS</button>
         </nav>
@@ -48,6 +51,7 @@
                 </div>
 
                 <div id="prob-statement" class="problem-statement"></div>
+                <div id="prob-source" class="problem-source"></div>
 
                 <div class="action-area">
                     <div id="stage-solve">
@@ -70,12 +74,17 @@
         <section id="sec-mental" class="hidden">
             <div id="mental-setup-box" class="view-container">
                 <p style="color:var(--fg-muted); margin-bottom:20px;">// SETUP TRACHTENBERG</p>
-                <div id="presets-container" style="display:flex; gap:10px; margin-bottom:20px;"></div>
-                <div style="display:flex; gap:20px; align-items:center;">
+                <div id="presets-container" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px;"></div>
+                <div style="display:flex; flex-wrap:wrap; gap:20px; align-items:center;">
                     <input type="text" id="config-digits" value="2" placeholder="Cifre (es. 2)" style="width:100px;">
                     <input type="text" id="config-mult" value="11" placeholder="Molt. (es. 11)" style="width:100px;">
                     <select id="config-mult-type"><option value="literal">Esatto</option><option value="digits">Cifre</option></select>
-                    <input type="number" id="config-time" value="60" style="width:60px;"><span>sec</span>
+                    <input type="number" id="config-time" value="60" min="1" style="width:60px;">
+                    <select id="config-time-type"><option value="s">sec</option><option value="m">min</option></select>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center; margin-top:20px;">
+                    <input type="text" id="preset-name" placeholder="Nome preset" style="width:200px;">
+                    <button class="btn" id="btn-save-preset" style="padding:5px 10px; font-size:0.8rem;">[ SALVA PRESET ]</button>
                 </div>
                 <button class="btn" id="btn-start-session" style="margin-top:30px;">[ START ]</button>
             </div>
@@ -108,6 +117,19 @@
                 </div>
             </div>
             <div class="dash-panel">
+                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:15px; color:var(--fg-muted);">
+                    <span>// MENTAL MATH: CALCOLI GIORNALIERI</span>
+                    <span>STREAK <span id="kpi-calc-streak">0</span> · RECORD <span id="kpi-calc-best">0</span> · OGGI <span id="kpi-calc-today">0</span></span>
+                </div>
+                <div id="heatmap-grid" class="heatmap-grid"></div>
+            </div>
+            <div class="dash-panel">
+                <p style="color:var(--fg-muted); margin-bottom:15px;">// MENTAL MATH VOLUME (CALCOLI/GIORNO)</p>
+                <div style="position: relative; height: 200px; width: 100%;">
+                    <canvas id="chart-mental-volume"></canvas>
+                </div>
+            </div>
+            <div class="dash-panel">
                 <p style="color:var(--fg-muted); margin-bottom:15px;">// MENTAL MATH LATENCY (SECONDI)</p>
                 <div style="position: relative; height: 250px; width: 100%;">
                     <canvas id="chart-mental-latency"></canvas>
@@ -129,6 +151,15 @@
             </div>
         </section>
         
+        <!-- VISTA 4b: LIBRERIA PDF (da math-pdf/manifest.json) -->
+        <section id="sec-library" class="hidden">
+            <div class="dash-panel">
+                <p style="color:var(--fg-muted); margin-bottom:20px;">// LIBRERIA PDF</p>
+                <ul id="library-list" class="library-list"><li style="color:var(--fg-muted);">CARICAMENTO...</li></ul>
+                <p id="library-meta" style="margin-top:20px; color:var(--fg-muted); font-size:0.8rem;"></p>
+            </div>
+        </section>
+
         <!-- VISTA 5: DOCS -->
         <section id="sec-docs" class="hidden">
             <div class="dash-panel docs-content">
@@ -157,7 +188,7 @@
 
                 <h3 style="margin-top:30px; margin-bottom:10px;">3. AGGIUNGERE NUOVI PROBLEMI (LATEX)</h3>
                 <p style="line-height: 1.6; margin-bottom: 15px;">
-                    Per aggiungere problemi, inseriscili nei tuoi file `.tex` all'interno della cartella `Documenti/Materia/Corso/chapters/` utilizzando la seguente sintassi:
+                    I problemi vivono nel repo <strong>math-tex</strong> (unica fonte), nei capitoli <code>&lt;Materia&gt;/chapters/*.tex</code> di qualunque materia elencata in <code>courses.json</code>, con la sintassi:
                     <br><br>
                     <code style="background-color:#222; padding:2px 5px;">\item \tagprob{Nome Argomento}{Difficoltà Base 1-5} Il testo del problema...</code>
                     <br><br>
@@ -165,7 +196,12 @@
                     <br>
                     <code style="background-color:#222; padding:2px 5px;">\item \tagprob{Numeri Reali}{2.0} Dimostra per assurdo che $\sqrt{3} \notin \mathbb{Q}$.</code>
                     <br><br>
-                    Quindi, lancia lo script `sync_problems.py` per aggiornare il database `problems.json` senza sovrascrivere lo storico dei ripassi.
+                    Al push su math-tex la CI esegue <code>tools/extract.py</code> e aggiorna <code>data/problems.json</code> qui. L'ID di un problema dipende solo dal suo enunciato, quindi lo storico dei ripassi resta valido finché il testo non cambia. In locale: <code>python tools/extract.py problems --out ../math-hub/data/problems.json</code>.
+                </p>
+
+                <h3 style="margin-top:30px; margin-bottom:10px;">3b. LIBRERIA PDF</h3>
+                <p style="line-height: 1.6; margin-bottom: 15px;">
+                    La sezione LIBRERIA legge <code>manifest.json</code> dal repo math-pdf (compilato dalla CI di math-tex) e apre i PDF delle dispense. L'indirizzo si configura in <code>config.js</code>.
                 </p>
 
                 <h3 style="margin-top:30px; margin-bottom:10px;">4. MENTAL MATH (TRACHTENBERG)</h3>

@@ -33,6 +33,12 @@ export class MathEngine {
         localStorage.setItem(this.presetsKey, JSON.stringify(presets));
     }
 
+    deletePreset(name) {
+        const presets = this.getPresets();
+        delete presets[name];
+        localStorage.setItem(this.presetsKey, JSON.stringify(presets));
+    }
+
     parseDigits(inputStr) {
         let [min, max] = inputStr.split('-').map(n => parseInt(n.trim(), 10));
         min = min || 1;

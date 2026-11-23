@@ -183,3 +183,24 @@ input:focus, select:focus {
     font-family: var(--font-mono);
     color: var(--fg);
 }
+
+/* --- PROBLEMA: LINK ALLA FONTE (math-tex / math-pdf) --- */
+.problem-source { margin-top: 15px; font-size: 0.75rem; color: var(--fg-muted); }
+.problem-source a { color: var(--fg-muted); }
+.problem-source a:hover { color: var(--bg); background: var(--fg); }
+
+/* --- HEATMAP MENTAL MATH (dal widget MentalMath, in scala di grigi) --- */
+.heatmap-grid { display: flex; gap: 3px; overflow-x: auto; padding-bottom: 5px; }
+.heatmap-col { display: flex; flex-direction: column; gap: 3px; }
+.heatmap-cell { width: 12px; height: 12px; background: #1a1a1a; }
+.heatmap-cell:hover { outline: 1px solid var(--fg); }
+.heatmap-cell[data-level="1"] { background: #444; }
+.heatmap-cell[data-level="2"] { background: #888; }
+.heatmap-cell[data-level="3"] { background: #bbb; }
+.heatmap-cell[data-level="4"] { background: #fff; }
+
+/* --- LIBRERIA PDF --- */
+.library-list { list-style: none; display: flex; flex-direction: column; }
+.library-list li { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 12px 0; border-bottom: 1px solid #222; }
+.library-list a { color: var(--fg); text-decoration: none; }
+.library-list a:hover { color: var(--bg); background: var(--fg); }

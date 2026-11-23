@@ -2,31 +2,34 @@
 import { ProblemEngine } from './problemEngine.js';
 import { MathEngine } from './mathEngine.js';
 import { GistSync } from './gistSync.js';
+import { PROBLEMS_URL, PDF_BASE_URL } from './config.js';
 
 const problemEngine = new ProblemEngine();
 const mathEngine = new MathEngine();
 const gistSync = new GistSync();
 
 let currentProblemObj = null;
+let pdfManifest = null; // { pdfs: [{ slug, title, file, pages, ... }] } da math-pdf
 
 // Stato UI Mental Math
 let currentOperation = null, mentalTimerInterval = null, mentalTimeLeft = 0;
 let mentalScore = 0, opStartTime = 0, currentErrors = 0, sessionStats = [];
-let probTimelineChartInstance = null, mentalLatencyChartInstance = null;
+let probTimelineChartInstance = null, mentalLatencyChartInstance = null, mentalVolumeChartInstance = null;
 
 window.addEventListener('DOMContentLoaded', async () => {
     setupNavigation();
-    await loadProblemsDatabase(); 
-    setupProblemSolvingUI();      
+    await loadProblemsDatabase();
+    setupProblemSolvingUI();
     setupMentalMathUI();
     setupDashboardUI();
     setupSyncUI();
     updateTopStreakPills();
+    loadPdfManifest(); // non bloccante: la libreria è un extra
 });
 
 async function loadProblemsDatabase() {
     try {
-        const res = await fetch('./problems.json', { cache: 'no-store' });
+        const res = await fetch(PROBLEMS_URL, { cache: 'no-store' });
         const data = await res.json();
         problemEngine.setProblems(data);
     } catch (err) {
@@ -34,9 +37,78 @@ async function loadProblemsDatabase() {
     }
 }
 
+// --- LIBRERIA PDF (math-pdf/manifest.json) ---
+async function loadPdfManifest() {
+    try {
+        const res = await fetch(new URL('manifest.json', PDF_BASE_URL), { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        pdfManifest = await res.json();
+    } catch (err) {
+        console.warn('Manifest PDF non disponibile:', err);
+        pdfManifest = null;
+    }
+    renderLibrary();
+    if (currentProblemObj) renderProblemSource(currentProblemObj);
+}
+
+function pdfUrlFor(slug) {
+    const item = pdfManifest?.pdfs?.find(p => p.slug === slug);
+    return item ? new URL(`pdf/${item.file}`, PDF_BASE_URL).href : null;
+}
+
+function renderLibrary() {
+    const listEl = document.getElementById('library-list');
+    const metaEl = document.getElementById('library-meta');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+
+    if (!pdfManifest?.pdfs?.length) {
+        const li = document.createElement('li');
+        li.style.color = 'var(--fg-muted)';
+        li.textContent = `Nessun PDF disponibile (manifest non raggiungibile: ${PDF_BASE_URL}).`;
+        listEl.appendChild(li);
+        metaEl.textContent = '';
+        return;
+    }
+
+    for (const p of pdfManifest.pdfs) {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = new URL(`pdf/${p.file}`, PDF_BASE_URL).href;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = `[ ${p.title.toUpperCase()} ]`;
+        const info = document.createElement('span');
+        info.style.color = 'var(--fg-muted)';
+        info.textContent = [p.pages ? `${p.pages} PAG` : null, `${Math.round(p.bytes / 1024)} KB`, (p.builtAt || '').slice(0, 10)]
+            .filter(Boolean).join(' · ');
+        li.append(a, info);
+        listEl.appendChild(li);
+    }
+    const commit = pdfManifest.sourceCommit ? pdfManifest.sourceCommit.slice(0, 7) : '?';
+    metaEl.textContent = `// BUILD ${String(pdfManifest.generatedAt || '').slice(0, 16).replace('T', ' ')} · math-tex@${commit}`;
+}
+
+function renderProblemSource(p) {
+    const el = document.getElementById('prob-source');
+    if (!el) return;
+    el.innerHTML = '';
+    if (!p?.source) return;
+    const label = `${p.source.file}:${p.source.line}`;
+    const url = pdfUrlFor(p.source.slug);
+    if (url) {
+        const a = document.createElement('a');
+        a.href = url; a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = `// FONTE: ${label} → PDF`;
+        el.appendChild(a);
+    } else {
+        el.textContent = `// FONTE: ${label}`;
+    }
+}
+
 function setupNavigation() {
     const navButtons = document.querySelectorAll('.nav-btn');
-    const sections = ['sec-problems', 'sec-mental', 'sec-dashboard', 'sec-sync', 'sec-docs'];
+    const sections = ['sec-problems', 'sec-mental', 'sec-dashboard', 'sec-library', 'sec-sync', 'sec-docs'];
 
     navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -173,13 +245,14 @@ function renderCurrentProblem(forceNew = false) {
         window.renderMathInElement(statementEl, {
             delimiters: [
                 { left: '$$', right: '$$', display: true },
-                { left: '\[', right: '\]', display: true },
+                { left: '\\[', right: '\\]', display: true },
                 { left: '$', right: '$', display: false },
-                { left: '\(', right: '\)', display: false }
+                { left: '\\(', right: '\\)', display: false }
             ],
             throwOnError: false
         });
     }
+    renderProblemSource(p);
 }
 
 // --- MENTAL MATH ---
@@ -193,6 +266,16 @@ function setupMentalMathUI() {
     const setupBox = document.getElementById('mental-setup-box');
     const gameBox = document.getElementById('mental-game-box');
 
+    function readSetup() {
+        return {
+            digits: document.getElementById('config-digits').value.trim() || '2',
+            mult: document.getElementById('config-mult').value.trim() || '11',
+            multType: document.getElementById('config-mult-type').value,
+            time: document.getElementById('config-time').value || '60',
+            timeType: document.getElementById('config-time-type').value
+        };
+    }
+
     function loadPresetsUI() {
         const container = document.getElementById('presets-container');
         container.innerHTML = '';
@@ -203,12 +286,22 @@ function setupMentalMathUI() {
             btn.style.padding = '5px 10px';
             btn.style.fontSize = '0.8rem';
             btn.textContent = `[ ${name.toUpperCase()} ]`;
+            btn.title = 'Click: applica · Tasto destro: elimina';
             btn.addEventListener('click', () => {
                 const c = presets[name];
                 document.getElementById('config-digits').value = c.digits;
                 document.getElementById('config-mult').value = c.mult;
                 document.getElementById('config-mult-type').value = c.multType;
                 document.getElementById('config-time').value = c.time;
+                document.getElementById('config-time-type').value = c.timeType === 'm' ? 'm' : 's';
+                document.getElementById('preset-name').value = name;
+            });
+            btn.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                if (confirm(`Eliminare il preset "${name}"?`)) {
+                    mathEngine.deletePreset(name);
+                    loadPresetsUI();
+                }
             });
             container.appendChild(btn);
         });
@@ -216,11 +309,25 @@ function setupMentalMathUI() {
 
     loadPresetsUI();
 
+    document.getElementById('btn-save-preset').addEventListener('click', () => {
+        const nameInput = document.getElementById('preset-name');
+        const name = nameInput.value.trim();
+        if (!name) { nameInput.focus(); return; }
+        mathEngine.savePreset(name, readSetup());
+        loadPresetsUI();
+    });
+
+    // Durante la sessione ogni click riporta il focus sulla risposta (come nel widget MentalMath)
+    document.addEventListener('click', (e) => {
+        if (gameBox.classList.contains('hidden') || answerInput.disabled) return;
+        if (e.target.closest('button, a, input, select')) return;
+        answerInput.focus();
+    });
+
     document.getElementById('btn-start-session').addEventListener('click', () => {
-        const digits = document.getElementById('config-digits').value.trim() || '2';
-        const mult = document.getElementById('config-mult').value.trim() || '11';
-        const multType = document.getElementById('config-mult-type').value;
-        const timeValue = parseInt(document.getElementById('config-time').value, 10) || 60;
+        const { digits, mult, multType, time, timeType } = readSetup();
+        const timeNumber = parseInt(time, 10) || 60;
+        const timeValue = timeType === 'm' ? timeNumber * 60 : timeNumber;
 
         mentalTimeLeft = timeValue;
         mentalScore = 0;
@@ -260,6 +367,7 @@ function setupMentalMathUI() {
         multiplierDisplay.textContent = '';
         answerInput.value = `TOT: ${mentalScore}`;
         mathEngine.updateWeights(sessionStats);
+        sessionStats = []; // evita il doppio conteggio quando poi si preme [ END ]
         updateTopStreakPills();
     }
 
@@ -316,6 +424,43 @@ function setupMentalMathUI() {
 // --- DASHBOARD ESSENZIALE ---
 function setupDashboardUI() {}
 
+// Heatmap stile GitHub (portata dal widget MentalMath): una colonna per settimana, da domenica
+function renderHeatmap(data) {
+    const container = document.getElementById('heatmap-grid');
+    if (!container) return;
+
+    const toISO = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Parte dal primo giorno con dati (o da 26 settimane fa), arretrando fino a domenica
+    const dates = Object.keys(data).sort();
+    const minStart = new Date(today); minStart.setDate(minStart.getDate() - 7 * 26);
+    const first = dates.length ? new Date(`${dates[0]}T00:00:00`) : minStart;
+    const start = first < minStart ? first : minStart;
+    while (start.getDay() !== 0) start.setDate(start.getDate() - 1);
+
+    const frag = document.createDocumentFragment();
+    let col = null;
+    for (const cur = new Date(start); cur <= today; cur.setDate(cur.getDate() + 1)) {
+        if (cur.getDay() === 0 || !col) {
+            col = document.createElement('div');
+            col.className = 'heatmap-col';
+            frag.appendChild(col);
+        }
+        const dStr = toISO(cur);
+        const count = data[dStr] || 0;
+        const level = count >= 100 ? 4 : count >= 50 ? 3 : count >= 20 ? 2 : count > 0 ? 1 : 0;
+        const cell = document.createElement('div');
+        cell.className = 'heatmap-cell';
+        cell.dataset.level = level;
+        cell.title = `${dStr}: ${count} calcoli`;
+        col.appendChild(cell);
+    }
+    container.replaceChildren(frag);
+    container.scrollLeft = container.scrollWidth; // mostra i giorni più recenti
+}
+
 function refreshDashboard() {
     const pStreak = problemEngine.getStreakData();
     const mData = mathEngine.getStreakAndDashboardData();
@@ -324,7 +469,28 @@ function refreshDashboard() {
     const masteryPct = problemEngine.state.globalEmaMastery ? Math.round(problemEngine.state.globalEmaMastery * 100) : 50;
     document.getElementById('kpi-global-mastery').textContent = `${masteryPct}%`;
 
+    document.getElementById('kpi-calc-streak').textContent = mData.streaks.current;
+    document.getElementById('kpi-calc-best').textContent = mData.streaks.best;
+    document.getElementById('kpi-calc-today').textContent = mData.streaks.todayCount;
+    renderHeatmap(mData.heatmapData);
+
     if (typeof Chart === 'undefined') return;
+
+    const ctxVol = document.getElementById('chart-mental-volume');
+    if (mentalVolumeChartInstance) mentalVolumeChartInstance.destroy();
+    mentalVolumeChartInstance = new Chart(ctxVol, {
+        type: 'bar',
+        data: { labels: mData.labels, datasets: [{ label: 'Calcoli', data: mData.volumeData, backgroundColor: '#ffffff' }] },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, grid: { display: false }, border: { color: '#ffffff' }, ticks: { color: '#888', font: { family: 'monospace' } } },
+                x: { grid: { display: false }, border: { color: '#ffffff' }, ticks: { color: '#888', font: { family: 'monospace' } } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
 
     const pHist = problemEngine.state.dailyHistory;
     const pDates = Object.keys(pHist).sort();
