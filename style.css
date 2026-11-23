@@ -231,7 +231,10 @@ select option { background: var(--bg); }
     position: fixed; left: var(--space-4); bottom: var(--space-3); z-index: 2; display: none;
     font-size: var(--font-2xs); color: var(--fg-dim); text-decoration: none; max-width: calc(50% - 580px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-@media (min-width: 1280px) { .bg-field:not(.off) { display: block; } .bg-field-label { display: block; } }
+.bg-field:not(.off) { display: block; }
+@media (min-width: 1280px) { .bg-field-label { display: block; } }
+/* telefono e finestre strette: niente lati liberi, il campo sta dietro al testo e quasi non si vede */
+@media (max-width: 1279px) { .bg-field { opacity: 0.22; -webkit-mask-image: none; mask-image: none; } }
 .topbar, .navbar, .workspace, .footer { position: relative; z-index: 1; }
 
 /* --- LAB --- */

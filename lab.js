@@ -50,7 +50,7 @@ class FieldLab {
             this.stage, this.eq,
             el('p', { class: 'dim small', text: "variabili x, y, t; funzioni sin cos tan exp log sqrt abs atan sinh cosh tanh pow min max; potenze con ^. esempio: x' = y, y' = -x + (1 - x^2)*y" }));
 
-        this.ff = new FlowField(flow, { mouse: this.stage, unit: 0.15, density: 1 / 700, alpha: 0.85, fade: 0.08 });
+        this.ff = new FlowField(flow, { reducedMotion: false, mouse: this.stage, unit: 0.15, density: 1 / 700, alpha: 0.85, fade: 0.08 });
         this.speed.addEventListener('input', () => { this.ff.o.speed = +this.speed.value; });
         new ResizeObserver(() => this.sizeOverlay()).observe(this.over);
         this.over.addEventListener('click', (e) => {
@@ -184,7 +184,7 @@ class MatrixLab {
                     el('p', { class: 'dim small', text: "la griglia mostra (1-t) I + t A applicata al piano: e1 ed e2 vanno nelle colonne di A, l'area si moltiplica per det A. sotto scorre il sistema x' = A x." })),
                 stage));
 
-        this.ff = new FlowField(flow, { mouse: null, unit: 0.11, density: 1 / 900, alpha: 0.35, fade: 0.09 });
+        this.ff = new FlowField(flow, { reducedMotion: false, mouse: null, unit: 0.11, density: 1 / 900, alpha: 0.35, fade: 0.09 });
         this.ff.set((x, y) => [this.A[0] * x + this.A[1] * y, this.A[2] * x + this.A[3] * y]);
         new ResizeObserver(() => this.size()).observe(this.grid);
     }

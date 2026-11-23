@@ -22,7 +22,8 @@ function init() {
     label.className = 'bg-field-label';
     document.body.prepend(canvas);
     document.body.append(label);
-    ff = new FlowField(canvas, { mouse: document, density: 1 / 1400, maxParticles: 1100, unit: 0.16, alpha: 0.75, fade: 0.06, vortex: 1.6 });
+    const narrow = !matchMedia('(min-width: 1280px)').matches;
+    ff = new FlowField(canvas, { mouse: document, density: narrow ? 1 / 2600 : 1 / 1400, maxParticles: 1100, unit: 0.16, alpha: 0.75, fade: 0.06, vortex: 1.6 });
 }
 
 export function setBackdrop(route, args = [], query = new URLSearchParams()) {
@@ -40,11 +41,6 @@ export function setBackdrop(route, args = [], query = new URLSearchParams()) {
         label.href = `#/lab/campi?f=${name}`;
         label.title = 'apri nel laboratorio';
     }
-    // su schermi stretti non c'e' spazio ai lati: niente animazione
-    if (matchMedia('(min-width: 1280px)').matches) ff.start(); else ff.stop();
+    // su schermi stretti non ci sono lati liberi: il campo passa dietro al contenuto, molto tenue (vedi style.css)
+    ff.start();
 }
-
-matchMedia('(min-width: 1280px)').addEventListener('change', (e) => {
-    if (!ff || ff.canvas.classList.contains('off')) return;
-    if (e.matches) ff.start(); else ff.stop();
-});

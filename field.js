@@ -70,24 +70,30 @@ export class FlowField {
             arrows: false,         // griglia di frecce sotto le particelle
             mouse: null,           // elemento da cui leggere il cursore (vortice), null = nessuno
             vortex: 2.2,
+            reducedMotion: true,  // con "riduci movimento" del sistema: solo frecce ferme
             ...opts,
         };
         this.field = FIELDS.pendolo.f;
         this.t = 0;
         this.running = false;
         this.pointer = null;
-        this.reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.particles = [];
+        this.reduced = this.o.reducedMotion && matchMedia('(prefers-reduced-motion: reduce)').matches;
         this.resize = this.resize.bind(this);
         this.frame = this.frame.bind(this);
         new ResizeObserver(this.resize).observe(canvas);
         if (this.o.mouse) {
             const tgt = this.o.mouse;
-            tgt.addEventListener('pointermove', e => {
+            const track = e => {
                 const r = canvas.getBoundingClientRect();
                 const px = e.clientX - r.left, py = e.clientY - r.top;
                 this.pointer = px < 0 || py < 0 || px > r.width || py > r.height ? null : this.toWorld(px, py);
-            }, { passive: true });
+            };
+            tgt.addEventListener('pointermove', track, { passive: true });
+            tgt.addEventListener('pointerdown', track, { passive: true });
             tgt.addEventListener('pointerleave', () => { this.pointer = null; });
+            tgt.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') this.pointer = null; });
+            tgt.addEventListener('pointercancel', () => { this.pointer = null; });
         }
         document.addEventListener('visibilitychange', () => { if (!document.hidden && this.running) requestAnimationFrame(this.frame); });
         this.resize();
@@ -141,6 +147,7 @@ export class FlowField {
 
     start() {
         if (this.running) return;
+        if (!this.W) this.resize();
         this.running = true;
         if (this.reduced) { this.drawStatic(); return; }
         this.last = performance.now();
@@ -150,6 +157,7 @@ export class FlowField {
 
     frame(now) {
         if (!this.running || document.hidden) return;
+        if (!this.W) { requestAnimationFrame(this.frame); return; }
         const dtReal = Math.min(0.05, (now - this.last) / 1000);
         this.last = now;
         this.t += dtReal;
