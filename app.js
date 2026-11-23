@@ -5,6 +5,8 @@ import { GistSync } from './gistSync.js';
 import { PROBLEMS_URL } from './config.js';
 import { Library } from './library.js';
 import { renderGraph, pauseGraph } from './graph.js';
+import { renderLab, pauseLab } from './lab.js';
+import { setBackdrop } from './backdrop.js';
 
 const problemEngine = new ProblemEngine();
 const mathEngine = new MathEngine();
@@ -53,8 +55,9 @@ function startClock() {
 // #/                       home
 // #/dispense[/slug[/pag]]  elenco PDF o visualizzatore
 // #/enunciati[?q=..]       indice di definizioni e teoremi
+// #/lab[/campi|/matrice][?f=campo]  laboratorio
 // #/problemi #/calcolo #/grafo #/stats #/sync #/docs
-const ROUTES = ['home', 'dispense', 'enunciati', 'problemi', 'calcolo', 'grafo', 'stats', 'sync', 'docs'];
+const ROUTES = ['home', 'dispense', 'enunciati', 'problemi', 'calcolo', 'grafo', 'lab', 'stats', 'sync', 'docs'];
 
 function parseHash() {
     const raw = location.hash.replace(/^#\/?/, '');
@@ -76,6 +79,9 @@ function route() {
     if (name === 'enunciati') library.renderEnunciati(query);
     if (name === 'grafo') renderGraph(library, query.get('corso'));
     else pauseGraph();
+    if (name === 'lab') renderLab(args[0], query);
+    else pauseLab();
+    setBackdrop(name, args, query);
     if (name === 'stats') refreshDashboard();
     if (name === 'problemi') {
         if (problemEngine.state.activeCourse) renderCurrentProblem(false);

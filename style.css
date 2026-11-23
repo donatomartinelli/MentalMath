@@ -221,6 +221,50 @@ select option { background: var(--bg); }
 .pdf-viewer.is-fullscreen { border: none; height: 100vh; }
 .pdf-viewer.is-fullscreen .pdf-shell { flex: 1; height: auto; min-height: 0; }
 
+/* --- SFONDO: campo vettoriale ai lati (backdrop.js) --- */
+.bg-field {
+    position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: none; opacity: 0.5;
+    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(50% - 680px), transparent calc(50% - 560px), transparent calc(50% + 560px), #000 calc(50% + 680px));
+            mask-image: linear-gradient(to right, #000 0, #000 calc(50% - 680px), transparent calc(50% - 560px), transparent calc(50% + 560px), #000 calc(50% + 680px));
+}
+.bg-field-label {
+    position: fixed; left: var(--space-4); bottom: var(--space-3); z-index: 2; display: none;
+    font-size: var(--font-2xs); color: var(--fg-dim); text-decoration: none; max-width: calc(50% - 580px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+@media (min-width: 1280px) { .bg-field:not(.off) { display: block; } .bg-field-label { display: block; } }
+.topbar, .navbar, .workspace, .footer { position: relative; z-index: 1; }
+
+/* --- LAB --- */
+.lab-tabs { display: flex; gap: var(--space-4); margin-bottom: var(--space-4); }
+.lab-tabs a, .lab-presets a { font-family: var(--font-display); font-size-adjust: 0.56; font-size: 1.3rem; text-decoration: none; color: var(--fg-dim); }
+.lab-tabs a.on, .lab-presets a.on, .btn.on { background: var(--fg); color: var(--bg); }
+.lab-tabs a:hover, .lab-presets a:hover { color: var(--bg); }
+.lab-presets { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin-bottom: var(--space-3); }
+.lab-presets a::before { content: "--"; color: var(--line-bright); }
+.lab-presets a.on::before, .lab-presets a:hover::before { color: inherit; }
+.lab-form { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); align-items: center; margin-bottom: var(--space-2); }
+.lab-form label { display: flex; align-items: center; gap: var(--space-2); flex: 1; min-width: 220px; }
+.lab-form input { flex: 1; font-size: var(--font-sm); }
+.lab-err { color: var(--accent-red); }
+.lab-row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: var(--space-2) 0 var(--space-3); }
+.lab-range { display: inline-flex; align-items: center; gap: var(--space-2); }
+.lab-range input[type=range] { accent-color: var(--fg); border: none; width: 140px; }
+.lab-stage { position: relative; height: calc(100vh - 360px); min-height: 380px; border: 1px solid var(--line); background: var(--bg); overflow: hidden; }
+.lab-stage.square { height: min(calc(100vh - 230px), 640px); min-height: 360px; }
+.lab-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.lab-over { cursor: crosshair; }
+.lab-hint { position: absolute; left: var(--space-3); bottom: var(--space-2); pointer-events: none; }
+.lab-eq { margin-top: var(--space-2); font-size: var(--font-sm); }
+.lab-split { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: var(--space-5); align-items: start; }
+.lab-side > * + * { margin-top: var(--space-3); }
+.lab-matrix { display: flex; align-items: center; gap: var(--space-3); }
+.lab-matrix .bracket { font-family: var(--font-display); font-size-adjust: 0.56; font-size: 1.6rem; }
+.lab-matrix .cells { display: grid; grid-template-columns: repeat(2, 80px); gap: var(--space-2); padding: var(--space-2) var(--space-3); border-left: 2px solid var(--fg); border-right: 2px solid var(--fg); }
+.lab-matrix input { width: 100%; text-align: right; font-size: var(--font-md); }
+.lab-info { border-top: 1px dashed var(--line); padding-top: var(--space-3); font-size: var(--font-sm); }
+.lab-info div { display: flex; justify-content: space-between; gap: var(--space-3); padding: 2px 0; }
+.lab-info div span:last-child { text-align: right; }
+
 /* --- ENUNCIATI --- */
 .stmt-list { list-style: none; }
 .stmt-list li { border-bottom: 1px solid var(--line); }
@@ -301,6 +345,8 @@ select option { background: var(--bg); }
     .pdf-controls { gap: var(--space-2) var(--space-3); }
     .pdf-outline { position: absolute; inset: 0 auto 0 0; width: min(85%, 300px); z-index: 5; }
     .graph-canvas { height: 65vh; }
+    .lab-split { grid-template-columns: 1fr; }
+    .lab-stage { height: 60vh; }
     #multiplicand, #multiplier, #answer-input { font-size: 3.5rem; }
     .stmt-body { padding-left: var(--space-3); }
 }

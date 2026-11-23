@@ -36,6 +36,7 @@
         <a class="nav-link" data-nav="grafo" href="#/grafo">grafo</a>
         <a class="nav-link" data-nav="problemi" href="#/problemi">problemi</a>
         <a class="nav-link" data-nav="calcolo" href="#/calcolo">calcolo</a>
+        <a class="nav-link" data-nav="lab" href="#/lab">lab</a>
         <a class="nav-link" data-nav="stats" href="#/stats">stats</a>
         <a class="nav-link" data-nav="sync" href="#/sync">sync</a>
         <a class="nav-link" data-nav="docs" href="#/docs">docs</a>
@@ -152,6 +153,17 @@
             </div>
         </section>
 
+        <!-- LAB: campi vettoriali e matrici 2x2 -->
+        <section data-route="lab" class="hidden">
+            <h1 class="section-title">// LAB</h1>
+            <div class="lab-tabs">
+                <a href="#/lab/campi" data-lab="campi">[ campi vettoriali ]</a>
+                <a href="#/lab/matrice" data-lab="matrice">[ matrice 2x2 ]</a>
+            </div>
+            <div id="lab-campi"></div>
+            <div id="lab-matrice" class="hidden"></div>
+        </section>
+
         <!-- STATS -->
         <section data-route="stats" id="sec-dashboard" class="hidden">
             <h1 class="section-title">// STATS</h1>
@@ -210,6 +222,12 @@
                 <p><b>dispense</b> mostra i PDF in un lettore integrato (pdf.js), in negativo per restare nello stile del sito: [ ◐ ] o <code>i</code> torna al bianco. Tasti: <code>n</code>/<code>p</code> pagina, <code>+</code>/<code>-</code>/<code>0</code> zoom, <code>/</code> cerca, <code>g</code> vai a pagina, <code>t</code> indice, <code>f</code> schermo intero. <b>enunciati</b> cerca tra definizioni, teoremi, proposizioni, lemmi e corollari
                    e apre il PDF alla pagina giusta. <b>grafo</b> (ex MAPH) disegna in 3D chi usa chi: un arco va da A a B quando
                    l'enunciato B o la sua dimostrazione citano A con <code>\ref</code>; i nodi più collegati sono più chiari.</p>
+
+                <h2>lab e sfondo</h2>
+                <p><b>lab</b> ha due strumenti. <b>campi vettoriali</b>: scegli un campo o scrivi <code>x' = …</code>, <code>y' = …</code>; un clic traccia la traiettoria
+                   con Runge-Kutta 4 (avanti nel tempo continua, indietro tratteggiata). <b>matrice 2x2</b>: la griglia del piano si deforma da I ad A,
+                   con autovettori, determinante e tipo di equilibrio del sistema <code>x' = Ax</code>. Su schermi larghi lo stesso campo scorre ai lati di ogni scheda,
+                   scelto in base alla materia aperta; la riga in basso a sinistra lo apre nel laboratorio.</p>
 
                 <h2>problemi</h2>
                 <p>Leggi il problema, risolvilo sul quaderno, premi [ DONE ] e valuta: FAIL lo ripropone subito,
