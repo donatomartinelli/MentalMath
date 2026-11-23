@@ -54,8 +54,7 @@
             <div id="dispense-list"></div>
             <div id="dispense-viewer" class="hidden">
                 <div id="viewer-bar" class="viewer-bar"></div>
-                <iframe id="viewer-frame" class="viewer-frame" title="Dispensa PDF"></iframe>
-                <p class="dim small mobile-only">Su telefono il PDF potrebbe non comparire qui sopra: usa [ apri ].</p>
+                <div id="pdf-viewer" class="pdf-viewer"></div>
             </div>
         </section>
 
@@ -208,7 +207,7 @@
                    o senza dimostrazioni con <code>&lt;Materia&gt;/studio.tex</code>: il sito resta completo.</p>
 
                 <h2>dispense, enunciati, grafo</h2>
-                <p><b>dispense</b> mostra i PDF. <b>enunciati</b> cerca tra definizioni, teoremi, proposizioni, lemmi e corollari
+                <p><b>dispense</b> mostra i PDF in un lettore integrato (pdf.js), in negativo per restare nello stile del sito: [ ◐ ] o <code>i</code> torna al bianco. Tasti: <code>n</code>/<code>p</code> pagina, <code>+</code>/<code>-</code>/<code>0</code> zoom, <code>/</code> cerca, <code>g</code> vai a pagina, <code>t</code> indice, <code>f</code> schermo intero. <b>enunciati</b> cerca tra definizioni, teoremi, proposizioni, lemmi e corollari
                    e apre il PDF alla pagina giusta. <b>grafo</b> (ex MAPH) disegna in 3D chi usa chi: un arco va da A a B quando
                    l'enunciato B o la sua dimostrazione citano A con <code>\ref</code>; i nodi più collegati sono più chiari.</p>
 

@@ -147,7 +147,79 @@ select option { background: var(--bg); }
 .viewer-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: baseline; margin-bottom: var(--space-3); }
 .viewer-bar a { font-family: var(--font-display); font-size-adjust: 0.56; font-size: 1.3rem; text-decoration: none; }
 .viewer-title { flex: 1; min-width: 160px; font-family: var(--font-display); font-size-adjust: 0.56; font-size: 1.6rem; }
-.viewer-frame { width: 100%; height: calc(100vh - 230px); min-height: 420px; border: 1px solid var(--line); background: #111; }
+
+/* --- LETTORE PDF (pdf.js) --- */
+.pdf-viewer { border: 1px solid var(--line); background: var(--bg-sec); display: flex; flex-direction: column; }
+.pdf-controls {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4);
+    padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--line); font-size: var(--font-sm);
+}
+.pdf-group { display: inline-flex; align-items: center; gap: var(--space-2); }
+.pdf-group.grow { flex: 1; min-width: 180px; }
+.pdf-btn {
+    font-family: var(--font-display); font-size-adjust: 0.56; font-size: 1.25rem;
+    background: transparent; color: var(--fg); border: none; padding: 0 2px; cursor: pointer; white-space: nowrap;
+}
+.pdf-btn:hover, .pdf-btn.on { background: var(--fg); color: var(--bg); }
+.pdf-page-input { width: 5ch; text-align: right; padding: 2px; }
+.pdf-zoom { min-width: 4.5ch; text-align: center; }
+.pdf-search { flex: 1; min-width: 120px; padding: 2px var(--space-1); }
+.pdf-search-info { white-space: nowrap; }
+
+.pdf-shell { display: flex; height: calc(100vh - 250px); min-height: 440px; position: relative; }
+.pdf-scroll { flex: 1; overflow: auto; padding: var(--space-4); background: var(--bg); scrollbar-color: var(--line-bright) var(--bg); }
+.pdf-scroll:focus-visible { outline: none; }
+.pdf-pages { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); width: max-content; min-width: 100%; }
+.pdf-status { padding: var(--space-5); text-align: center; }
+.pdf-status::after { content: "\2588"; animation: blink 1s steps(1) infinite; margin-left: 4px; }
+
+.pdf-page { position: relative; flex: none; background: #fff; outline: 1px solid var(--line); }
+.pdf-page canvas { display: block; width: 100%; height: 100%; }
+.pdf-page:not(.ready)::before {
+    content: "caricamento..."; position: absolute; inset: 0; display: grid; place-items: center;
+    font-family: var(--font-body); font-size: var(--font-xs); color: #888;
+}
+.pdf-page-num {
+    position: absolute; right: -1px; bottom: -1px; transform: translateY(100%);
+    font-size: var(--font-2xs); color: var(--fg-dim); padding-top: 2px; pointer-events: none;
+}
+.pdf-links { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+.pdf-link { position: absolute; pointer-events: auto; background: transparent; }
+.pdf-link:hover { background: rgba(0, 0, 0, 0.12); outline: 1px dashed #888; }
+
+/* negativo: i pixel vengono invertiti in pdfviewer.js, qui solo lo sfondo prima del disegno */
+.pdf-invert .pdf-page { background: #000; }
+.pdf-invert .pdf-page:not(.ready)::before { color: var(--fg-dim); }
+.pdf-invert .pdf-link:hover { background: rgba(255, 255, 255, 0.12); }
+
+/* livello di testo di pdf.js: invisibile ma selezionabile */
+.textLayer { position: absolute; text-align: initial; inset: 0; overflow: clip; opacity: 1; line-height: 1; text-size-adjust: none; forced-color-adjust: none; transform-origin: 0 0; z-index: 2; }
+.textLayer :is(span, br) { color: transparent; position: absolute; white-space: pre; cursor: text; transform-origin: 0% 0%; }
+.textLayer > :not(.markedContent), .textLayer .markedContent span:not(.markedContent) { z-index: 1; }
+.textLayer span.markedContent { top: 0; height: 0; }
+.textLayer span[role="img"] { user-select: none; cursor: default; }
+.textLayer ::selection { background: rgba(0, 0, 255, 0.25); color: transparent; }
+.pdf-invert .textLayer ::selection { background: rgba(255, 255, 255, 0.35); }
+.textLayer br::selection { background: transparent; }
+.textLayer .endOfContent { display: block; position: absolute; inset: 100% 0 0; z-index: 0; cursor: default; user-select: none; }
+.textLayer.selecting .endOfContent { top: 0; }
+.textLayer span.hit { background: rgba(255, 200, 0, 0.45); outline: 1px solid rgba(200, 140, 0, 0.9); }
+.pdf-invert .textLayer span.hit { background: rgba(0, 60, 255, 0.4); outline-color: rgba(60, 120, 255, 0.9); }
+
+.pdf-outline {
+    width: 280px; flex: none; overflow: auto; border-right: 1px solid var(--line);
+    background: var(--bg-sec); padding: var(--space-3); font-size: var(--font-xs);
+}
+.pdf-outline-title { font-family: var(--font-display); font-size-adjust: 0.56; font-size: 1.3rem; margin-bottom: var(--space-2); }
+.pdf-outline ul { list-style: none; }
+.pdf-outline ul ul { margin-left: var(--space-3); border-left: 1px dashed var(--line); padding-left: var(--space-2); }
+.pdf-outline li { margin: 2px 0; }
+.pdf-outline a { text-decoration: none; color: var(--fg-muted); display: block; padding: 1px 2px; }
+.pdf-outline .depth-0 > li > a { color: var(--fg); }
+.pdf-outline a:hover { background: var(--fg); color: var(--bg); }
+
+.pdf-viewer.is-fullscreen { border: none; height: 100vh; }
+.pdf-viewer.is-fullscreen .pdf-shell { flex: 1; height: auto; min-height: 0; }
 
 /* --- ENUNCIATI --- */
 .stmt-list { list-style: none; }
@@ -224,7 +296,10 @@ select option { background: var(--bg); }
     .workspace { padding: var(--space-4); }
     .section-title { font-size: 1.6rem; }
     .mobile-only { display: block; margin-top: var(--space-2); }
-    .viewer-frame { height: 70vh; }
+    .pdf-shell { height: 75vh; min-height: 0; }
+    .pdf-scroll { padding: var(--space-2); }
+    .pdf-controls { gap: var(--space-2) var(--space-3); }
+    .pdf-outline { position: absolute; inset: 0 auto 0 0; width: min(85%, 300px); z-index: 5; }
     .graph-canvas { height: 65vh; }
     #multiplicand, #multiplier, #answer-input { font-size: 3.5rem; }
     .stmt-body { padding-left: var(--space-3); }

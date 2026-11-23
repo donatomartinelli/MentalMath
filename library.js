@@ -1,6 +1,7 @@
 // MATH-HUB // DISPENSE (PDF da math-pdf) + INDICE DEGLI ENUNCIATI (catalog.json da math-tex)
 import { PDF_BASE_URL, CATALOG_URL } from './config.js';
 import { texToHtml, renderMath } from './texlite.js';
+import { PdfViewer } from './pdfviewer.js';
 
 const el = (tag, attrs = {}, ...children) => {
     const n = document.createElement(tag);
@@ -122,23 +123,33 @@ export class Library {
         viewer.classList.remove('hidden');
         const p = this.pdf(slug);
         const bar = document.getElementById('viewer-bar');
-        const frame = document.getElementById('viewer-frame');
+        const box = document.getElementById('pdf-viewer');
         bar.replaceChildren();
         if (!p) {
             bar.append(el('span', { class: 'dim', text: `dispensa "${slug}" non trovata` }), el('a', { href: '#/dispense', text: '[ indietro ]' }));
-            frame.removeAttribute('src');
+            this.viewer?.close();
             return;
         }
-        const url = this.pdfUrl(slug, page);
+        const raw = this.pdfUrl(slug);
         bar.append(
             el('a', { href: '#/dispense', text: '[ .. ]' }),
-            el('span', { class: 'viewer-title', text: p.title + (page ? `  · pag ${page}` : '') }),
+            el('span', { class: 'viewer-title', text: `${p.title.toLowerCase().replace(/\s+/g, '-')}.pdf` }),
             el('a', { href: `#/enunciati?corso=${slug}`, text: '[ enunciati ]' }),
             el('a', { href: `#/grafo?corso=${slug}`, text: '[ grafo ]' }),
-            el('a', { href: url, target: '_blank', rel: 'noopener', text: '[ apri ]' }),
-            el('a', { href: this.pdfUrl(slug), download: p.file, text: '[ scarica ]' }));
-        // cambiare solo l'hash #page non ricarica l'iframe: si reimposta src
-        if (frame.getAttribute('src') !== url) frame.setAttribute('src', url);
+            el('a', { href: raw, target: '_blank', rel: 'noopener', text: '[ apri ]' }),
+            el('a', { href: raw, download: p.file, text: '[ scarica ]' }));
+
+        if (!this.viewer) this.viewer = new PdfViewer(box);
+        // la pagina corrente finisce nell'indirizzo senza riattivare il router (replaceState non genera hashchange)
+        let t;
+        this.viewer.onPage = (n) => {
+            clearTimeout(t);
+            t = setTimeout(() => {
+                const target = `#/dispense/${slug}/${n}`;
+                if (location.hash.startsWith(`#/dispense/${slug}`) && location.hash !== target) history.replaceState(null, '', target);
+            }, 300);
+        };
+        this.viewer.open(raw, parseInt(page, 10) || 1);
     }
 
     // --- ENUNCIATI --------------------------------------------------------------
