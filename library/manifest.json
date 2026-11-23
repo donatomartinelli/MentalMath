@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-23T12:13:15+00:00",
+  "sourceCommit": "d6cad810ce91e47866ea7bebbda22df5c9485a2a",
+  "pdfs": [
+    {
+      "slug": "algebra",
+      "title": "Algebra",
+      "file": "algebra.pdf",
+      "pages": 166,
+      "bytes": 1051224,
+      "sha256": "009edfd2055e57134e7fc78307972aeedfd4f6148800ed43c23806bf2be16aa6",
+      "builtAt": "2026-11-23T12:13:15+00:00"
+    },
+    {
+      "slug": "analisi",
+      "title": "Analisi",
+      "file": "analisi.pdf",
+      "pages": 465,
+      "bytes": 2644794,
+      "sha256": "fd7200ab2933e398b42d58010170609f336884295fcd26544eda4c0616a953cd",
+      "builtAt": "2026-11-23T12:13:15+00:00"
+    },
+    {
+      "slug": "calcolo-scientifico",
+      "title": "Calcolo Scientifico",
+      "file": "calcolo-scientifico.pdf",
+      "pages": 152,
+      "bytes": 1626303,
+      "sha256": "b2029ee4e356458d05b6f694f02e7b0af8da52450b9a336d234863af3561c3a1",
+      "builtAt": "2026-11-23T12:13:15+00:00"
+    },
+    {
+      "slug": "fisica",
+      "title": "Fisica 1",
+      "file": "fisica.pdf",
+      "pages": 95,
+      "bytes": 654758,
+      "sha256": "e266d8f1b1ae33f1b705059320c42433273a8f210fdb2f6ee2d69b8ea961df7b",
+      "builtAt": "2026-11-23T12:13:15+00:00"
+    },
+    {
+      "slug": "geometria",
+      "title": "Geometria",
+      "file": "geometria.pdf",
+      "pages": 103,
+      "bytes": 836402,
+      "sha256": "519253ad5867d5acd9f6901ef12ec67d1b999c5b008385457119c69421bb7ee9",
+      "builtAt": "2026-11-23T12:13:15+00:00"
+    },
+    {
+      "slug": "meccanica-razionale",
+      "title": "Meccanica Razionale",
+      "file": "meccanica-razionale.pdf",
+      "pages": 75,
+      "bytes": 630610,
+      "sha256": "e373a029794e83c17a6f7fe5d7d7f922a9b7cbf88ae594bb11ab882f40017a14",
+      "builtAt": "2026-11-23T12:13:15+00:00"
+    },
+    {
+      "slug": "pre-analisi",
+      "title": "Pre-Analisi",
+      "file": "pre-analisi.pdf",
+      "pages": 60,
+      "bytes": 603536,
+      "sha256": "f62c110edb452d3cead9f1a32d7b375a8d4e4d6b37a486b0e06214af7fabcff7",
+      "builtAt": "2026-11-23T12:13:15+00:00"
+    }
+  ]
+}
