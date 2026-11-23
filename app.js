@@ -22,6 +22,7 @@ let probTimelineChartInstance = null, mentalLatencyChartInstance = null, mentalV
 
 window.addEventListener('DOMContentLoaded', async () => {
     startClock();
+    const libraryReady = library.load(); // manifest PDF + catalogo, in parallelo ai problemi
     await loadProblemsDatabase();
     setupProblemSolvingUI();
     setupMentalMathUI();
@@ -30,7 +31,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     updateTopStreakPills();
     window.addEventListener('hashchange', route);
     route();
-    await library.load(); // manifest PDF + catalogo: la pagina funziona anche senza
+    await libraryReady; // la pagina funziona anche senza
     route();
 });
 
@@ -81,7 +82,8 @@ function route() {
     else pauseGraph();
     if (name === 'lab') renderLab(args[0], query);
     else pauseLab();
-    setBackdrop(name, args, query);
+    // lo sfondo e' decorativo: un suo errore non deve mai fermare il resto
+    try { setBackdrop(name, args, query); } catch (err) { console.warn('sfondo', err); }
     if (name === 'stats') refreshDashboard();
     if (name === 'problemi') {
         if (problemEngine.state.activeCourse) renderCurrentProblem(false);

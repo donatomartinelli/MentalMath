@@ -223,9 +223,10 @@ select option { background: var(--bg); }
 
 /* --- SFONDO: campo vettoriale ai lati (backdrop.js) --- */
 .bg-field {
-    position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: none; opacity: 0.5;
-    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(50% - 680px), transparent calc(50% - 560px), transparent calc(50% + 560px), #000 calc(50% + 680px));
-            mask-image: linear-gradient(to right, #000 0, #000 calc(50% - 680px), transparent calc(50% - 560px), transparent calc(50% + 560px), #000 calc(50% + 680px));
+    position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: none; opacity: 0.6;
+    /* pieno ai lati, in trasparenza sotto la colonna del contenuto */
+    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(50% - 680px), rgba(0,0,0,.42) calc(50% - 540px), rgba(0,0,0,.42) calc(50% + 540px), #000 calc(50% + 680px));
+            mask-image: linear-gradient(to right, #000 0, #000 calc(50% - 680px), rgba(0,0,0,.42) calc(50% - 540px), rgba(0,0,0,.42) calc(50% + 540px), #000 calc(50% + 680px));
 }
 .bg-field-label {
     position: fixed; left: var(--space-4); bottom: var(--space-3); z-index: 2; display: none;
@@ -233,8 +234,8 @@ select option { background: var(--bg); }
 }
 .bg-field:not(.off) { display: block; }
 @media (min-width: 1280px) { .bg-field-label { display: block; } }
-/* telefono e finestre strette: niente lati liberi, il campo sta dietro al testo e quasi non si vede */
-@media (max-width: 1279px) { .bg-field { opacity: 0.22; -webkit-mask-image: none; mask-image: none; } }
+/* telefono e finestre strette: niente lati liberi, il campo sta dietro al testo in trasparenza */
+@media (max-width: 1279px) { .bg-field { opacity: 0.34; -webkit-mask-image: none; mask-image: none; } }
 .topbar, .navbar, .workspace, .footer { position: relative; z-index: 1; }
 
 /* --- LAB --- */

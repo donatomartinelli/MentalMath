@@ -24,10 +24,11 @@ export class Library {
     }
 
     async load() {
-        const [man, cat] = await Promise.allSettled([
-            fetch(new URL('manifest.json', PDF_BASE_URL), { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject(r.status)),
-            fetch(CATALOG_URL, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject(r.status))
-        ]);
+        // un secondo tentativo: sul telefono una rete lenta o un cambio di rete fanno fallire la prima richiesta
+        const get = (url) => fetch(url, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject(r.status));
+        const retry = (url) => get(url).catch(() => new Promise(r => setTimeout(r, 1500)).then(() => get(url)));
+        const [man, cat] = await Promise.allSettled([retry(new URL('manifest.json', PDF_BASE_URL)), retry(CATALOG_URL)]);
+        this.loaded = true;
         this.manifest = man.status === 'fulfilled' ? man.value : null;
         this.catalog = cat.status === 'fulfilled' ? cat.value : null;
         if (!this.manifest) console.warn('manifest PDF non disponibile', man.reason);
@@ -170,7 +171,7 @@ export class Library {
             (!needle || [e.title, e.label, e.body, e.type].some(v => v && v.toLowerCase().includes(needle))));
 
         root.replaceChildren();
-        if (!this.catalog) { root.append(el('p', { class: 'dim', text: 'catalog.json non disponibile.' })); return; }
+        if (!this.catalog) { root.append(this.missing()); return; }
         root.append(el('p', { class: 'dim small', text: `${results.length} risultati` }));
 
         const pageItems = results.slice((pag - 1) * PAGE_SIZE, pag * PAGE_SIZE);
@@ -190,6 +191,14 @@ export class Library {
             if (pag < pages) nav.append(link(pag + 1, '[ > ]'));
             root.append(nav);
         }
+    }
+
+    // catalogo assente: ancora in caricamento oppure richiesta fallita
+    missing() {
+        if (!this.loaded) return el('p', { class: 'dim cursor', text: 'caricamento catalogo ' });
+        const p = el('p', { class: 'dim', text: 'catalog.json non disponibile. ' });
+        p.append(el('a', { href: '#', text: '[ riprova ]', onclick: (e) => { e.preventDefault(); location.reload(); } }));
+        return p;
     }
 
     stmtItem(e, open = false) {

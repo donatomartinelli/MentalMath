@@ -61,7 +61,7 @@ export async function renderGraph(library, course, focusLabel = new URLSearchPar
     }
     select.value = course || '';
 
-    if (!library.catalog) { status.textContent = 'catalog.json non disponibile'; return; }
+    if (!library.catalog) { status.replaceChildren(library.missing()); return; }
     const data = buildData(library.entries(), course);
     status.textContent = `${data.nodes.length} nodi · ${data.links.length} archi${data.links.length ? '' : ' (aggiungi \\ref tra enunciati per vedere le dipendenze)'}`;
 
