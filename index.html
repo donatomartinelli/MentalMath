@@ -3,220 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MATH-HUB // TERMINAL</title>
+    <title>math-hub</title>
+    <meta name="description" content="Appunti di matematica di Donato Martinelli: dispense PDF, indice di definizioni e teoremi, grafo delle dipendenze, esercizi e calcolo mentale.">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0a0a0a">
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ctext x='16' y='23' font-family='monospace' font-size='20' font-weight='700' text-anchor='middle' fill='%23fff'%3E%E2%88%AB%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="fonts/fonts.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
-    <header class="top-nav">
-        <nav class="nav-tabs">
-            <button class="nav-btn active" data-target="sec-problems">PROBLEM-SOLVING</button>
-            <button class="nav-btn" data-target="sec-mental">MENTAL MATH</button>
-            <button class="nav-btn" data-target="sec-dashboard">DASHBOARD</button>
-            <button class="nav-btn" data-target="sec-library">LIBRERIA</button>
-            <button class="nav-btn" data-target="sec-sync">SYNC</button>
-            <button class="nav-btn" data-target="sec-docs">DOCS</button>
-        </nav>
-        <div class="nav-streaks">
+    <header class="topbar">
+        <div class="brand">
+            <a href="#/" class="brand-name">MATH-HUB</a>
+            <span class="prompt"><span class="dim">donato@unibas:</span><span id="prompt-path">~</span><span class="dim">$</span></span>
+        </div>
+        <div class="topbar-right">
             <span id="nav-streak-prob">PROB: 0</span>
             <span id="nav-streak-calc">CALC: 0</span>
+            <span id="clock" class="clock">--:--</span>
         </div>
     </header>
 
+    <nav class="navbar" aria-label="Sezioni">
+        <a class="nav-link" data-nav="home" href="#/">~</a>
+        <a class="nav-link" data-nav="dispense" href="#/dispense">dispense</a>
+        <a class="nav-link" data-nav="enunciati" href="#/enunciati">enunciati</a>
+        <a class="nav-link" data-nav="grafo" href="#/grafo">grafo</a>
+        <a class="nav-link" data-nav="problemi" href="#/problemi">problemi</a>
+        <a class="nav-link" data-nav="calcolo" href="#/calcolo">calcolo</a>
+        <a class="nav-link" data-nav="stats" href="#/stats">stats</a>
+        <a class="nav-link" data-nav="sync" href="#/sync">sync</a>
+        <a class="nav-link" data-nav="docs" href="#/docs">docs</a>
+    </nav>
+
     <main class="workspace">
-        
-        <!-- VISTA 1: PROBLEM SOLVING -->
-        <section id="sec-problems">
-            
-            <!-- SCHERMATA SELEZIONE CORSI -->
-            <div id="course-selection" class="action-area" style="margin-top:0;">
-                <p style="color:var(--fg-muted); margin-bottom: 20px; align-self: flex-start;">// SELEZIONA UN CORSO PER INIZIARE</p>
-                <div id="course-list" style="display:flex; flex-direction:column; gap:15px; width: 100%;"></div>
+
+        <!-- HOME -->
+        <section data-route="home">
+            <div id="home-body" class="terminal"></div>
+        </section>
+
+        <!-- DISPENSE: elenco + visualizzatore PDF -->
+        <section data-route="dispense" class="hidden">
+            <h1 class="section-title">// DISPENSE</h1>
+            <div id="dispense-list"></div>
+            <div id="dispense-viewer" class="hidden">
+                <div id="viewer-bar" class="viewer-bar"></div>
+                <iframe id="viewer-frame" class="viewer-frame" title="Dispensa PDF"></iframe>
+                <p class="dim small mobile-only">Su telefono il PDF potrebbe non comparire qui sopra: usa [ apri ].</p>
+            </div>
+        </section>
+
+        <!-- ENUNCIATI -->
+        <section data-route="enunciati" class="hidden">
+            <h1 class="section-title">// ENUNCIATI</h1>
+            <form id="enunciati-form" class="toolbar" autocomplete="off">
+                <span class="dim">grep</span>
+                <input type="search" name="q" placeholder="cerca: titolo, etichetta, testo..." class="grow">
+                <select name="corso"><option value="">tutti i corsi</option></select>
+                <select name="tipo"><option value="">tutti i tipi</option></select>
+                <button class="btn" type="submit">[ CERCA ]</button>
+            </form>
+            <div id="enunciati-body"></div>
+        </section>
+
+        <!-- GRAFO (ex MAPH) -->
+        <section data-route="grafo" class="hidden">
+            <h1 class="section-title">// GRAFO DELLE DIPENDENZE</h1>
+            <div class="toolbar">
+                <select id="graph-course"><option value="">tutti i corsi</option></select>
+                <span id="graph-status" class="dim small"></span>
+            </div>
+            <div class="graph-wrap">
+                <div id="graph-canvas" class="graph-canvas"></div>
+                <div id="graph-panel" class="graph-panel hidden"></div>
+            </div>
+        </section>
+
+        <!-- PROBLEMI -->
+        <section data-route="problemi" id="sec-problems" class="hidden">
+            <h1 class="section-title">// PROBLEMI</h1>
+            <div id="course-selection">
+                <p class="dim">seleziona un corso per iniziare</p>
+                <div id="course-list" class="stack"></div>
             </div>
 
-            <!-- SCHERMATA AREA DI LAVORO -->
             <div id="problem-solving-area" class="hidden">
                 <div class="problem-meta">
-                    <div style="display:flex; flex-direction:column; gap:5px;">
-                        <span id="prob-breadcrumb">CARICAMENTO...</span>
-                        <span id="prob-progress" style="color: var(--fg-muted);"></span>
+                    <div class="stack-tight">
+                        <span id="prob-breadcrumb">caricamento...</span>
+                        <span id="prob-progress" class="dim"></span>
                     </div>
-                    <button id="btn-back-courses" class="nav-btn" style="border:none;">[ ESCI ]</button>
+                    <button id="btn-back-courses" class="btn">[ ESCI ]</button>
                 </div>
-
                 <div id="prob-statement" class="problem-statement"></div>
                 <div id="prob-source" class="problem-source"></div>
-
                 <div class="action-area">
                     <div id="stage-solve">
                         <button id="btn-done" class="btn">[ DONE ]</button>
                     </div>
-                    
-                    <div id="stage-rate" class="rate-container hidden">
-                        <div class="rating-buttons" style="display:flex; gap:15px; justify-content:center;">
-                            <button id="btn-fail" class="btn btn-rate">[ FAIL ]</button>
-                            <button id="btn-hard" class="btn btn-rate">[ HARD ]</button>
-                            <button id="btn-good" class="btn btn-rate">[ GOOD ]</button>
-                            <button id="btn-easy" class="btn btn-rate">[ EASY ]</button>
-                        </div>
+                    <div id="stage-rate" class="rating-buttons hidden">
+                        <button id="btn-fail" class="btn">[ FAIL ]</button>
+                        <button id="btn-hard" class="btn">[ HARD ]</button>
+                        <button id="btn-good" class="btn">[ GOOD ]</button>
+                        <button id="btn-easy" class="btn">[ EASY ]</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- VISTA 2: MENTAL MATH -->
-        <section id="sec-mental" class="hidden">
-            <div id="mental-setup-box" class="view-container">
-                <p style="color:var(--fg-muted); margin-bottom:20px;">// SETUP TRACHTENBERG</p>
-                <div id="presets-container" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px;"></div>
-                <div style="display:flex; flex-wrap:wrap; gap:20px; align-items:center;">
-                    <input type="text" id="config-digits" value="2" placeholder="Cifre (es. 2)" style="width:100px;">
-                    <input type="text" id="config-mult" value="11" placeholder="Molt. (es. 11)" style="width:100px;">
-                    <select id="config-mult-type"><option value="literal">Esatto</option><option value="digits">Cifre</option></select>
-                    <input type="number" id="config-time" value="60" min="1" style="width:60px;">
-                    <select id="config-time-type"><option value="s">sec</option><option value="m">min</option></select>
+        <!-- CALCOLO MENTALE -->
+        <section data-route="calcolo" id="sec-mental" class="hidden">
+            <h1 class="section-title">// CALCOLO MENTALE</h1>
+            <div id="mental-setup-box" class="panel">
+                <p class="dim">setup trachtenberg</p>
+                <div id="presets-container" class="row wrap"></div>
+                <div class="row wrap">
+                    <label class="field"><span class="dim">cifre</span><input type="text" id="config-digits" value="2" placeholder="es. 2 o 2-3"></label>
+                    <label class="field"><span class="dim">molt.</span><input type="text" id="config-mult" value="11" placeholder="es. 11 o 5-9"></label>
+                    <label class="field"><span class="dim">tipo</span><select id="config-mult-type"><option value="literal">esatto</option><option value="digits">cifre</option></select></label>
+                    <label class="field"><span class="dim">durata</span><input type="number" id="config-time" value="60" min="1" style="width:70px;"></label>
+                    <select id="config-time-type" aria-label="Unità"><option value="s">sec</option><option value="m">min</option></select>
                 </div>
-                <div style="display:flex; gap:10px; align-items:center; margin-top:20px;">
-                    <input type="text" id="preset-name" placeholder="Nome preset" style="width:200px;">
-                    <button class="btn" id="btn-save-preset" style="padding:5px 10px; font-size:0.8rem;">[ SALVA PRESET ]</button>
+                <div class="row wrap">
+                    <input type="text" id="preset-name" placeholder="nome preset">
+                    <button class="btn" id="btn-save-preset">[ SALVA PRESET ]</button>
+                    <span class="dim small">tasto destro su un preset per eliminarlo</span>
                 </div>
-                <button class="btn" id="btn-start-session" style="margin-top:30px;">[ START ]</button>
+                <button class="btn btn-primary" id="btn-start-session">[ START ]</button>
             </div>
 
-            <div id="mental-game-box" class="hidden view-container" style="text-align:center;">
-                <div style="display:flex; justify-content:space-between; color:var(--fg-muted);">
+            <div id="mental-game-box" class="hidden panel game">
+                <div class="row between dim">
                     <span id="mental-timer-display">TEMPO: 60s</span>
                     <span id="mental-score-display">PUNTI: 0</span>
                 </div>
-                <div id="trachtenberg-rule-banner" style="margin:20px 0; color:var(--fg-muted);"></div>
-                <div style="font-size:4rem; margin-top:20px;">
+                <div id="trachtenberg-rule-banner" class="dim small rule"></div>
+                <div class="game-numbers">
                     <div id="multiplicand">--</div>
-                    <div id="multiplier" style="color:var(--fg-muted);">* --</div>
-                    <input type="text" id="answer-input" autocomplete="off" inputmode="numeric" style="font-size:4rem; width:100%; text-align:right; border-bottom:2px solid var(--fg);">
+                    <div id="multiplier" class="dim">* --</div>
+                    <input type="text" id="answer-input" autocomplete="off" inputmode="numeric" aria-label="Risposta">
                 </div>
-                <button class="btn" id="btn-exit-game" style="margin-top:40px;">[ END ]</button>
+                <button class="btn" id="btn-exit-game">[ END ]</button>
             </div>
         </section>
 
-        <!-- VISTA 3: DASHBOARD ESSENZIALE -->
-        <section id="sec-dashboard" class="hidden">
-            <div class="dash-panel" style="display:flex; justify-content:space-between; font-size:2rem;">
-                <div>STREAK: <span id="kpi-prob-streak">0</span></div>
-                <div>MASTERY: <span id="kpi-global-mastery">0%</span></div>
+        <!-- STATS -->
+        <section data-route="stats" id="sec-dashboard" class="hidden">
+            <h1 class="section-title">// STATS</h1>
+            <div class="panel kpis">
+                <div><span class="dim">streak problemi</span><strong id="kpi-prob-streak">0</strong></div>
+                <div><span class="dim">mastery</span><strong id="kpi-global-mastery">0%</strong></div>
             </div>
-            <div class="dash-panel">
-                <p style="color:var(--fg-muted); margin-bottom:15px;">// PROBLEMI RISOLTI (VOLUMI & DIFFICOLTÀ)</p>
-                <div style="position: relative; height: 250px; width: 100%;">
-                    <canvas id="chart-prob-timeline"></canvas>
-                </div>
+            <div class="panel">
+                <p class="dim">problemi risolti al giorno</p>
+                <div class="chart-box"><canvas id="chart-prob-timeline"></canvas></div>
             </div>
-            <div class="dash-panel">
-                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:15px; color:var(--fg-muted);">
-                    <span>// MENTAL MATH: CALCOLI GIORNALIERI</span>
-                    <span>STREAK <span id="kpi-calc-streak">0</span> · RECORD <span id="kpi-calc-best">0</span> · OGGI <span id="kpi-calc-today">0</span></span>
+            <div class="panel">
+                <div class="row between wrap dim">
+                    <span>calcolo mentale: calcoli al giorno</span>
+                    <span>streak <span id="kpi-calc-streak">0</span> · record <span id="kpi-calc-best">0</span> · oggi <span id="kpi-calc-today">0</span></span>
                 </div>
                 <div id="heatmap-grid" class="heatmap-grid"></div>
             </div>
-            <div class="dash-panel">
-                <p style="color:var(--fg-muted); margin-bottom:15px;">// MENTAL MATH VOLUME (CALCOLI/GIORNO)</p>
-                <div style="position: relative; height: 200px; width: 100%;">
-                    <canvas id="chart-mental-volume"></canvas>
-                </div>
+            <div class="panel">
+                <p class="dim">volume calcolo mentale</p>
+                <div class="chart-box short"><canvas id="chart-mental-volume"></canvas></div>
             </div>
-            <div class="dash-panel">
-                <p style="color:var(--fg-muted); margin-bottom:15px;">// MENTAL MATH LATENCY (SECONDI)</p>
-                <div style="position: relative; height: 250px; width: 100%;">
-                    <canvas id="chart-mental-latency"></canvas>
-                </div>
+            <div class="panel">
+                <p class="dim">latenza media per moltiplicatore (s)</p>
+                <div class="chart-box"><canvas id="chart-mental-latency"></canvas></div>
             </div>
         </section>
 
-        <!-- VISTA 4: SYNC GIST -->
-        <section id="sec-sync" class="hidden">
-            <div class="dash-panel">
-                <p style="color:var(--fg-muted); margin-bottom:20px;">// GITHUB GIST SYNC</p>
-                <input type="password" id="gist-token" placeholder="GitHub Token (ghp_...)" style="width:100%; margin-bottom:10px;">
-                <input type="text" id="gist-id" placeholder="Gist ID" style="width:100%; margin-bottom:20px;">
-                <div style="display:flex; gap:20px;">
+        <!-- SYNC -->
+        <section data-route="sync" id="sec-sync" class="hidden">
+            <h1 class="section-title">// SYNC</h1>
+            <div class="panel">
+                <p class="dim">i progressi stanno nel browser; per spostarli tra dispositivi si salvano in un Gist GitHub privato.
+                   usa un token con il solo permesso "gist": resta salvato in questo browser.</p>
+                <input type="password" id="gist-token" placeholder="token github (solo scope gist)" class="full">
+                <input type="text" id="gist-id" placeholder="gist id" class="full">
+                <div class="row">
                     <button id="btn-gist-push" class="btn">[ PUSH ]</button>
                     <button id="btn-gist-pull" class="btn">[ PULL ]</button>
                 </div>
-                <div id="sync-log" style="margin-top:30px; min-height:50px; color:var(--fg-muted);"></div>
-            </div>
-        </section>
-        
-        <!-- VISTA 4b: LIBRERIA PDF (da math-pdf/manifest.json) -->
-        <section id="sec-library" class="hidden">
-            <div class="dash-panel">
-                <p style="color:var(--fg-muted); margin-bottom:20px;">// LIBRERIA PDF</p>
-                <ul id="library-list" class="library-list"><li style="color:var(--fg-muted);">CARICAMENTO...</li></ul>
-                <p id="library-meta" style="margin-top:20px; color:var(--fg-muted); font-size:0.8rem;"></p>
+                <div id="sync-log" class="dim"></div>
             </div>
         </section>
 
-        <!-- VISTA 5: DOCS -->
-        <section id="sec-docs" class="hidden">
-            <div class="dash-panel docs-content">
-                <h2 style="margin-bottom: 20px;">// MATH-HUB DOCUMENTATION</h2>
-                <p style="color:var(--fg-muted); margin-bottom:15px;">MANUAL PAGE 1</p>
-                
-                <h3 style="margin-top:30px; margin-bottom:10px;">1. WORKFLOW E RISOLUZIONE</h3>
-                <p style="line-height: 1.6; margin-bottom: 15px;">
-                    L'approccio di Math-Hub è totalmente analogico-digitale (stile prompter). 
-                    Seleziona un corso, leggi il problema a schermo e calcola fisicamente sul tuo quaderno A5. 
-                    Il tablet serve solo a presentare la sfida e a raccogliere la valutazione finale.
-                    L'app è progettata per minimizzare le distrazioni e massimizzare il focus sul problem-solving puro.
-                </p>
+        <!-- DOCS -->
+        <section data-route="docs" class="hidden">
+            <h1 class="section-title">// DOCS</h1>
+            <div class="panel docs">
+                <h2>da dove arrivano i dati</h2>
+                <p>Tutto nasce dai sorgenti LaTeX del repo <b>math-tex</b>. A ogni push la CI compila i PDF <b>completi</b>
+                   (tutti i capitoli, con le dimostrazioni) e li pubblica su <b>math-pdf</b>; poi estrae problemi, enunciati e
+                   dipendenze e li scrive in <code>data/</code> qui. Per studiare puoi stampare in locale solo alcuni capitoli
+                   o senza dimostrazioni con <code>&lt;Materia&gt;/studio.tex</code>: il sito resta completo.</p>
 
-                <h3 style="margin-top:30px; margin-bottom:10px;">2. SISTEMA DI VALUTAZIONE E FSRS</h3>
-                <p style="line-height: 1.6; margin-bottom: 15px;">
-                    Al termine del problema, premi [ DONE ] e valuta la difficoltà usando i pulsanti:
-                    <ul style="list-style-type: none; margin-left: 15px; margin-top: 10px; margin-bottom: 15px;">
-                        <li><strong>[ FAIL ]</strong>: Non sei riuscito a risolverlo. Riprogrammato per la sessione attuale.</li>
-                        <li><strong>[ HARD ]</strong>: Risolto, ma con incertezze o aiuti. Riprogrammato a breve.</li>
-                        <li><strong>[ GOOD ]</strong>: Risolto in tempi normali senza errori. Riprogrammazione standard.</li>
-                        <li><strong>[ EASY ]</strong>: Risolto in modo fluido e veloce. Riprogrammato molto più in là nel tempo.</li>
-                    </ul>
-                    L'algoritmo calcolerà l'intervallo esatto per il prossimo ripasso.
-                </p>
+                <h2>dispense, enunciati, grafo</h2>
+                <p><b>dispense</b> mostra i PDF. <b>enunciati</b> cerca tra definizioni, teoremi, proposizioni, lemmi e corollari
+                   e apre il PDF alla pagina giusta. <b>grafo</b> (ex MAPH) disegna in 3D chi usa chi: un arco va da A a B quando
+                   l'enunciato B o la sua dimostrazione citano A con <code>\ref</code>; i nodi più collegati sono più chiari.</p>
 
-                <h3 style="margin-top:30px; margin-bottom:10px;">3. AGGIUNGERE NUOVI PROBLEMI (LATEX)</h3>
-                <p style="line-height: 1.6; margin-bottom: 15px;">
-                    I problemi vivono nel repo <strong>math-tex</strong> (unica fonte), nei capitoli <code>&lt;Materia&gt;/chapters/*.tex</code> di qualunque materia elencata in <code>courses.json</code>, con la sintassi:
-                    <br><br>
-                    <code style="background-color:#222; padding:2px 5px;">\item \tagprob{Nome Argomento}{Difficoltà Base 1-5} Il testo del problema...</code>
-                    <br><br>
-                    Esempio:
-                    <br>
-                    <code style="background-color:#222; padding:2px 5px;">\item \tagprob{Numeri Reali}{2.0} Dimostra per assurdo che $\sqrt{3} \notin \mathbb{Q}$.</code>
-                    <br><br>
-                    Al push su math-tex la CI esegue <code>tools/extract.py</code> e aggiorna <code>data/problems.json</code> qui. L'ID di un problema dipende solo dal suo enunciato, quindi lo storico dei ripassi resta valido finché il testo non cambia. In locale: <code>python tools/extract.py problems --out ../math-hub/data/problems.json</code>.
-                </p>
+                <h2>problemi</h2>
+                <p>Leggi il problema, risolvilo sul quaderno, premi [ DONE ] e valuta: FAIL lo ripropone subito,
+                   HARD/GOOD/EASY lo rimandano sempre più in là. Per aggiungerne uno, in un capitolo di math-tex:</p>
+                <pre>\item \tagprob{Numeri Reali}{2.0} Dimostra per assurdo che $\sqrt{3} \notin \mathbb{Q}$.</pre>
+                <p>L'ID dipende solo dall'enunciato: lo storico resta valido finché il testo non cambia.</p>
 
-                <h3 style="margin-top:30px; margin-bottom:10px;">3b. LIBRERIA PDF</h3>
-                <p style="line-height: 1.6; margin-bottom: 15px;">
-                    La sezione LIBRERIA legge <code>manifest.json</code> dal repo math-pdf (compilato dalla CI di math-tex) e apre i PDF delle dispense. L'indirizzo si configura in <code>config.js</code>.
-                </p>
+                <h2>calcolo mentale</h2>
+                <p>Moltiplicazioni secondo il sistema Trachtenberg, con la regola del moltiplicatore nel banner. Le cifre
+                   si inseriscono da destra a sinistra. I moltiplicatori più lenti escono più spesso.</p>
 
-                <h3 style="margin-top:30px; margin-bottom:10px;">4. MENTAL MATH (TRACHTENBERG)</h3>
-                <p style="line-height: 1.6; margin-bottom: 15px;">
-                    La sezione Mental Math è progettata per allenare il Sistema Trachtenberg. Scegli le cifre del moltiplicando e il moltiplicatore esatto (o range). 
-                    L'app tiene traccia della latenza di risposta tramite una media mobile esponenziale, mostrandoti nel banner la regola specifica da applicare. L'inserimento dei numeri sulla tastiera avviene rigorosamente da destra verso sinistra.
-                </p>
-                
-                <h3 style="margin-top:30px; margin-bottom:10px;">5. GIST SYNC</h3>
-                <p style="line-height: 1.6; margin-bottom: 15px;">
-                    Inserisci il tuo Personal Access Token di GitHub e l'ID del Gist in cui vuoi salvare i tuoi progressi. Usa [ PUSH ] al termine della sessione per salvare sul cloud e [ PULL ] su un altro dispositivo per riprendere da dove hai lasciato.
-                </p>
+                <h2>sync</h2>
+                <p>[ PUSH ] a fine sessione salva i progressi nel Gist, [ PULL ] su un altro dispositivo li recupera.</p>
             </div>
         </section>
     </main>
+
+    <footer class="footer dim small">
+        <a href="https://donatomartinelli.github.io/">donatomartinelli.github.io</a> · sorgenti in math-tex · <a href="https://github.com/DonatoMartinelli/math-hub">codice</a>
+    </footer>
 
     <script type="module" src="app.js"></script>
 </body>

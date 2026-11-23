@@ -1,15 +1,17 @@
-// MATH-HUB // MAIN APPLICATION CONTROLLER
+// MATH-HUB // MAIN APPLICATION CONTROLLER (router a hash + moduli)
 import { ProblemEngine } from './problemEngine.js';
 import { MathEngine } from './mathEngine.js';
 import { GistSync } from './gistSync.js';
-import { PROBLEMS_URL, PDF_BASE_URL } from './config.js';
+import { PROBLEMS_URL } from './config.js';
+import { Library } from './library.js';
+import { renderGraph, pauseGraph } from './graph.js';
 
 const problemEngine = new ProblemEngine();
 const mathEngine = new MathEngine();
 const gistSync = new GistSync();
+const library = new Library();
 
 let currentProblemObj = null;
-let pdfManifest = null; // { pdfs: [{ slug, title, file, pages, ... }] } da math-pdf
 
 // Stato UI Mental Math
 let currentOperation = null, mentalTimerInterval = null, mentalTimeLeft = 0;
@@ -17,14 +19,17 @@ let mentalScore = 0, opStartTime = 0, currentErrors = 0, sessionStats = [];
 let probTimelineChartInstance = null, mentalLatencyChartInstance = null, mentalVolumeChartInstance = null;
 
 window.addEventListener('DOMContentLoaded', async () => {
-    setupNavigation();
+    startClock();
     await loadProblemsDatabase();
     setupProblemSolvingUI();
     setupMentalMathUI();
     setupDashboardUI();
     setupSyncUI();
     updateTopStreakPills();
-    loadPdfManifest(); // non bloccante: la libreria è un extra
+    window.addEventListener('hashchange', route);
+    route();
+    await library.load(); // manifest PDF + catalogo: la pagina funziona anche senza
+    route();
 });
 
 async function loadProblemsDatabase() {
@@ -37,56 +42,47 @@ async function loadProblemsDatabase() {
     }
 }
 
-// --- LIBRERIA PDF (math-pdf/manifest.json) ---
-async function loadPdfManifest() {
-    try {
-        const res = await fetch(new URL('manifest.json', PDF_BASE_URL), { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        pdfManifest = await res.json();
-    } catch (err) {
-        console.warn('Manifest PDF non disponibile:', err);
-        pdfManifest = null;
-    }
-    renderLibrary();
-    if (currentProblemObj) renderProblemSource(currentProblemObj);
+function startClock() {
+    const el = document.getElementById('clock');
+    const tick = () => { el.textContent = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }); };
+    tick();
+    setInterval(tick, 15000);
 }
 
-function pdfUrlFor(slug) {
-    const item = pdfManifest?.pdfs?.find(p => p.slug === slug);
-    return item ? new URL(`pdf/${item.file}`, PDF_BASE_URL).href : null;
+// --- ROUTER ----------------------------------------------------------------------
+// #/                       home
+// #/dispense[/slug[/pag]]  elenco PDF o visualizzatore
+// #/enunciati[?q=..]       indice di definizioni e teoremi
+// #/problemi #/calcolo #/grafo #/stats #/sync #/docs
+const ROUTES = ['home', 'dispense', 'enunciati', 'problemi', 'calcolo', 'grafo', 'stats', 'sync', 'docs'];
+
+function parseHash() {
+    const raw = location.hash.replace(/^#\/?/, '');
+    const [path, query = ''] = raw.split('?');
+    const parts = path.split('/').filter(Boolean).map(decodeURIComponent);
+    const name = ROUTES.includes(parts[0]) ? parts[0] : 'home';
+    return { name, args: parts.slice(1), query: new URLSearchParams(query) };
 }
 
-function renderLibrary() {
-    const listEl = document.getElementById('library-list');
-    const metaEl = document.getElementById('library-meta');
-    if (!listEl) return;
-    listEl.innerHTML = '';
+function route() {
+    const { name, args, query } = parseHash();
+    document.querySelectorAll('[data-route]').forEach(sec => sec.classList.toggle('hidden', sec.dataset.route !== name));
+    document.querySelectorAll('.nav-link').forEach(a => a.classList.toggle('active', a.dataset.nav === name));
+    document.getElementById('prompt-path').textContent = name === 'home' ? '~' : `~/${[name, ...args].join('/')}`;
+    document.title = name === 'home' ? 'math-hub' : `${name} · math-hub`;
 
-    if (!pdfManifest?.pdfs?.length) {
-        const li = document.createElement('li');
-        li.style.color = 'var(--fg-muted)';
-        li.textContent = `Nessun PDF disponibile (manifest non raggiungibile: ${PDF_BASE_URL}).`;
-        listEl.appendChild(li);
-        metaEl.textContent = '';
-        return;
+    if (name === 'home') library.renderHome(problemEngine.problems.length);
+    if (name === 'dispense') library.renderDispense(args[0], args[1]);
+    if (name === 'enunciati') library.renderEnunciati(query);
+    if (name === 'grafo') renderGraph(library, query.get('corso'));
+    else pauseGraph();
+    if (name === 'stats') refreshDashboard();
+    if (name === 'problemi') {
+        if (problemEngine.state.activeCourse) renderCurrentProblem(false);
+        else renderCourseSelection();
     }
-
-    for (const p of pdfManifest.pdfs) {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = new URL(`pdf/${p.file}`, PDF_BASE_URL).href;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.textContent = `[ ${p.title.toUpperCase()} ]`;
-        const info = document.createElement('span');
-        info.style.color = 'var(--fg-muted)';
-        info.textContent = [p.pages ? `${p.pages} PAG` : null, `${Math.round(p.bytes / 1024)} KB`, (p.builtAt || '').slice(0, 10)]
-            .filter(Boolean).join(' · ');
-        li.append(a, info);
-        listEl.appendChild(li);
-    }
-    const commit = pdfManifest.sourceCommit ? pdfManifest.sourceCommit.slice(0, 7) : '?';
-    metaEl.textContent = `// BUILD ${String(pdfManifest.generatedAt || '').slice(0, 16).replace('T', ' ')} · math-tex@${commit}`;
+    updateTopStreakPills();
+    window.scrollTo(0, 0);
 }
 
 function renderProblemSource(p) {
@@ -95,45 +91,14 @@ function renderProblemSource(p) {
     el.innerHTML = '';
     if (!p?.source) return;
     const label = `${p.source.file}:${p.source.line}`;
-    const url = pdfUrlFor(p.source.slug);
-    if (url) {
+    if (library.hasPdf(p.source.slug)) {
         const a = document.createElement('a');
-        a.href = url; a.target = '_blank'; a.rel = 'noopener';
-        a.textContent = `// FONTE: ${label} → PDF`;
+        a.href = `#/dispense/${p.source.slug}`;
+        a.textContent = `> fonte: ${label} [apri dispensa]`;
         el.appendChild(a);
     } else {
-        el.textContent = `// FONTE: ${label}`;
+        el.textContent = `> fonte: ${label}`;
     }
-}
-
-function setupNavigation() {
-    const navButtons = document.querySelectorAll('.nav-btn');
-    const sections = ['sec-problems', 'sec-mental', 'sec-dashboard', 'sec-library', 'sec-sync', 'sec-docs'];
-
-    navButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const target = btn.dataset.target;
-            navButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            sections.forEach(s => {
-                const el = document.getElementById(s);
-                if(el) el.classList.add('hidden');
-            });
-            const targetEl = document.getElementById(target);
-            if(targetEl) targetEl.classList.remove('hidden');
-
-            if (target === 'sec-dashboard') refreshDashboard();
-            if (target === 'sec-problems') {
-                if (problemEngine.state.activeCourse) {
-                    renderCurrentProblem(false);
-                } else {
-                    renderCourseSelection();
-                }
-            }
-            updateTopStreakPills();
-        });
-    });
 }
 
 function updateTopStreakPills() {
