@@ -1,5 +1,5 @@
 // MATH-HUB // CAMPI VETTORIALI ANIMATI (canvas, nessuna dipendenza)
-// Lo stesso motore disegna lo sfondo ai lati delle schede, il laboratorio (#/lab) e la home del sito.
+// Disegna lo sfondo animato ai lati delle schede (backdrop.js).
 // Coordinate "mondo" con y verso l'alto; le particelle seguono il campo con passi RK2 e lasciano una scia.
 
 const { sin, cos, hypot } = Math;
@@ -16,43 +16,23 @@ const newton = (x, y) => {
 const vortex = (x, y, a, b, s) => { const dx = x - a, dy = y - b, r = dx * dx + dy * dy + 0.08; return [-s * dy / r, s * dx / r]; };
 
 export const FIELDS = {
-    pendolo:      { ex: ['y', '-sin(1.4*x) - 0.15*y'], eq: "x' = y   y' = -sin x - 0.15 y",        f: (x, y) => [y, -sin(x * 1.4) - 0.15 * y] },
-    'van-der-pol':{ ex: ['y', '(1 - x^2)*y - x'], eq: "x' = y   y' = (1 - x²) y - x",          f: (x, y) => [y, (1 - x * x) * y - x] },
+    pendolo:      { eq: "x' = y   y' = -sin x - 0.15 y",        f: (x, y) => [y, -sin(x * 1.4) - 0.15 * y] },
+    'van-der-pol':{ eq: "x' = y   y' = (1 - x²) y - x",          f: (x, y) => [y, (1 - x * x) * y - x] },
     dipolo:       { eq: 'E = q r₊/|r₊|³ - q r₋/|r₋|³',          f: (x, y) => {
         const g = (a, s) => { const dx = x - a, dy = y, r = Math.pow(dx * dx + dy * dy + 0.03, 1.5); return [s * dx / r, s * dy / r]; };
         const p = g(-0.9, 1), m = g(0.9, -1); return [p[0] + m[0], p[1] + m[1]];
     } },
-    sella:        { ex: ['x', '-y'], eq: "x' = x   y' = -y",                     f: (x, y) => [x, -y] },
-    spirale:      { ex: ['-0.2*x - y', 'x - 0.2*y'], eq: "x' = -0.2x - y   y' = x - 0.2y",       f: (x, y) => [-0.2 * x - y, x - 0.2 * y] },
-    lineare:      { ex: ['0.3*x - y', '1.2*x - 0.4*y'], eq: "x' = A x,  A = [[0.3, -1], [1.2, -0.4]]", f: (x, y) => [0.3 * x - y, 1.2 * x - 0.4 * y] },
-    kepler:       { ex: ['-y/(x^2+y^2+0.05)^0.75 - 0.08*x', 'x/(x^2+y^2+0.05)^0.75 - 0.08*y'], eq: "r'' = -r/|r|³  (campo centrale)",      f: (x, y) => { const r = Math.pow(x * x + y * y + 0.05, 0.75); return [-y / r - 0.08 * x, x / r - 0.08 * y]; } },
+    sella:        { eq: "x' = x   y' = -y",                     f: (x, y) => [x, -y] },
+    spirale:      { eq: "x' = -0.2x - y   y' = x - 0.2y",       f: (x, y) => [-0.2 * x - y, x - 0.2 * y] },
+    lineare:      { eq: "x' = A x,  A = [[0.3, -1], [1.2, -0.4]]", f: (x, y) => [0.3 * x - y, 1.2 * x - 0.4 * y] },
+    kepler:       { eq: "r'' = -r/|r|³  (campo centrale)",      f: (x, y) => { const r = Math.pow(x * x + y * y + 0.05, 0.75); return [-y / r - 0.08 * x, x / r - 0.08 * y]; } },
     newton:       { eq: "z' = -p(z)/p'(z),  p(z) = z³ - 1",      f: newton },
     vortici:      { eq: 'tre vortici puntiformi',               f: (x, y) => {
         const a = vortex(x, y, -1.2, 0.4, 0.8), b = vortex(x, y, 1.1, -0.3, -0.9), c = vortex(x, y, 0, 1.1, 0.6);
         return [a[0] + b[0] + c[0] + 0.15, a[1] + b[1] + c[1]];
     } },
-    onde:         { ex: ['sin(y + 0.6*t)', 'cos(x - 0.4*t)'], eq: "x' = sin(y + t)   y' = cos(x - t)",     f: (x, y, t) => [sin(y + t * 0.6), cos(x - t * 0.4)] },
+    onde:         { eq: "x' = sin(y + t)   y' = cos(x - t)",     f: (x, y, t) => [sin(y + t * 0.6), cos(x - t * 0.4)] },
 };
-export const FIELD_NAMES = Object.keys(FIELDS);
-
-// --- espressioni scritte a mano: x' = ..., y' = ... (solo numeri, x, y, t e funzioni matematiche) ---
-const ALLOWED = new Set(['x', 'y', 't', 'sin', 'cos', 'tan', 'exp', 'log', 'sqrt', 'abs', 'atan', 'atan2', 'sinh', 'cosh', 'tanh',
-    'pow', 'min', 'max', 'sign', 'floor', 'pi', 'e']);
-export function compileField(fx, fy) {
-    const prep = (s) => {
-        const src = String(s).trim();
-        if (!src) throw new Error('espressione vuota');
-        if (!/^[0-9a-z+\-*/^().,\s]*$/i.test(src)) throw new Error(`carattere non ammesso in "${src}"`);
-        for (const id of src.match(/[a-z_]+/gi) || []) if (!ALLOWED.has(id.toLowerCase())) throw new Error(`"${id}" non riconosciuto`);
-        return src.toLowerCase().replace(/\^/g, '**');
-    };
-    const body = `const {sin,cos,tan,exp,log,sqrt,abs,atan,atan2,sinh,cosh,tanh,pow,min,max,sign,floor}=Math;const pi=Math.PI,e=Math.E;` +
-        `return [(${prep(fx)}),(${prep(fy)})];`;
-    const f = new Function('x', 'y', 't', body);
-    const probe = f(0.3, -0.7, 0);
-    if (!probe.every(Number.isFinite)) throw new Error('il campo non e\' finito in (0.3, -0.7)');
-    return f;
-}
 
 // --- motore -------------------------------------------------------------------------------
 export class FlowField {
@@ -237,5 +217,3 @@ export class FlowField {
         return { forward: run(1), backward: run(-1) };
     }
 }
-
-export const randomField = () => FIELD_NAMES[Math.floor(Math.random() * FIELD_NAMES.length)];

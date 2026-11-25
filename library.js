@@ -20,7 +20,6 @@ export class Library {
     constructor() {
         this.manifest = null;   // { pdfs: [{ slug, title, file, pages, bytes, builtAt }] }
         this.catalog = null;    // { courses: [{slug,title}], entries: [...] }
-        this.byLabel = new Map();
     }
 
     async load() {
@@ -32,7 +31,6 @@ export class Library {
         this.manifest = man.status === 'fulfilled' ? man.value : null;
         this.catalog = cat.status === 'fulfilled' ? cat.value : null;
         if (!this.manifest) console.warn('manifest PDF non disponibile', man.reason);
-        this.byLabel = new Map((this.catalog?.entries || []).filter(e => e.label).map(e => [e.label, e]));
     }
 
     // --- dati -------------------------------------------------------------------
@@ -54,13 +52,13 @@ export class Library {
     entries() { return this.catalog?.entries || []; }
 
     // --- HOME -------------------------------------------------------------------
-    renderHome(nProblems) {
+    renderHome() {
         const root = document.getElementById('home-body');
         root.replaceChildren();
         const line = (cmd) => el('div', { class: 'term-cmd', text: `$ ${cmd}` });
 
         root.append(line('whoami'),
-            el('p', { class: 'term-out', text: 'math-hub: appunti di matematica, dispense PDF e allenamento. Tutto generato dai sorgenti LaTeX di math-tex.' }));
+            el('p', { class: 'term-out', text: 'math-hub: appunti dei corsi universitari, dispense PDF e indice degli enunciati. Tutto generato dai sorgenti LaTeX di math-tex.' }));
 
         root.append(line('ls dispense/'));
         const ul = el('ul', { class: 'term-list' });
@@ -74,20 +72,15 @@ export class Library {
         root.append(ul);
 
         const entries = this.entries();
-        const labels = new Set(entries.map(e => e.label).filter(Boolean));
-        const edges = entries.reduce((n, e) => n + (e.refs || []).filter(r => labels.has(r)).length, 0);
         const commit = (this.manifest?.sourceCommit || this.catalog?.sourceCommit || '').slice(0, 7) || '?';
         root.append(line('stat'),
-            el('p', { class: 'term-out', text: `${nProblems} problemi · ${entries.length} enunciati · ${edges} dipendenze · build math-tex@${commit}` }));
+            el('p', { class: 'term-out', text: `${pdfs.length} dispense · ${entries.length} enunciati · build math-tex@${commit}` }));
 
         root.append(line('help'));
         const help = [
             ['dispense', 'leggi i PDF completi'],
             ['enunciati', 'cerca definizioni e teoremi'],
-            ['problemi', 'esercizi con ripetizione dilazionata'],
-            ['calcolo', 'calcolo mentale (Trachtenberg)'],
-            ['grafo', 'mappa 3D delle dipendenze tra enunciati'],
-            ['stats', 'progressi e streak'],
+            ['docs', 'come funziona il sito'],
         ];
         const hl = el('ul', { class: 'term-list' });
         for (const [r, d] of help) hl.append(el('li', {}, el('a', { href: `#/${r}`, text: r }), el('span', { class: 'dim', text: d })));
@@ -136,7 +129,6 @@ export class Library {
             el('a', { href: '#/dispense', text: '[ .. ]' }),
             el('span', { class: 'viewer-title', text: `${p.title.toLowerCase().replace(/\s+/g, '-')}.pdf` }),
             el('a', { href: `#/enunciati?corso=${slug}`, text: '[ enunciati ]' }),
-            el('a', { href: `#/grafo?corso=${slug}`, text: '[ grafo ]' }),
             el('a', { href: raw, target: '_blank', rel: 'noopener', text: '[ apri ]' }),
             el('a', { href: raw, download: p.file, text: '[ scarica ]' }));
 
@@ -215,9 +207,6 @@ export class Library {
             renderMath(body);
             const links = el('div', { class: 'stmt-links' });
             if (this.hasPdf(e.course)) links.append(el('a', { href: `#/dispense/${e.course}${e.page ? '/' + e.page : ''}`, text: `[ apri nel pdf${e.page ? ' a pag. ' + e.page : ''} ]` }));
-            if (e.label) links.append(el('a', { href: `#/grafo?corso=${e.course}&nodo=${encodeURIComponent(e.label)}`, text: '[ nel grafo ]' }));
-            const deps = (e.refs || []).filter(r => this.byLabel.has(r));
-            if (deps.length) links.append(el('span', { class: 'dim', text: `usa: ${deps.length}` }));
             body.append(links);
         };
         det.addEventListener('toggle', () => det.open && fill());

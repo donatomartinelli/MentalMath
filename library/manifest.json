@@ -56,15 +56,6 @@
       "bytes": 562023,
       "sha256": "cd5fab042d9b3986bde4e219d3da96ae95d184a28b7172a6265edb7929c393ac",
       "builtAt": "2026-11-23T13:35:32+00:00"
-    },
-    {
-      "slug": "pre-analisi",
-      "title": "Pre-Analisi",
-      "file": "pre-analisi.pdf",
-      "pages": 60,
-      "bytes": 419598,
-      "sha256": "c8c087c56fba698a126058219fec14e5068facaec80fed2c00ad61d8da3df7e0",
-      "builtAt": "2026-11-23T13:35:32+00:00"
     }
   ]
 }

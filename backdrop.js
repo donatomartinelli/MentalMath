@@ -3,14 +3,11 @@ import { FlowField, FIELDS } from './field.js';
 
 // materia -> campo (slug dei PDF di math-tex)
 const BY_COURSE = {
-    analisi: 'van-der-pol', 'pre-analisi': 'spirale', algebra: 'lineare', geometria: 'sella',
+    analisi: 'van-der-pol', algebra: 'lineare', geometria: 'sella',
     fisica: 'pendolo', 'meccanica-razionale': 'kepler', 'calcolo-scientifico': 'newton',
 };
 // scheda -> campo
-const BY_ROUTE = {
-    home: 'pendolo', dispense: 'spirale', enunciati: 'onde', grafo: 'dipolo', problemi: 'vortici',
-    calcolo: 'newton', stats: 'sella', sync: 'lineare', docs: 'spirale',
-};
+const BY_ROUTE = { home: 'pendolo', dispense: 'spirale', enunciati: 'onde', docs: 'vortici' };
 
 let ff = null, label = null, current = null;
 
@@ -18,7 +15,7 @@ function init() {
     const canvas = document.createElement('canvas');
     canvas.className = 'bg-field';
     canvas.setAttribute('aria-hidden', 'true');
-    label = document.createElement('a');
+    label = document.createElement('span');
     label.className = 'bg-field-label';
     document.body.prepend(canvas);
     document.body.append(label);
@@ -28,18 +25,12 @@ function init() {
 
 export function setBackdrop(route, args = [], query = new URLSearchParams()) {
     if (!ff) init();
-    // il laboratorio ha i suoi canvas: lo sfondo si ferma
-    if (route === 'lab') { ff.stop(); ff.canvas.classList.add('off'); label.classList.add('hidden'); return; }
     const course = (route === 'dispense' && args[0]) || query.get('corso') || '';
     const name = BY_COURSE[course] || BY_ROUTE[route] || 'pendolo';
-    ff.canvas.classList.remove('off');
-    label.classList.remove('hidden');
     if (name !== current) {
         current = name;
         ff.set(name);
         label.textContent = `$ field --${name}   ${FIELDS[name].eq}`;
-        label.href = `#/lab/campi?f=${name}`;
-        label.title = 'apri nel laboratorio';
     }
     // su schermi stretti non ci sono lati liberi: il campo passa dietro al contenuto, molto tenue (vedi style.css)
     ff.start();
